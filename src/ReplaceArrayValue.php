@@ -29,13 +29,13 @@ use \InvalidArgumentException;
  *     'ids' => [
  *         2,
  *     ],
- *     'validDomains' => new \Yii\Helpers\ReplaceArrayValue([
+ *     'validDomains' => new \Yiisoft\Arrays\ReplaceArrayValue([
  *         'yiiframework.com',
  *         'www.yiiframework.com',
  *     ]),
  * ];
  *
- * $result = \Yii\Helpers\ArrayHelper::merge($array1, $array2);
+ * $result = \Yiisoft\Arrays\ArrayHelper::merge($array1, $array2);
  * ```
  *
  * The result will be

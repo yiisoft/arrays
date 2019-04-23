@@ -27,10 +27,10 @@ namespace Yiisoft\Arrays;
  *     'ids' => [
  *         2,
  *     ],
- *     'validDomains' => new \yii\helpers\UnsetArrayValue(),
+ *     'validDomains' => new \Yiisoft\Arrays\UnsetArrayValue(),
  * ];
  *
- * $result = \yii\helpers\ArrayHelper::merge($array1, $array2);
+ * $result = \Yiisoft\Arrays\ArrayHelper::merge($array1, $array2);
  * ```
  *
  * The result will be

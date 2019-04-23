@@ -151,17 +151,17 @@ class ArrayHelper
      *
      * ```php
      * // working with array
-     * $username = \yii\helpers\ArrayHelper::getValue($_POST, 'username');
+     * $username = \Yiisoft\Arrays\ArrayHelper::getValue($_POST, 'username');
      * // working with object
-     * $username = \yii\helpers\ArrayHelper::getValue($user, 'username');
+     * $username = \Yiisoft\Arrays\ArrayHelper::getValue($user, 'username');
      * // working with anonymous function
-     * $fullName = \yii\helpers\ArrayHelper::getValue($user, function ($user, $defaultValue) {
+     * $fullName = \Yiisoft\Arrays\ArrayHelper::getValue($user, function ($user, $defaultValue) {
      *     return $user->firstName . ' ' . $user->lastName;
      * });
      * // using dot format to retrieve the property of embedded object
-     * $street = \yii\helpers\ArrayHelper::getValue($users, 'address.street');
+     * $street = \Yiisoft\Arrays\ArrayHelper::getValue($users, 'address.street');
      * // using an array of keys to retrieve the value
-     * $value = \yii\helpers\ArrayHelper::getValue($versions, ['1.0', 'date']);
+     * $value = \Yiisoft\Arrays\ArrayHelper::getValue($versions, ['1.0', 'date']);
      * ```
      *
      * @param array|object $array array or object to extract value from
@@ -290,7 +290,7 @@ class ArrayHelper
      * ```php
      * // $array = ['type' => 'A', 'options' => [1, 2]];
      * // working with array
-     * $type = \yii\helpers\ArrayHelper::remove($array, 'type');
+     * $type = \Yiisoft\Arrays\ArrayHelper::remove($array, 'type');
      * // $array content
      * // $array = ['options' => [1, 2]];
      * ```
@@ -319,7 +319,7 @@ class ArrayHelper
      *
      * ```php
      * $array = ['Bob' => 'Dylan', 'Michael' => 'Jackson', 'Mick' => 'Jagger', 'Janet' => 'Jackson'];
-     * $removed = \yii\helpers\ArrayHelper::removeValue($array, 'Jackson');
+     * $removed = \Yiisoft\Arrays\ArrayHelper::removeValue($array, 'Jackson');
      * // result:
      * // $array = ['Bob' => 'Dylan', 'Mick' => 'Jagger'];
      * // $removed = ['Michael' => 'Jackson', 'Janet' => 'Jackson'];
@@ -875,20 +875,20 @@ class ArrayHelper
      *     'E' => 1,
      * ];
      *
-     * $result = \yii\helpers\ArrayHelper::filter($array, ['A']);
+     * $result = \Yiisoft\Arrays\ArrayHelper::filter($array, ['A']);
      * // $result will be:
      * // [
      * //     'A' => [1, 2],
      * // ]
      *
-     * $result = \yii\helpers\ArrayHelper::filter($array, ['A', 'B.C']);
+     * $result = \Yiisoft\Arrays\ArrayHelper::filter($array, ['A', 'B.C']);
      * // $result will be:
      * // [
      * //     'A' => [1, 2],
      * //     'B' => ['C' => 1],
      * // ]
      *
-     * $result = \yii\helpers\ArrayHelper::filter($array, ['B', '!B.C']);
+     * $result = \Yiisoft\Arrays\ArrayHelper::filter($array, ['B', '!B.C']);
      * // $result will be:
      * // [
      * //     'B' => ['D' => 2],
