@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yii\Helpers;
+namespace Yiisoft\Arrays;
 
 use yii\web\Link;
 use yii\web\Linkable;

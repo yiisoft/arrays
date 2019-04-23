@@ -1,5 +1,5 @@
 {
-    "name": "yiisoft/array",
+    "name": "yiisoft/arrays",
     "type": "library",
     "description": "Yii - Array Helper",
     "keywords": [
@@ -22,8 +22,8 @@
         }
     ],
     "support": {
-        "source": "https://github.com/yiisoft/array",
-        "issues": "https://github.com/yiisoft/array/issues",
+        "source": "https://github.com/yiisoft/arrays",
+        "issues": "https://github.com/yiisoft/arrays/issues",
         "forum": "http://www.yiiframework.com/forum/",
         "wiki": "http://www.yiiframework.com/wiki/",
         "irc": "irc://irc.freenode.net/yii"
@@ -32,24 +32,30 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.2",
-        "yiisoft/string": "^3.0@dev"
+        "yiisoft/strings": "^3.0@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.2"
     },
     "autoload": {
         "psr-4": {
-            "Yii\\Helpers\\": "src"
+            "Yiisoft\\Arrays\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Yii\\Helpers\\Tests\\": "tests"
+            "Yiisoft\\Arrays\\Tests\\": "tests"
         }
     },
     "extra": {
         "branch-alias": {
             "dev-master": "3.0.x-dev"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/yiisoft/string"
+        }
+    ]
 }

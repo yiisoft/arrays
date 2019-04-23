@@ -5,11 +5,11 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\tests\framework\helpers;
+namespace Yii\Arrays\Tests;
 
-use Yii\Helpers\Arrayable;
+use Yiisoft\Arrays\Arrayable;
 use yii\data\Sort; // FIXME
-use Yii\Helpers\ArrayHelper;
+use Yiisoft\Arrays\ArrayHelper;
 use PHPUnit\Framework\TestCase;
 
 class Post1
@@ -436,7 +436,7 @@ class ArrayHelperTest extends TestCase
         ];
         $b = [
             'version' => '1.1',
-            'options' => new \Yii\Helpers\UnsetArrayValue(),
+            'options' => new \Yiisoft\Arrays\UnsetArrayValue(),
             'features' => [
                 'gii',
             ],
@@ -473,7 +473,7 @@ class ArrayHelperTest extends TestCase
             'options' => [
                 'unittest' => true,
             ],
-            'features' => new \Yii\Helpers\ReplaceArrayValue([
+            'features' => new \Yiisoft\Arrays\ReplaceArrayValue([
                 'gii',
             ]),
         ];

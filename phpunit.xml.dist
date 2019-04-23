@@ -8,7 +8,7 @@
          failOnRisky="true"
          failOnWarning="true">
     <testsuites>
-        <testsuite name="Yii Array Helper tests">
+        <testsuite name="Yii - Arrays tests">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>

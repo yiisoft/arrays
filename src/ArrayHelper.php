@@ -5,8 +5,9 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yii\Helpers;
+namespace Yiisoft\Arrays;
 
+use Yiisoft\Strings\StringHelper;
 use \InvalidArgumentException;
 
 /**
