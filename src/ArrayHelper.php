@@ -564,15 +564,15 @@ class ArrayHelper
      */
     public static function map($array, $from, $to, $group = null)
     {
+        if ($group === null) {
+            return array_column($array, $to, $from);
+        }
+
         $result = [];
         foreach ($array as $element) {
             $key = static::getValue($element, $from);
             $value = static::getValue($element, $to);
-            if ($group !== null) {
-                $result[static::getValue($element, $group)][$key] = $value;
-            } else {
-                $result[$key] = $value;
-            }
+            $result[static::getValue($element, $group)][$key] = $value;
         }
 
         return $result;
