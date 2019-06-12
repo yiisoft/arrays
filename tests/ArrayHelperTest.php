@@ -8,7 +8,6 @@
 namespace Yii\Arrays\Tests;
 
 use Yiisoft\Arrays\Arrayable;
-use yii\data\Sort; // FIXME
 use Yiisoft\Arrays\ArrayHelper;
 use PHPUnit\Framework\TestCase;
 
@@ -52,15 +51,7 @@ class Post3
  */
 class ArrayHelperTest extends TestCase
 {
-    protected function setUp()
-    {
-        // TODO destroy application, Helper must work without $this->app
-        // But the tests use Sort that needs Application.
-        // $this->destroyApplication();
-        // $this->mockApplication();
-    }
-
-    public function testToArray()
+    public function testToArray(): void
     {
         $dataArrayable = $this->getMockBuilder(Arrayable::class)->getMock();
         $dataArrayable->method('toArray')->willReturn([]);
@@ -286,13 +277,9 @@ class ArrayHelperTest extends TestCase
     public function testMultisortUseSort()
     {
         // single key
-        $sort = $this->factory->create([
-            '__class' => Sort::class,
-            'attributes' => ['name', 'age'],
-            'defaultOrder' => ['name' => SORT_ASC],
-            'params' => [],
-        ]);
-        $orders = $sort->getOrders();
+        $orders = [
+            'name' => SORT_ASC,
+        ];
 
         $array = [
             ['name' => 'b', 'age' => 3],
@@ -305,13 +292,10 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals(['name' => 'c', 'age' => 2], $array[2]);
 
         // multiple keys
-        $sort = $this->factory->create([
-            '__class' => Sort::class,
-            'attributes' => ['name', 'age'],
-            'defaultOrder' => ['name' => SORT_ASC, 'age' => SORT_DESC],
-            'params' => [],
-        ]);
-        $orders = $sort->getOrders();
+        $orders = [
+            'name' => SORT_ASC,
+            'age' => SORT_DESC,
+        ];
 
         $array = [
             ['name' => 'b', 'age' => 3],
@@ -650,7 +634,7 @@ class ArrayHelperTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/11739
      */
-    public function testIndexFloat()
+    public function testIndexFloat(): void
     {
         $array = [
             ['id' => 1e6],
@@ -801,7 +785,7 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals($expected, ArrayHelper::getValue($array, $key, $default));
     }
 
-    public function testGetValueObjects()
+    public function testGetValueObjects(): void
     {
         $arrayObject = new \ArrayObject(['id' => 23], \ArrayObject::ARRAY_AS_PROPS);
         $this->assertEquals(23, ArrayHelper::getValue($arrayObject, 'id'));
@@ -814,7 +798,7 @@ class ArrayHelperTest extends TestCase
      * This is expected to result in a PHP error.
      * @requires PHPUnit 6.0
      */
-    public function testGetValueNonexistingProperties1()
+    public function testGetValueNonexistingProperties1(): void
     {
         $this->expectException(\PHPUnit\Framework\Error\Error::class);
         $object = new Post1();
@@ -825,7 +809,7 @@ class ArrayHelperTest extends TestCase
      * This is expected to result in a PHP error.
      * @requires PHPUnit 6.0
      */
-    public function testGetValueNonexistingProperties2()
+    public function testGetValueNonexistingProperties2(): void
     {
         $this->expectException(\PHPUnit\Framework\Error\Error::class);
         $arrayObject = new \ArrayObject(['id' => 23], \ArrayObject::ARRAY_AS_PROPS);
@@ -836,7 +820,7 @@ class ArrayHelperTest extends TestCase
      * Data provider for [[testSetValue()]].
      * @return array test data
      */
-    public function dataProviderSetValue()
+    public function dataProviderSetValue(): array
     {
         return [
             [
@@ -1061,18 +1045,18 @@ class ArrayHelperTest extends TestCase
     /**
      * @dataProvider dataProviderSetValue
      *
-     * @param array $array_input
+     * @param array $arrayInput
      * @param string|array|null $key
      * @param mixed $value
      * @param mixed $expected
      */
-    public function testSetValue($array_input, $key, $value, $expected)
+    public function testSetValue(array $arrayInput, $key, $value, $expected)
     {
-        ArrayHelper::setValue($array_input, $key, $value);
-        $this->assertEquals($expected, $array_input);
+        ArrayHelper::setValue($arrayInput, $key, $value);
+        $this->assertEquals($expected, $arrayInput);
     }
 
-    public function testIsAssociative()
+    public function testIsAssociative(): void
     {
         $this->assertFalse(ArrayHelper::isAssociative('test'));
         $this->assertFalse(ArrayHelper::isAssociative([]));
@@ -1083,7 +1067,7 @@ class ArrayHelperTest extends TestCase
         $this->assertTrue(ArrayHelper::isAssociative(['name' => 1, 'value' => 'test', 3], false));
     }
 
-    public function testIsIndexed()
+    public function testIsIndexed(): void
     {
         $this->assertFalse(ArrayHelper::isIndexed('test'));
         $this->assertTrue(ArrayHelper::isIndexed([]));
@@ -1093,7 +1077,7 @@ class ArrayHelperTest extends TestCase
         $this->assertFalse(ArrayHelper::isIndexed(['a' => 'b'], false));
     }
 
-    public function testHtmlEncode()
+    public function testHtmlEncode(): void
     {
         $array = [
             'abc' => '123',
@@ -1180,7 +1164,7 @@ class ArrayHelperTest extends TestCase
         $this->assertFalse(ArrayHelper::isIn('a', [['a'], 'b']));
     }
 
-    public function testIsInStrict()
+    public function testIsInStrict(): void
     {
         // strict comparison
         $this->assertTrue(ArrayHelper::isIn(1, new \ArrayObject([1, 'a']), true));
@@ -1194,12 +1178,12 @@ class ArrayHelperTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Argument $haystack must be an array or implement Traversable
      */
-    public function testInException()
+    public function testInException(): void
     {
         ArrayHelper::isIn('value', null);
     }
 
-    public function testIsSubset()
+    public function testIsSubset(): void
     {
         $this->assertTrue(ArrayHelper::isSubset(['a'], new \ArrayObject(['a', 'b'])));
         $this->assertTrue(ArrayHelper::isSubset(new \ArrayObject(['a']), ['a', 'b']));
@@ -1215,12 +1199,12 @@ class ArrayHelperTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Argument $needles must be an array or implement Traversable
      */
-    public function testIsSubsetException()
+    public function testIsSubsetException(): void
     {
         ArrayHelper::isSubset('a', new \ArrayObject(['a', 'b']));
     }
 
-    public function testIsArray()
+    public function testIsArray(): void
     {
         $this->assertTrue(ArrayHelper::isTraversable(['a']));
         $this->assertTrue(ArrayHelper::isTraversable(new \ArrayObject(['1'])));
@@ -1231,7 +1215,7 @@ class ArrayHelperTest extends TestCase
         $this->assertFalse(ArrayHelper::isTraversable(null));
     }
 
-    public function testFilter()
+    public function testFilter(): void
     {
         $array = [
             'A' => [
