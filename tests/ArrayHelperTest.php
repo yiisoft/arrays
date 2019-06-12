@@ -1058,7 +1058,6 @@ class ArrayHelperTest extends TestCase
 
     public function testIsAssociative(): void
     {
-        $this->assertFalse(ArrayHelper::isAssociative('test'));
         $this->assertFalse(ArrayHelper::isAssociative([]));
         $this->assertFalse(ArrayHelper::isAssociative([1, 2, 3]));
         $this->assertFalse(ArrayHelper::isAssociative([1], false));
@@ -1069,7 +1068,6 @@ class ArrayHelperTest extends TestCase
 
     public function testIsIndexed(): void
     {
-        $this->assertFalse(ArrayHelper::isIndexed('test'));
         $this->assertTrue(ArrayHelper::isIndexed([]));
         $this->assertTrue(ArrayHelper::isIndexed([1, 2, 3]));
         $this->assertTrue(ArrayHelper::isIndexed([2 => 'a', 3 => 'b']));

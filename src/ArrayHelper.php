@@ -50,7 +50,7 @@ class ArrayHelper
      * @param bool $recursive whether to recursively converts properties which are objects into arrays.
      * @return array the array representation of the object
      */
-    public static function toArray($object, $properties = [], $recursive = true)
+    public static function toArray($object, array $properties = [], bool $recursive = true): array
     {
         if (is_array($object)) {
             if ($recursive) {
@@ -62,7 +62,9 @@ class ArrayHelper
             }
 
             return $object;
-        } elseif (is_object($object)) {
+        }
+
+        if (is_object($object)) {
             if (!empty($properties)) {
                 $className = get_class($object);
                 if (!empty($properties[$className])) {
@@ -108,7 +110,7 @@ class ArrayHelper
      * arrays via third argument, fourth argument etc.
      * @return array the merged array (the original arrays are not changed.)
      */
-    public static function merge($a, $b)
+    public static function merge(array $a, array $b): array
     {
         $args = func_get_args();
         $res = array_shift($args);
@@ -199,7 +201,9 @@ class ArrayHelper
             // this is expected to fail if the property does not exist, or __get() is not implemented
             // it is not reliably possible to check whether a property is accessible beforehand
             return $array->$key;
-        } elseif (is_array($array)) {
+        }
+
+        if (is_array($array)) {
             return (isset($array[$key]) || array_key_exists($key, $array)) ? $array[$key] : $default;
         }
 
@@ -258,7 +262,7 @@ class ArrayHelper
      * if the path is null then `$array` will be assigned the `$value`
      * @param mixed $value the value to be written
      */
-    public static function setValue(&$array, $path, $value)
+    public static function setValue(array &$array, $path, $value): void
     {
         if ($path === null) {
             $array = $value;
@@ -300,9 +304,9 @@ class ArrayHelper
      * @param mixed $default the default value to be returned if the specified key does not exist
      * @return mixed|null the value of the element if found, default value otherwise
      */
-    public static function remove(&$array, $key, $default = null)
+    public static function remove(array &$array, string $key, $default = null)
     {
-        if (is_array($array) && (isset($array[$key]) || array_key_exists($key, $array))) {
+        if (isset($array[$key]) || array_key_exists($key, $array)) {
             $value = $array[$key];
             unset($array[$key]);
 
@@ -326,18 +330,16 @@ class ArrayHelper
      * ```
      *
      * @param array $array the array where to look the value from
-     * @param string $value the value to remove from the array
+     * @param mixed $value the value to remove from the array
      * @return array the items that were removed from the array
      */
-    public static function removeValue(&$array, $value)
+    public static function removeValue(array &$array, $value): array
     {
         $result = [];
-        if (is_array($array)) {
-            foreach ($array as $key => $val) {
-                if ($val === $value) {
-                    $result[$key] = $val;
-                    unset($array[$key]);
-                }
+        foreach ($array as $key => $val) {
+            if ($val === $value) {
+                $result[$key] = $val;
+                unset($array[$key]);
             }
         }
 
@@ -444,7 +446,7 @@ class ArrayHelper
      * to the result array without any key.
      * @return array the indexed and/or grouped array
      */
-    public static function index($array, $key, $groups = [])
+    public static function index(array $array, $key, $groups = []): array
     {
         $result = [];
         $groups = (array)$groups;
@@ -505,7 +507,7 @@ class ArrayHelper
      * will be re-indexed with integers.
      * @return array the list of column values
      */
-    public static function getColumn($array, $name, $keepKeys = true)
+    public static function getColumn(array $array, $name, bool $keepKeys = true): array
     {
         $result = [];
         if ($keepKeys) {
@@ -562,7 +564,7 @@ class ArrayHelper
      * @param string|\Closure $group
      * @return array
      */
-    public static function map($array, $from, $to, $group = null)
+    public static function map(array $array, $from, $to, $group = null): array
     {
         if ($group === null) {
             return array_column($array, $to, $from);
@@ -587,7 +589,7 @@ class ArrayHelper
      * @param bool $caseSensitive whether the key comparison should be case-sensitive
      * @return bool whether the array contains the specified key
      */
-    public static function keyExists($key, $array, $caseSensitive = true)
+    public static function keyExists(string $key, array $array, bool $caseSensitive = true): bool
     {
         if ($caseSensitive) {
             // Function `isset` checks key faster but skips `null`, `array_key_exists` handles this case
@@ -620,7 +622,7 @@ class ArrayHelper
      * @throws InvalidArgumentException if the $direction or $sortFlag parameters do not have
      * correct number of elements as that of $key.
      */
-    public static function multisort(&$array, $key, $direction = SORT_ASC, $sortFlag = SORT_REGULAR)
+    public static function multisort(array &$array, $key, $direction = SORT_ASC, $sortFlag = SORT_REGULAR): void
     {
         $keys = is_array($key) ? $key : [$key];
         if (empty($keys) || empty($array)) {
@@ -638,9 +640,9 @@ class ArrayHelper
             throw new InvalidArgumentException('The length of $sortFlag parameter must be the same as that of $keys.');
         }
         $args = [];
-        foreach ($keys as $i => $key) {
+        foreach ($keys as $i => $iKey) {
             $flag = $sortFlag[$i];
-            $args[] = static::getColumn($array, $key);
+            $args[] = static::getColumn($array, $iKey);
             $args[] = $direction[$i];
             $args[] = $flag;
         }
@@ -652,7 +654,7 @@ class ArrayHelper
         $args[] = SORT_NUMERIC;
 
         $args[] = &$array;
-        call_user_func_array('array_multisort', $args);
+        array_multisort(...$args);
     }
 
     /**
@@ -668,7 +670,7 @@ class ArrayHelper
      * @return array the encoded data
      * @see http://www.php.net/manual/en/function.htmlspecialchars.php
      */
-    public static function htmlEncode($data, $valuesOnly = true, $charset = null)
+    public static function htmlEncode(array $data, bool $valuesOnly = true, string $charset = null): array
     {
         $d = [];
         foreach ($data as $key => $value) {
@@ -698,7 +700,7 @@ class ArrayHelper
      * @return array the decoded data
      * @see http://www.php.net/manual/en/function.htmlspecialchars-decode.php
      */
-    public static function htmlDecode($data, $valuesOnly = true)
+    public static function htmlDecode(array $data, bool $valuesOnly = true): array
     {
         $d = [];
         foreach ($data as $key => $value) {
@@ -730,9 +732,9 @@ class ArrayHelper
      * the array to be treated as associative.
      * @return bool whether the array is associative
      */
-    public static function isAssociative($array, $allStrings = true)
+    public static function isAssociative(array $array, bool $allStrings = true): bool
     {
-        if (!is_array($array) || empty($array)) {
+        if ($array === []) {
             return false;
         }
 
@@ -768,13 +770,9 @@ class ArrayHelper
      * in order for the array to be treated as indexed.
      * @return bool whether the array is indexed
      */
-    public static function isIndexed($array, $consecutive = false)
+    public static function isIndexed(array $array, bool $consecutive = false): bool
     {
-        if (!is_array($array)) {
-            return false;
-        }
-
-        if (empty($array)) {
+        if ($array === []) {
             return true;
         }
 
@@ -803,7 +801,7 @@ class ArrayHelper
      * @throws InvalidArgumentException if `$haystack` is neither traversable nor an array.
      * @see http://php.net/manual/en/function.in-array.php
      */
-    public static function isIn($needle, $haystack, $strict = false)
+    public static function isIn($needle, $haystack, bool $strict = false): bool
     {
         if ($haystack instanceof \Traversable) {
             foreach ($haystack as $value) {
@@ -829,7 +827,7 @@ class ArrayHelper
      * @return bool whether $var is array-like
      * @see http://php.net/manual/en/function.is-array.php
      */
-    public static function isTraversable($var)
+    public static function isTraversable($var): bool
     {
         return is_array($var) || $var instanceof \Traversable;
     }
@@ -845,7 +843,7 @@ class ArrayHelper
      * @return bool `true` if `$needles` is a subset of `$haystack`, `false` otherwise.
      * @throws InvalidArgumentException if `$haystack` or `$needles` is neither traversable nor an array.
      */
-    public static function isSubset($needles, $haystack, $strict = false)
+    public static function isSubset($needles, $haystack, bool $strict = false): bool
     {
         if (is_array($needles) || $needles instanceof \Traversable) {
             foreach ($needles as $needle) {
@@ -903,7 +901,7 @@ class ArrayHelper
      * - `!var.key` = `$array['var']['key'] will be removed from result.
      * @return array Filtered array
      */
-    public static function filter($array, $filters)
+    public static function filter(array $array, array $filters): array
     {
         $result = [];
         $forbiddenVars = [];
