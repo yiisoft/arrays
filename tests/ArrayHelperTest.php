@@ -709,15 +709,15 @@ class ArrayHelperTest extends TestCase
             'a' => 1,
             'B' => 2,
         ];
-        $this->assertTrue(ArrayHelper::keyExists('a', $array));
-        $this->assertFalse(ArrayHelper::keyExists('b', $array));
-        $this->assertTrue(ArrayHelper::keyExists('B', $array));
-        $this->assertFalse(ArrayHelper::keyExists('c', $array));
+        $this->assertTrue(ArrayHelper::keyExists($array, 'a'));
+        $this->assertFalse(ArrayHelper::keyExists($array, 'b'));
+        $this->assertTrue(ArrayHelper::keyExists($array, 'B'));
+        $this->assertFalse(ArrayHelper::keyExists($array, 'c'));
 
-        $this->assertTrue(ArrayHelper::keyExists('a', $array, false));
-        $this->assertTrue(ArrayHelper::keyExists('b', $array, false));
-        $this->assertTrue(ArrayHelper::keyExists('B', $array, false));
-        $this->assertFalse(ArrayHelper::keyExists('c', $array, false));
+        $this->assertTrue(ArrayHelper::keyExists($array, 'a', false));
+        $this->assertTrue(ArrayHelper::keyExists($array, 'b', false));
+        $this->assertTrue(ArrayHelper::keyExists($array, 'B', false));
+        $this->assertFalse(ArrayHelper::keyExists($array, 'c', false));
     }
 
     public function valueProvider()

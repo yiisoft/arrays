@@ -584,12 +584,12 @@ class ArrayHelper
      * Checks if the given array contains the specified key.
      * This method enhances the `array_key_exists()` function by supporting case-insensitive
      * key comparison.
-     * @param string $key the key to check
      * @param array $array the array with keys to check
+     * @param string $key the key to check
      * @param bool $caseSensitive whether the key comparison should be case-sensitive
      * @return bool whether the array contains the specified key
      */
-    public static function keyExists(string $key, array $array, bool $caseSensitive = true): bool
+    public static function keyExists(array $array, string $key, bool $caseSensitive = true): bool
     {
         if ($caseSensitive) {
             // Function `isset` checks key faster but skips `null`, `array_key_exists` handles this case
