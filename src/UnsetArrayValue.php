@@ -46,15 +46,4 @@ namespace Yiisoft\Arrays;
  */
 class UnsetArrayValue
 {
-    /**
-     * Restores class state after using `var_export()`.
-     *
-     * @param array $state
-     * @return self
-     * @see var_export()
-     */
-    public static function __set_state($state)
-    {
-        return new self();
-    }
 }
