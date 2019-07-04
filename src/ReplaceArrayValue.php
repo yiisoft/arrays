@@ -59,4 +59,9 @@ class ReplaceArrayValue
      * @var mixed value used as replacement.
      */
     public $value;
+
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
 }
