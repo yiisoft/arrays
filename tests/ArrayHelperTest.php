@@ -7,7 +7,7 @@
 
 namespace Yii\Arrays\Tests;
 
-use Yiisoft\Arrays\Arrayable;
+use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayHelper;
 use PHPUnit\Framework\TestCase;
 
@@ -53,7 +53,7 @@ class ArrayHelperTest extends TestCase
 {
     public function testToArray(): void
     {
-        $dataArrayable = $this->getMockBuilder(Arrayable::class)->getMock();
+        $dataArrayable = $this->getMockBuilder(ArrayableInterface::class)->getMock();
         $dataArrayable->method('toArray')->willReturn([]);
         $this->assertEquals([], ArrayHelper::toArray($dataArrayable));
         $this->assertEquals(['foo'], ArrayHelper::toArray('foo'));

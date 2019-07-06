@@ -8,16 +8,16 @@
 namespace Yiisoft\Arrays;
 
 /**
- * Arrayable is the interface that should be implemented by classes who want to support customizable representation of their instances.
+ * ArrayableInterface should be implemented by classes who want to support customizable representation of their instances.
  *
- * For example, if a class implements Arrayable, by calling [[toArray()]], an instance of this class
+ * For example, if a class implements ArrayableInterface, by calling [[toArray()]], an instance of this class
  * can be turned into an array (including all its embedded objects) which can then be further transformed easily
  * into other formats, such as JSON, XML.
  *
  * The methods [[fields()]] and [[extraFields()]] allow the implementing classes to customize how and which of their data
  * should be formatted and put into the result of [[toArray()]].
  */
-interface Arrayable
+interface ArrayableInterface
 {
     /**
      * Returns the list of fields that should be returned by default by [[toArray()]] when no specific fields are specified.

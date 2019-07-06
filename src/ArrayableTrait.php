@@ -123,12 +123,12 @@ trait ArrayableTrait
             if ($recursive) {
                 $nestedFields = $this->extractFieldsFor($fields, $field);
                 $nestedExpand = $this->extractFieldsFor($expand, $field);
-                if ($attribute instanceof Arrayable) {
+                if ($attribute instanceof ArrayableInterface) {
                     $attribute = $attribute->toArray($nestedFields, $nestedExpand);
                 } elseif (is_array($attribute)) {
                     $attribute = array_map(
                         function ($item) use ($nestedFields, $nestedExpand) {
-                            if ($item instanceof Arrayable) {
+                            if ($item instanceof ArrayableInterface) {
                                 return $item->toArray($nestedFields, $nestedExpand);
                             }
                             return $item;
