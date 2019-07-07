@@ -1,13 +1,5 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Arrays;
-
-use \InvalidArgumentException;
 
 /**
  * Object that represents the replacement of array value while performing [[ArrayHelper::merge()]].

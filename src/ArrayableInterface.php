@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Arrays;
 
 /**
@@ -58,7 +52,7 @@ interface ArrayableInterface
      * @return array the list of field names or field definitions.
      * @see toArray()
      */
-    public function fields();
+    public function fields(): array;
 
     /**
      * Returns the list of additional fields that can be returned by [[toArray()]] in addition to those listed in [[fields()]].
@@ -72,7 +66,7 @@ interface ArrayableInterface
      * @see toArray()
      * @see fields()
      */
-    public function extraFields();
+    public function extraFields(): array;
 
     /**
      * Converts the object into an array.
@@ -85,5 +79,5 @@ interface ArrayableInterface
      * @param bool $recursive whether to recursively return array representation of embedded objects.
      * @return array the array representation of the object
      */
-    public function toArray(array $fields = [], array $expand = [], $recursive = true);
+    public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array;
 }
