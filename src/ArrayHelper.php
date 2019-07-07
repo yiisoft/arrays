@@ -105,14 +105,11 @@ class ArrayHelper
      * be appended to the former array.
      * You can use [[UnsetArrayValue]] object to unset value from previous array or
      * [[ReplaceArrayValue]] to force replace former value instead of recursive merging.
-     * @param array $a array to be merged to
-     * @param array $b array to be merged from. You can specify additional
-     * arrays via third argument, fourth argument etc.
+     * @param array $args arrays to be merged
      * @return array the merged array (the original arrays are not changed.)
      */
-    public static function merge(array $a, array $b): array
+    public static function merge(...$args): array
     {
-        $args = func_get_args();
         $res = array_shift($args);
         while (!empty($args)) {
             foreach (array_shift($args) as $k => $v) {
