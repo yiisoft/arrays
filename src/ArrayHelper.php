@@ -794,16 +794,14 @@ class ArrayHelper
      */
     public static function isIn($needle, iterable $haystack, bool $strict = false): bool
     {
-        if ($haystack instanceof \Traversable) {
-            foreach ($haystack as $value) {
-                if ($needle == $value && (!$strict || $needle === $value)) {
-                    return true;
-                }
-            }
-        } elseif (is_array($haystack)) {
+        if (is_array($haystack)) {
             return in_array($needle, $haystack, $strict);
-        } else {
-            throw new InvalidArgumentException('Argument $haystack must be an array or implement Traversable');
+        }
+
+        foreach ($haystack as $value) {
+            if ($needle == $value && (!$strict || $needle === $value)) {
+                return true;
+            }
         }
 
         return false;
@@ -836,17 +834,13 @@ class ArrayHelper
      */
     public static function isSubset(iterable $needles, iterable $haystack, bool $strict = false): bool
     {
-        if (is_array($needles) || $needles instanceof \Traversable) {
-            foreach ($needles as $needle) {
-                if (!static::isIn($needle, $haystack, $strict)) {
-                    return false;
-                }
+        foreach ($needles as $needle) {
+            if (!static::isIn($needle, $haystack, $strict)) {
+                return false;
             }
-
-            return true;
         }
 
-        throw new InvalidArgumentException('Argument $needles must be an array or implement Traversable');
+        return true;
     }
 
     /**

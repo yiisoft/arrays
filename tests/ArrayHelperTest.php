@@ -1166,15 +1166,6 @@ class ArrayHelperTest extends TestCase
         $this->assertFalse(ArrayHelper::isIn('1', [1, 'a'], true));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Argument $haystack must be an array or implement Traversable
-     */
-    public function testInException(): void
-    {
-        ArrayHelper::isIn('value', null);
-    }
-
     public function testIsSubset(): void
     {
         $this->assertTrue(ArrayHelper::isSubset(['a'], new \ArrayObject(['a', 'b'])));
@@ -1185,15 +1176,6 @@ class ArrayHelperTest extends TestCase
 
         $this->assertFalse(ArrayHelper::isSubset([1], new \ArrayObject(['1', 'b']), true));
         $this->assertFalse(ArrayHelper::isSubset(new \ArrayObject([1]), ['1', 'b'], true));
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Argument $needles must be an array or implement Traversable
-     */
-    public function testIsSubsetException(): void
-    {
-        ArrayHelper::isSubset('a', new \ArrayObject(['a', 'b']));
     }
 
     public function testIsArray(): void
