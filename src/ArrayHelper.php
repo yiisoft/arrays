@@ -786,13 +786,13 @@ class ArrayHelper
      * This method does the same as the PHP function [in_array()](http://php.net/manual/en/function.in-array.php)
      * but additionally works for objects that implement the [[\Traversable]] interface.
      * @param mixed $needle The value to look for.
-     * @param array|\Traversable $haystack The set of values to search.
+     * @param iterable $haystack The set of values to search.
      * @param bool $strict Whether to enable strict (`===`) comparison.
      * @return bool `true` if `$needle` was found in `$haystack`, `false` otherwise.
      * @throws InvalidArgumentException if `$haystack` is neither traversable nor an array.
      * @see http://php.net/manual/en/function.in-array.php
      */
-    public static function isIn($needle, $haystack, bool $strict = false): bool
+    public static function isIn($needle, iterable $haystack, bool $strict = false): bool
     {
         if ($haystack instanceof \Traversable) {
             foreach ($haystack as $value) {
@@ -828,13 +828,13 @@ class ArrayHelper
      *
      * This method will return `true`, if all elements of `$needles` are contained in
      * `$haystack`. If at least one element is missing, `false` will be returned.
-     * @param array|\Traversable $needles The values that must **all** be in `$haystack`.
-     * @param array|\Traversable $haystack The set of value to search.
+     * @param iterable $needles The values that must **all** be in `$haystack`.
+     * @param iterable $haystack The set of value to search.
      * @param bool $strict Whether to enable strict (`===`) comparison.
      * @return bool `true` if `$needles` is a subset of `$haystack`, `false` otherwise.
      * @throws InvalidArgumentException if `$haystack` or `$needles` is neither traversable nor an array.
      */
-    public static function isSubset($needles, $haystack, bool $strict = false): bool
+    public static function isSubset(iterable $needles, iterable $haystack, bool $strict = false): bool
     {
         if (is_array($needles) || $needles instanceof \Traversable) {
             foreach ($needles as $needle) {
@@ -943,7 +943,7 @@ class ArrayHelper
      * @param object $object the object to be handled
      * @return array|null the public member variables of the object or null if not object given
      */
-    public static function getObjectVars($object): ?array
+    public static function getObjectVars(object $object): ?array
     {
         return get_object_vars($object);
     }
