@@ -293,7 +293,7 @@ class ArrayHelper
      * @param array $array the array to extract value from
      * @param string $key key name of the array element
      * @param mixed $default the default value to be returned if the specified key does not exist
-     * @return mixed|null the value of the element if found, default value otherwise
+     * @return mixed the value of the element if found, default value otherwise
      */
     public static function remove(array &$array, string $key, $default = null)
     {
