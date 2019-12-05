@@ -329,25 +329,21 @@ class ArrayHelperTest extends TestCase
         ], $changelog);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testMultisortInvalidArgumentExceptionDirection()
+    public function testMultisortInvalidArgumentExceptionDirection(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
         $data = ['foo' => 'bar'];
         ArrayHelper::multisort($data, ['foo'], []);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testMultisortInvalidArgumentExceptionSortFlag()
+    public function testMultisortInvalidArgumentExceptionSortFlag(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
         $data = ['foo' => 'bar'];
         ArrayHelper::multisort($data, ['foo'], ['foo'], []);
     }
 
-    public function testMerge()
+    public function testMerge(): void
     {
         $a = [
             'name' => 'Yii',
