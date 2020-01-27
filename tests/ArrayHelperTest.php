@@ -1,4 +1,5 @@
 <?php
+
 namespace Yii\Arrays\Tests;
 
 use Yiisoft\Arrays\ArrayableInterface;

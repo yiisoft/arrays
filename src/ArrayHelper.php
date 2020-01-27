@@ -1,8 +1,9 @@
 <?php
+
 namespace Yiisoft\Arrays;
 
 use Yiisoft\Strings\StringHelper;
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 /**
  * Yii array helper provides static methods allowing you to deal with arrays more efficiently.
