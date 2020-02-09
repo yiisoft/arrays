@@ -3,7 +3,6 @@
 
 namespace Yiisoft\Arrays\Tests;
 
-
 final class Post1
 {
     public $id = 23;

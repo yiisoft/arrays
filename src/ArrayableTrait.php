@@ -2,7 +2,6 @@
 
 namespace Yiisoft\Arrays;
 
-
 /**
  * ArrayableTrait provides a common implementation of the [[Arrayable]] interface.
  *
