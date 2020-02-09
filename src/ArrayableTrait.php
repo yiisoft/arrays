@@ -2,8 +2,6 @@
 
 namespace Yiisoft\Arrays;
 
-use yii\web\Link;
-use yii\web\Linkable;
 
 /**
  * ArrayableTrait provides a common implementation of the [[Arrayable]] interface.
@@ -95,9 +93,6 @@ trait ArrayableTrait
      * any embedded objects will also be converted into arrays.
      * When embeded objects are [[Arrayable]], their respective nested fields will be extracted and passed to [[toArray()]].
      *
-     * If the model implements the [[Linkable]] interface, the resulting array will also have a `_link` element
-     * which refers to a list of links as specified by the interface.
-     *
      * @param array $fields the fields being requested.
      * If empty or if it contains '*', all fields as specified by [[fields()]] will be returned.
      * Fields can be nested, separated with dots (.). e.g.: item.field.sub-field
@@ -133,10 +128,6 @@ trait ArrayableTrait
                 }
             }
             $data[$field] = $attribute;
-        }
-
-        if ($this instanceof Linkable) {
-            $data['_links'] = Link::serialize($this->getLinks());
         }
 
         return $recursive ? ArrayHelper::toArray($data) : $data;

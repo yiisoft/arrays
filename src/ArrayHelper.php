@@ -565,8 +565,7 @@ class ArrayHelper
         $result = [];
         foreach ($array as $element) {
             $key = static::getValue($element, $from);
-            $value = static::getValue($element, $to);
-            $result[static::getValue($element, $group)][$key] = $value;
+            $result[static::getValue($element, $group)][$key] = static::getValue($element, $to);
         }
 
         return $result;
@@ -819,7 +818,7 @@ class ArrayHelper
      */
     public static function isTraversable($var): bool
     {
-        return is_array($var) || $var instanceof \Traversable;
+        return is_iterable($var);
     }
 
     /**
@@ -897,7 +896,7 @@ class ArrayHelper
             $globalKey = $keys[0];
             $localKey = $keys[1] ?? null;
 
-            if ($globalKey[0] === '!') {
+            if (strpos($globalKey, '!') === 0) {
                 $forbiddenVars[] = [
                     substr($globalKey, 1),
                     $localKey,
