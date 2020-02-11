@@ -188,11 +188,10 @@ class ArrayHelper
             $keys = explode('.', $key);
             while (count($keys) != 0) {
                 $key = array_shift($keys);
-                if (isset($array[$key]) || array_key_exists($key, $array)) {
-                    $array = $array[$key];
-                } else {
+                if (!(isset($array[$key]) || array_key_exists($key, $array))) {
                     return $default;
                 }
+                $array = $array[$key];
             }
             return $array;
         }
