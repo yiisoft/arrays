@@ -184,9 +184,17 @@ class ArrayHelper
             return $array[$key];
         }
 
-        if (($pos = strrpos($key, '.')) !== false) {
-            $array = static::getValue($array, substr($key, 0, $pos), $default);
-            $key = substr($key, $pos + 1);
+        if (strpos($key, '.') !== false) {
+            $keys = explode('.', $key);
+            while (count($keys) != 0) {
+                $key = array_shift($keys);
+                if (isset($array[$key]) || array_key_exists($key, $array)) {
+                    $array = $array[$key];
+                } else {
+                    return $default;
+                }
+            }
+            return $array;
         }
 
         if (is_object($array)) {
