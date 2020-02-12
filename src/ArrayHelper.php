@@ -180,7 +180,7 @@ class ArrayHelper
             $key = $lastKey;
         }
 
-        if (is_array($array) && (isset($array[$key]) || array_key_exists($key, $array))) {
+        if (is_array($array) && array_key_exists((string)$key, $array)) {
             return $array[$key];
         }
 
@@ -299,7 +299,7 @@ class ArrayHelper
      */
     public static function remove(array &$array, string $key, $default = null)
     {
-        if (isset($array[$key]) || array_key_exists($key, $array)) {
+        if (array_key_exists($key, $array)) {
             $value = $array[$key];
             unset($array[$key]);
 
@@ -584,9 +584,7 @@ class ArrayHelper
     public static function keyExists(array $array, string $key, bool $caseSensitive = true): bool
     {
         if ($caseSensitive) {
-            // Function `isset` checks key faster but skips `null`, `array_key_exists` handles this case
-            // http://php.net/manual/en/function.array-key-exists.php#107786
-            return isset($array[$key]) || array_key_exists($key, $array);
+            return array_key_exists($key, $array);
         }
 
         foreach (array_keys($array) as $k) {
