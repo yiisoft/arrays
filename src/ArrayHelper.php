@@ -201,10 +201,6 @@ class ArrayHelper
             return $array->$key;
         }
 
-        if (is_array($array)) {
-            return (isset($array[$key]) || array_key_exists($key, $array)) ? $array[$key] : $default;
-        }
-
         return $default;
     }
 
