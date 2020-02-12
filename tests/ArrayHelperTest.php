@@ -749,7 +749,7 @@ final class ArrayHelperTest extends TestCase
     /**
      * @see https://github.com/yiisoft/arrays/issues/1
      */
-    public function testGetValueConsistentWithSetValue()
+    public function testGetValueConsistentWithSetValue(): void
     {
         $array = [
             'a.b' => [

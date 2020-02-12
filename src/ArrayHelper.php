@@ -185,12 +185,11 @@ class ArrayHelper
         }
 
         if (strpos($key, '.') !== false) {
-            $keys = explode('.', $key);
-            foreach ($keys as $key) {
-                if (!array_key_exists($key, $array)) {
+            foreach (explode('.', $key) as $part) {
+                if (!array_key_exists($part, $array)) {
                     return $default;
                 }
-                $array = $array[$key];
+                $array = $array[$part];
             }
             return $array;
         }
