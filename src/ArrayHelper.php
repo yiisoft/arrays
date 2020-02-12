@@ -186,9 +186,8 @@ class ArrayHelper
 
         if (strpos($key, '.') !== false) {
             $keys = explode('.', $key);
-            while (count($keys) != 0) {
-                $key = array_shift($keys);
-                if (!(isset($array[$key]) || array_key_exists($key, $array))) {
+            foreach ($keys as $key) {
+                if (!array_key_exists($key, $array)) {
                     return $default;
                 }
                 $array = $array[$key];
