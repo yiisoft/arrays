@@ -746,6 +746,21 @@ final class ArrayHelperTest extends TestCase
         $this->assertEquals($expected, ArrayHelper::getValue($array, $key, $default));
     }
 
+    /**
+     * @see https://github.com/yiisoft/arrays/issues/1
+     */
+    public function testGetValueConsistentWithSetValue(): void
+    {
+        $array = [
+            'a.b' => [
+                'c' => 'value1',
+            ],
+        ];
+        $this->assertEquals(null, ArrayHelper::getValue($array, 'a.b.c'));
+        ArrayHelper::setValue($array, 'a.b.c', 'newValue');
+        $this->assertEquals('newValue', ArrayHelper::getValue($array, 'a.b.c'));
+    }
+
     public function testGetValueObjects(): void
     {
         $arrayObject = new ArrayObject(['id' => 23], ArrayObject::ARRAY_AS_PROPS);

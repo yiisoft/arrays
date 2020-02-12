@@ -184,19 +184,20 @@ class ArrayHelper
             return $array[$key];
         }
 
-        if (($pos = strrpos($key, '.')) !== false) {
-            $array = static::getValue($array, substr($key, 0, $pos), $default);
-            $key = substr($key, $pos + 1);
+        if (strpos($key, '.') !== false) {
+            foreach (explode('.', $key) as $part) {
+                if (!array_key_exists($part, $array)) {
+                    return $default;
+                }
+                $array = $array[$part];
+            }
+            return $array;
         }
 
         if (is_object($array)) {
             // this is expected to fail if the property does not exist, or __get() is not implemented
             // it is not reliably possible to check whether a property is accessible beforehand
             return $array->$key;
-        }
-
-        if (is_array($array)) {
-            return (isset($array[$key]) || array_key_exists($key, $array)) ? $array[$key] : $default;
         }
 
         return $default;
