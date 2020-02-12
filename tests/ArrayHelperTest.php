@@ -461,6 +461,19 @@ final class ArrayHelperTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
+
+    public function testMergeIntegerKeyedArraysWithSameValue(): void
+    {
+        $a = ['2019-01-25'];
+        $b = ['2019-01-25'];
+        $c = ['2019-01-25'];
+
+        $result = ArrayHelper::merge($a, $b, $c);
+        $expected = ['2019-01-25'];
+
+        $this->assertEquals($expected, $result);
+    }
+
     /**
      * @see https://github.com/yiisoft/yii2/pull/11549
      */

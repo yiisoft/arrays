@@ -113,7 +113,7 @@ class ArrayHelper
                 } elseif ($v instanceof ReplaceArrayValue) {
                     $res[$k] = $v->value;
                 } elseif (is_int($k)) {
-                    if (array_key_exists($k, $res)) {
+                    if (array_key_exists($k, $res) && $res[$k] !== $v) {
                         $res[] = $v;
                     } else {
                         $res[$k] = $v;
