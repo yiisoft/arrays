@@ -4,10 +4,10 @@ namespace Yiisoft\Arrays\Tests;
 
 use ArrayObject;
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayHelper;
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ReplaceArrayValue;
 use Yiisoft\Arrays\UnsetArrayValue;
 
@@ -781,6 +781,15 @@ final class ArrayHelperTest extends TestCase
 
         $object = new Post1();
         $this->assertEquals(23, ArrayHelper::getValue($object, 'id'));
+    }
+
+    public function testGetNestedValueFromObject(): void
+    {
+        $object = new stdClass();
+        $object->subObject = new stdClass();
+        $object->subObject->id = 155;
+
+        $this->assertEquals(155, ArrayHelper::getValue($object, 'subObject.id'));
     }
 
     /**
