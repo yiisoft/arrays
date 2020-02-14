@@ -180,13 +180,13 @@ class ArrayHelper
             $key = $lastKey;
         }
 
-        if (is_array($array) && array_key_exists((string)$key, $array)) {
+        if (is_array($array) && isset($array[$key])) {
             return $array[$key];
         }
 
         if (strpos($key, '.') !== false) {
             foreach (explode('.', $key) as $part) {
-                if (!array_key_exists($part, $array)) {
+                if (!isset($array[$part])) {
                     return $default;
                 }
                 $array = $array[$part];
