@@ -477,7 +477,7 @@ final class ArrayHelperTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/pull/11549
      */
-    public function test(): void
+    public function testFloatKey(): void
     {
         $array = [];
         $array[1.0] = 'some value';
