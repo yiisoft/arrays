@@ -783,13 +783,33 @@ final class ArrayHelperTest extends TestCase
         $this->assertEquals(23, ArrayHelper::getValue($object, 'id'));
     }
 
-    public function testGetNestedValueFromObject(): void
+    public function testGetNestedObjectsValueFromObject(): void
     {
         $object = new stdClass();
         $object->subObject = new stdClass();
         $object->subObject->id = 155;
 
         $this->assertEquals(155, ArrayHelper::getValue($object, 'subObject.id'));
+    }
+
+    public function testGetNestedValueFromObjectThatFromArrayFromObject(): void
+    {
+        $subObject = new stdClass();
+        $subObject->id = 200;
+
+        $object = new stdClass();
+        $object->subObject = ['sub' => $subObject];
+
+        $this->assertEquals(200, ArrayHelper::getValue($object, 'subObject.sub.id'));
+    }
+
+    public function testGetNestedValueFromObjectFromArray(): void
+    {
+        $stdClass = new stdClass();
+        $stdClass->id = 250;
+        $object = ['main' => $stdClass];
+
+        $this->assertEquals(250, ArrayHelper::getValue($object, 'main.id'));
     }
 
     /**
