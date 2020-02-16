@@ -4,10 +4,10 @@ namespace Yiisoft\Arrays\Tests;
 
 use ArrayObject;
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayHelper;
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ReplaceArrayValue;
 use Yiisoft\Arrays\UnsetArrayValue;
 
@@ -477,7 +477,7 @@ final class ArrayHelperTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/pull/11549
      */
-    public function test(): void
+    public function testFloatKey(): void
     {
         $array = [];
         $array[1.0] = 'some value';
@@ -781,6 +781,35 @@ final class ArrayHelperTest extends TestCase
 
         $object = new Post1();
         $this->assertEquals(23, ArrayHelper::getValue($object, 'id'));
+    }
+
+    public function testGetNestedObjectsValueFromObject(): void
+    {
+        $object = new stdClass();
+        $object->subObject = new stdClass();
+        $object->subObject->id = 155;
+
+        $this->assertEquals(155, ArrayHelper::getValue($object, 'subObject.id'));
+    }
+
+    public function testGetNestedValueFromObjectThatFromArrayFromObject(): void
+    {
+        $subObject = new stdClass();
+        $subObject->id = 200;
+
+        $object = new stdClass();
+        $object->subObject = ['sub' => $subObject];
+
+        $this->assertEquals(200, ArrayHelper::getValue($object, 'subObject.sub.id'));
+    }
+
+    public function testGetNestedValueFromObjectFromArray(): void
+    {
+        $stdClass = new stdClass();
+        $stdClass->id = 250;
+        $object = ['main' => $stdClass];
+
+        $this->assertEquals(250, ArrayHelper::getValue($object, 'main.id'));
     }
 
     /**

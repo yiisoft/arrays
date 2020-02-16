@@ -2,8 +2,8 @@
 
 namespace Yiisoft\Arrays;
 
-use Yiisoft\Strings\StringHelper;
 use InvalidArgumentException;
+use Yiisoft\Strings\StringHelper;
 
 /**
  * Yii array helper provides static methods allowing you to deal with arrays more efficiently.
@@ -175,26 +175,41 @@ class ArrayHelper
         if (is_array($key)) {
             $lastKey = array_pop($key);
             foreach ($key as $keyPart) {
-                $array = static::getValue($array, $keyPart);
+                $array = static::getValue($array, $keyPart, $default);
             }
-            $key = $lastKey;
+
+            return static::getValue($array, $lastKey, $default);
         }
 
-        if (is_array($array) && array_key_exists((string)$key, $array)) {
+        $isArgumentArray = is_array($array);
+        if ($isArgumentArray && array_key_exists((string)$key, $array)) {
             return $array[$key];
+        }
+
+        $isArgumentObject = is_object($array);
+        if (!$isArgumentArray && !$isArgumentObject) {
+            return $default;
         }
 
         if (strpos($key, '.') !== false) {
             foreach (explode('.', $key) as $part) {
-                if (!array_key_exists($part, $array)) {
-                    return $default;
+                if (is_array($array)) {
+                    if (!array_key_exists($part, $array)) {
+                        return $default;
+                    }
+                    $array = $array[$part];
+                } elseif(is_object($array)) {
+                    if (!property_exists($array, $part)) {
+                        return $default;
+                    }
+                    $array = $array->$part;
                 }
-                $array = $array[$part];
             }
+
             return $array;
         }
 
-        if (is_object($array)) {
+        if ($isArgumentObject) {
             // this is expected to fail if the property does not exist, or __get() is not implemented
             // it is not reliably possible to check whether a property is accessible beforehand
             return $array->$key;
