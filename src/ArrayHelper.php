@@ -172,23 +172,20 @@ class ArrayHelper
             return $key($array, $default);
         }
 
+        if (!is_array($array) && !is_object($array)) {
+            throw new \InvalidArgumentException('getValue() can not get value from ' . gettype($array) . '. Only array and object are supported.');
+        }
+
         if (is_array($key)) {
             $lastKey = array_pop($key);
             foreach ($key as $keyPart) {
                 $array = static::getValue($array, $keyPart, $default);
             }
-
             return static::getValue($array, $lastKey, $default);
         }
 
-        $isArgumentArray = is_array($array);
-        if ($isArgumentArray && array_key_exists((string)$key, $array)) {
+        if (is_array($array) && array_key_exists((string)$key, $array)) {
             return $array[$key];
-        }
-
-        $isArgumentObject = is_object($array);
-        if (!$isArgumentArray && !$isArgumentObject) {
-            return $default;
         }
 
         if (strpos($key, '.') !== false) {
@@ -209,7 +206,7 @@ class ArrayHelper
             return $array;
         }
 
-        if ($isArgumentObject) {
+        if (is_object($array)) {
             // this is expected to fail if the property does not exist, or __get() is not implemented
             // it is not reliably possible to check whether a property is accessible beforehand
             return $array->$key;
