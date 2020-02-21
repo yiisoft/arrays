@@ -1262,4 +1262,15 @@ final class ArrayHelperTest extends TestCase
 
         $this->assertEquals(ArrayHelper::filter($tmp, array_keys($tmp)), $tmp);
     }
+
+    public function testGetNestedValueFromObjectFromActiveQuery(): void
+    {
+        $customer = new Customer();
+
+        $order = new Order();
+
+        $order->customer = $customer;
+
+        $this->assertEquals(1, ArrayHelper::getValue($order, 'customer.id'));
+    }
 }
