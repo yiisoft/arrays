@@ -199,7 +199,7 @@ class ArrayHelper
                     }
                     $array = $array[$part];
                 } elseif (is_object($array)) {
-                    if (!property_exists($array, $part)) {
+                    if (!property_exists($array, $part) && empty($array)) {
                         return $default;
                     }
                     $array = $array->$part;

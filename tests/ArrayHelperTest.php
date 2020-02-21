@@ -694,7 +694,7 @@ final class ArrayHelperTest extends TestCase
         $this->assertFalse(ArrayHelper::keyExists($array, 'c', false));
     }
 
-    public function valueProvider(): array
+    public function getValueFromArrayProvider(): array
     {
         return [
             ['name', 'test'],
@@ -724,13 +724,13 @@ final class ArrayHelperTest extends TestCase
     }
 
     /**
-     * @dataProvider valueProvider
+     * @dataProvider getValueFromArrayProvider
      *
      * @param $key
      * @param $expected
      * @param null $default
      */
-    public function testGetValue($key, $expected, $default = null): void
+    public function testGetValueFromArray($key, $expected, $default = null): void
     {
         $array = [
             'name' => 'test',
@@ -1261,5 +1261,36 @@ final class ArrayHelperTest extends TestCase
         ];
 
         $this->assertEquals(ArrayHelper::filter($tmp, array_keys($tmp)), $tmp);
+    }
+
+    public function testExistingMagicObjectProperty(): void
+    {
+        $magic = new Magic(['name' => 'Wilmer']);
+        $this->assertEquals('Wilmer', ArrayHelper::getValue($magic, 'name'));
+    }
+
+    public function testNonExistingMagicObjectProperty(): void
+    {
+        $magic = new Magic([]);
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        ArrayHelper::getValue($magic, 'name');
+    }
+
+    public function testExistingNestedMagicObjectProperty(): void
+    {
+        $storage = new stdClass();
+        $storage->magic = new Magic(['name' => 'Wilmer']);
+        $this->assertEquals('Wilmer', ArrayHelper::getValue($storage, 'magic.name'));
+    }
+
+    public function testNonExistingNestedMagicObjectProperty(): void
+    {
+        $order = new stdClass();
+        $order->magic = new Magic([]);
+
+        $this->expectException(\InvalidArgumentException::class);
+        ArrayHelper::getValue($order, 'magic.name');
     }
 }
