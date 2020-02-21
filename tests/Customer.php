@@ -2,13 +2,15 @@
 
 namespace Yiisoft\Arrays\Tests;
 
+use ReflectionClass;
+
 final class Customer
 {
-    public $status2 = null;
+    public ?int $status2 = null;
 
-    public $sumTotal = null;
+    public ?int $sumTotal = null;
 
-    public $attributes = [
+    public array $attributes = [
         'id' => 1,
         'email' => 'user1@example.com',
         'name' => 'user1',
@@ -17,7 +19,7 @@ final class Customer
         'profile_id' => 1,
     ];
 
-    public $oldAttributes = [
+    public array $oldAttributes = [
         'id' => 1,
         'email' => 'user1@example.com',
         'name' => 'user1',
@@ -26,7 +28,7 @@ final class Customer
         'profile_id' => 1,
     ];
 
-    public function hasAttribute($name)
+    public function hasAttribute($name): bool
     {
         return isset($this->attributes[$name]) || in_array($name, $this->attributes(), true);
     }
@@ -40,15 +42,9 @@ final class Customer
         if ($this->hasAttribute($name)) {
             return null;
         }
-
-        if (isset($this->related[$name]) || array_key_exists($name, $this->related)) {
-            return $this->related[$name];
-        }
-
-        return $value;
     }
 
-    public function attributes()
+    public function attributes(): array
     {
         $class = new ReflectionClass($this);
         $names = [];
