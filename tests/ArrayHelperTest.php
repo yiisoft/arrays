@@ -8,8 +8,8 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Arrays\ReplaceArrayValue;
-use Yiisoft\Arrays\UnsetArrayValue;
+use Yiisoft\Arrays\Modifier\ReplaceValue;
+use Yiisoft\Arrays\Modifier\UnsetValue;
 
 final class ArrayHelperTest extends TestCase
 {
@@ -431,7 +431,7 @@ final class ArrayHelperTest extends TestCase
         ];
         $b = [
             'version' => '1.1',
-            'options' => new UnsetArrayValue(),
+            'options' => new UnsetValue(),
             'features' => [
                 'gii',
             ],
@@ -468,7 +468,7 @@ final class ArrayHelperTest extends TestCase
             'options' => [
                 'unittest' => true,
             ],
-            'features' => new ReplaceArrayValue(
+            'features' => new ReplaceValue(
                 [
                     'gii',
                 ]
