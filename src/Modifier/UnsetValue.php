@@ -1,6 +1,6 @@
 <?php
 
-namespace Yiisoft\Arrays;
+namespace Yiisoft\Arrays\Modifier;
 
 /**
  * Object that represents the removal of array value while performing [[ArrayHelper::merge()]].
@@ -22,7 +22,7 @@ namespace Yiisoft\Arrays;
  *     'ids' => [
  *         2,
  *     ],
- *     'validDomains' => new \Yiisoft\Arrays\UnsetArrayValue(),
+ *     'validDomains' => new \Yiisoft\Arrays\Modifier\UnsetValue(),
  * ];
  *
  * $result = \Yiisoft\Arrays\ArrayHelper::merge($array1, $array2);
@@ -39,6 +39,12 @@ namespace Yiisoft\Arrays;
  * ]
  * ```
  */
-class UnsetArrayValue
+class UnsetValue implements ModifierInterface
 {
+    public function apply(array $data, string $key): array
+    {
+        unset($data[$key]);
+
+        return $data;
+    }
 }
