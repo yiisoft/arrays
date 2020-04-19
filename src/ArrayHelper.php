@@ -105,7 +105,7 @@ class ArrayHelper
      */
     public static function merge(...$args): array
     {
-        $res = array_shift($args);
+        $res = array_shift($args) ?: [];
         while (!empty($args)) {
             foreach (array_shift($args) as $k => $v) {
                 if ($v instanceof UnsetArrayValue) {

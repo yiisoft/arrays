@@ -359,6 +359,11 @@ final class ArrayHelperTest extends TestCase
         ArrayHelper::multisort($data, ['foo'], ['foo'], []);
     }
 
+    public function testEmptyMerge(): void
+    {
+        $this->assertEquals([], ArrayHelper::merge(...[]));
+    }
+
     public function testMerge(): void
     {
         $a = [
