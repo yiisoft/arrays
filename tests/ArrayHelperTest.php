@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Arrays\Modifier\RemoveKeys;
 use Yiisoft\Arrays\Modifier\ReplaceValue;
 use Yiisoft\Arrays\Modifier\UnsetValue;
 
@@ -486,6 +487,28 @@ final class ArrayHelperTest extends TestCase
             'features' => [
                 'gii',
             ],
+        ];
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testMergeWithRemoveKeys(): void
+    {
+        $a = [
+            'name' => 'Yii',
+            'version' => '1.0',
+        ];
+        $b = [
+            'version' => '1.1',
+            'options' => [],
+            new RemoveKeys(),
+        ];
+
+        $result = ArrayHelper::merge($a, $b);
+        $expected = [
+            'Yii',
+            '1.1',
+            [],
         ];
 
         $this->assertEquals($expected, $result);
