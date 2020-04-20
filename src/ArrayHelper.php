@@ -632,11 +632,11 @@ class ArrayHelper
         }
 
         if (is_callable($key)) {
-            $keysAux = static::getColumn($array, $key);
+            $keysTemp = static::getColumn($array, $key);
             // Check if the array is multidimensional
-            if (count($keysAux) !== count($keysAux, COUNT_RECURSIVE)) {
-                // Is multidimensional the unify array and get keys
-                $keys = array_unique($keysAux, SORT_REGULAR)[0];
+            if (count($keysTemp) !== count($keysTemp, COUNT_RECURSIVE)) {
+                // If it is multidimensional then unify array and get keys
+                $keys = array_unique($keysTemp, SORT_REGULAR)[0];
             }
         }
 
