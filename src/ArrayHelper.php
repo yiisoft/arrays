@@ -632,17 +632,29 @@ class ArrayHelper
         if (empty($keys) || empty($array)) {
             return;
         }
+
+        if (is_callable($key)) {
+            $keysTemp = static::getColumn($array, $key);
+            // Check if the array is multidimensional
+            if (count($keysTemp) !== count($keysTemp, COUNT_RECURSIVE)) {
+                // If it is multidimensional then unify array and get keys
+                $keys = array_unique($keysTemp, SORT_REGULAR)[0];
+            }
+        }
+
         $n = count($keys);
         if (is_scalar($direction)) {
             $direction = array_fill(0, $n, $direction);
         } elseif (count($direction) !== $n) {
             throw new InvalidArgumentException('The length of $direction parameter must be the same as that of $keys.');
         }
+
         if (is_scalar($sortFlag)) {
             $sortFlag = array_fill(0, $n, $sortFlag);
         } elseif (count($sortFlag) !== $n) {
             throw new InvalidArgumentException('The length of $sortFlag parameter must be the same as that of $keys.');
         }
+
         $args = [];
         foreach ($keys as $i => $iKey) {
             $flag = $sortFlag[$i];
