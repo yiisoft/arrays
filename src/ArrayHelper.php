@@ -137,7 +137,7 @@ class ArrayHelper
             if ($v instanceof ModifierInterface) {
                 $modifiers[$k] = $v;
                 unset($data[$k]);
-            } else if (is_array($v)) {
+            } elseif (is_array($v)) {
                 $data[$k] = self::applyModifiers($v);
             }
         }
