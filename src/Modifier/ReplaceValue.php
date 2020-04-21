@@ -1,6 +1,6 @@
 <?php
 
-namespace Yiisoft\Arrays;
+namespace Yiisoft\Arrays\Modifier;
 
 /**
  * Object that represents the replacement of array value while performing [[ArrayHelper::merge()]].
@@ -22,7 +22,7 @@ namespace Yiisoft\Arrays;
  *     'ids' => [
  *         2,
  *     ],
- *     'validDomains' => new \Yiisoft\Arrays\ReplaceArrayValue([
+ *     'validDomains' => new \Yiisoft\Arrays\Modifier\ReplaceValue([
  *         'yiiframework.com',
  *         'www.yiiframework.com',
  *     ]),
@@ -46,7 +46,7 @@ namespace Yiisoft\Arrays;
  * ]
  * ```
  */
-class ReplaceArrayValue
+class ReplaceValue implements ModifierInterface
 {
     /**
      * @var mixed value used as replacement.
@@ -56,5 +56,12 @@ class ReplaceArrayValue
     public function __construct($value)
     {
         $this->value = $value;
+    }
+
+    public function apply(array $data, string $key): array
+    {
+        $data[$key] = $this->value;
+
+        return $data;
     }
 }

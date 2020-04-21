@@ -3,6 +3,7 @@
 namespace Yiisoft\Arrays;
 
 use InvalidArgumentException;
+use Yiisoft\Arrays\Modifier\ModifierInterface;
 use Yiisoft\Strings\StringHelper;
 
 /**
@@ -98,28 +99,28 @@ class ArrayHelper
      * type and are having the same key.
      * For integer-keyed elements, the elements from the latter array will
      * be appended to the former array.
-     * You can use [[UnsetArrayValue]] object to unset value from previous array or
-     * [[ReplaceArrayValue]] to force replace former value instead of recursive merging.
+     * You can use modifiers to change merging result.
      * @param array $args arrays to be merged
      * @return array the merged array (the original arrays are not changed.)
      */
     public static function merge(...$args): array
     {
-        $res = array_shift($args);
+        return self::applyModifiers(self::performMerge(...$args));
+    }
+
+    private static function performMerge(...$args): array
+    {
+        $res = array_shift($args) ?: [];
         while (!empty($args)) {
             foreach (array_shift($args) as $k => $v) {
-                if ($v instanceof UnsetArrayValue) {
-                    unset($res[$k]);
-                } elseif ($v instanceof ReplaceArrayValue) {
-                    $res[$k] = $v->value;
-                } elseif (is_int($k)) {
+                if (is_int($k)) {
                     if (array_key_exists($k, $res) && $res[$k] !== $v) {
                         $res[] = $v;
                     } else {
                         $res[$k] = $v;
                     }
                 } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
-                    $res[$k] = static::merge($res[$k], $v);
+                    $res[$k] = self::performMerge($res[$k], $v);
                 } else {
                     $res[$k] = $v;
                 }
@@ -127,6 +128,23 @@ class ArrayHelper
         }
 
         return $res;
+    }
+
+    public static function applyModifiers(array $data): array
+    {
+        $modifiers = [];
+        foreach ($data as $k => $v) {
+            if ($v instanceof ModifierInterface) {
+                $modifiers[$k] = $v;
+                unset($data[$k]);
+            } elseif (is_array($v)) {
+                $data[$k] = self::applyModifiers($v);
+            }
+        }
+        foreach ($modifiers as $key => $modifier) {
+            $data = $modifier->apply($data, $key);
+        }
+        return $data;
     }
 
     /**
