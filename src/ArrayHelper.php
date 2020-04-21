@@ -105,30 +105,46 @@ class ArrayHelper
      */
     public static function merge(...$args): array
     {
+        return self::applyModifiers(self::performMerge(...$args));
+    }
+
+    private static function performMerge(...$args): array
+    {
         $res = array_shift($args) ?: [];
-        $modifiers = [];
         while (!empty($args)) {
             foreach (array_shift($args) as $k => $v) {
-                if ($v instanceof ModifierInterface) {
-                    $modifiers[$k] = $v;
-                } elseif (is_int($k)) {
+                if (is_int($k)) {
                     if (array_key_exists($k, $res) && $res[$k] !== $v) {
                         $res[] = $v;
                     } else {
                         $res[$k] = $v;
                     }
                 } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
-                    $res[$k] = static::merge($res[$k], $v);
+                    $res[$k] = self::performMerge($res[$k], $v);
                 } else {
                     $res[$k] = $v;
                 }
             }
         }
-        foreach ($modifiers as $key => $modifier) {
-            $res = $modifier->apply($res, $key);
-        }
 
         return $res;
+    }
+
+    public static function applyModifiers(array $data): array
+    {
+        $modifiers = [];
+        foreach ($data as $k => $v) {
+            if ($v instanceof ModifierInterface) {
+                $modifiers[$k] = $v;
+                unset($data[$k]);
+            } else if (is_array($v)) {
+                $data[$k] = self::applyModifiers($v);
+            }
+        }
+        foreach ($modifiers as $key => $modifier) {
+            $data = $modifier->apply($data, $key);
+        }
+        return $data;
     }
 
     /**
