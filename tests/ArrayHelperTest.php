@@ -11,6 +11,7 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Modifier\RemoveKeys;
 use Yiisoft\Arrays\Modifier\ReplaceValue;
 use Yiisoft\Arrays\Modifier\UnsetValue;
+use Yiisoft\Arrays\Sorter;
 
 final class ArrayHelperTest extends TestCase
 {
@@ -198,7 +199,7 @@ final class ArrayHelperTest extends TestCase
     {
         // empty key
         $dataEmpty = [];
-        ArrayHelper::multisort($dataEmpty, '');
+        Sorter::multisort($dataEmpty, '');
         $this->assertEquals([], $dataEmpty);
 
         // single key
@@ -207,7 +208,7 @@ final class ArrayHelperTest extends TestCase
             ['name' => 'a', 'age' => 1],
             ['name' => 'c', 'age' => 2],
         ];
-        ArrayHelper::multisort($array, 'name');
+        Sorter::multisort($array, 'name');
         $this->assertEquals(['name' => 'a', 'age' => 1], $array[0]);
         $this->assertEquals(['name' => 'b', 'age' => 3], $array[1]);
         $this->assertEquals(['name' => 'c', 'age' => 2], $array[2]);
@@ -218,7 +219,7 @@ final class ArrayHelperTest extends TestCase
             ['name' => 'a', 'age' => 2],
             ['name' => 'a', 'age' => 1],
         ];
-        ArrayHelper::multisort($array, ['name', 'age']);
+        Sorter::multisort($array, ['name', 'age']);
         $this->assertEquals(['name' => 'a', 'age' => 1], $array[0]);
         $this->assertEquals(['name' => 'a', 'age' => 2], $array[1]);
         $this->assertEquals(['name' => 'b', 'age' => 3], $array[2]);
@@ -231,19 +232,19 @@ final class ArrayHelperTest extends TestCase
             ['name' => 'A', 'age' => 1],
         ];
 
-        ArrayHelper::multisort($array, ['name', 'age'], SORT_ASC, [SORT_STRING, SORT_REGULAR]);
+        Sorter::multisort($array, ['name', 'age'], SORT_ASC, [SORT_STRING, SORT_REGULAR]);
         $this->assertEquals(['name' => 'A', 'age' => 1], $array[0]);
         $this->assertEquals(['name' => 'B', 'age' => 4], $array[1]);
         $this->assertEquals(['name' => 'a', 'age' => 3], $array[2]);
         $this->assertEquals(['name' => 'b', 'age' => 2], $array[3]);
 
-        ArrayHelper::multisort($array, ['name', 'age'], SORT_ASC, [SORT_STRING | SORT_FLAG_CASE, SORT_REGULAR]);
+        Sorter::multisort($array, ['name', 'age'], SORT_ASC, [SORT_STRING | SORT_FLAG_CASE, SORT_REGULAR]);
         $this->assertEquals(['name' => 'A', 'age' => 1], $array[0]);
         $this->assertEquals(['name' => 'a', 'age' => 3], $array[1]);
         $this->assertEquals(['name' => 'b', 'age' => 2], $array[2]);
         $this->assertEquals(['name' => 'B', 'age' => 4], $array[3]);
 
-        ArrayHelper::multisort($array, fn ($item) => ['age', 'name'], SORT_DESC);
+        Sorter::multisort($array, fn ($item) => ['age', 'name'], SORT_DESC);
 
         $this->assertEquals(['name' => 'B', 'age' => 4], $array[0]);
         $this->assertEquals(['name' => 'a', 'age' => 3], $array[1]);
@@ -273,12 +274,12 @@ final class ArrayHelperTest extends TestCase
 
         $this->assertEquals($obj2, $obj3);
 
-        ArrayHelper::multisort($models, 'type', SORT_ASC);
+        Sorter::multisort($models, 'type', SORT_ASC);
         $this->assertEquals($obj2, $models[0]);
         $this->assertEquals($obj3, $models[1]);
         $this->assertEquals($obj1, $models[2]);
 
-        ArrayHelper::multisort($models, 'type', SORT_DESC);
+        Sorter::multisort($models, 'type', SORT_DESC);
         $this->assertEquals($obj1, $models[0]);
         $this->assertEquals($obj2, $models[1]);
         $this->assertEquals($obj3, $models[2]);
@@ -296,7 +297,7 @@ final class ArrayHelperTest extends TestCase
             ['name' => 'a', 'age' => 1],
             ['name' => 'c', 'age' => 2],
         ];
-        ArrayHelper::multisort($array, array_keys($orders), array_values($orders));
+        Sorter::multisort($array, array_keys($orders), array_values($orders));
         $this->assertEquals(['name' => 'a', 'age' => 1], $array[0]);
         $this->assertEquals(['name' => 'b', 'age' => 3], $array[1]);
         $this->assertEquals(['name' => 'c', 'age' => 2], $array[2]);
@@ -312,7 +313,7 @@ final class ArrayHelperTest extends TestCase
             ['name' => 'a', 'age' => 2],
             ['name' => 'a', 'age' => 1],
         ];
-        ArrayHelper::multisort($array, array_keys($orders), array_values($orders));
+        Sorter::multisort($array, array_keys($orders), array_values($orders));
         $this->assertEquals(['name' => 'a', 'age' => 2], $array[0]);
         $this->assertEquals(['name' => 'a', 'age' => 1], $array[1]);
         $this->assertEquals(['name' => 'b', 'age' => 3], $array[2]);
@@ -328,7 +329,7 @@ final class ArrayHelperTest extends TestCase
             '- Bug: test4',
         ];
         $i = 0;
-        ArrayHelper::multisort(
+        Sorter::multisort(
             $changelog,
             static function ($line) use (&$i) {
                 if (preg_match('/^- (Enh|Bug)( #\d+)?: .+$/', $line, $m)) {
@@ -357,14 +358,14 @@ final class ArrayHelperTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $data = ['foo' => 'bar'];
-        ArrayHelper::multisort($data, ['foo'], []);
+        Sorter::multisort($data, ['foo'], []);
     }
 
     public function testMultisortInvalidArgumentExceptionSortFlag(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $data = ['foo' => 'bar'];
-        ArrayHelper::multisort($data, ['foo'], ['foo'], []);
+        Sorter::multisort($data, ['foo'], ['foo'], []);
     }
 
     public function testEmptyMerge(): void
