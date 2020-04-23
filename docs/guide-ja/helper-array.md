@@ -294,7 +294,7 @@ $data = [
     ['age' => 30, 'name' => 'Brian'],
     ['age' => 19, 'name' => 'Barney'],
 ];
-ArrayHelper::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
+Sorter::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
 ```
 
 並べ替えの後には、`$data` に次のデータが入っています。
@@ -311,7 +311,7 @@ ArrayHelper::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
 さらに、次のような無名関数でも構いません。
 
 ```php
-ArrayHelper::multisort($data, function($item) {
+Sorter::multisort($data, function($item) {
     return isset($item['age']) ? ['age', 'name'] : 'name';
 });
 ```

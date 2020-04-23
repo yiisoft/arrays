@@ -294,7 +294,7 @@ $data = [
     ['age' => 30, 'name' => 'Brian'],
     ['age' => 19, 'name' => 'Barney'],
 ];
-ArrayHelper::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
+Sorter::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
 ```
 
 排序之后我们在 `$data` 中得到的值如下所示：
@@ -311,7 +311,7 @@ ArrayHelper::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
 或者是如下例所示的一个匿名函数：
 
 ```php
-ArrayHelper::multisort($data, function($item) {
+Sorter::multisort($data, function($item) {
     return isset($item['age']) ? ['age', 'name'] : 'name';
 });
 ```
