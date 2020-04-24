@@ -5,15 +5,15 @@ namespace Yiisoft\Arrays\Tests;
 use InvalidArgumentException;
 use stdClass;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Arrays\Sorter;
+use Yiisoft\Arrays\ArraySorter;
 
-final class SorterTest extends TestCase
+final class ArraySorterTest extends TestCase
 {
     public function testMultisort(): void
     {
         // empty key
         $dataEmpty = [];
-        Sorter::multisort($dataEmpty, '');
+        ArraySorter::multisort($dataEmpty, '');
         $this->assertEquals([], $dataEmpty);
 
         // single key
@@ -22,7 +22,7 @@ final class SorterTest extends TestCase
             ['name' => 'a', 'age' => 1],
             ['name' => 'c', 'age' => 2],
         ];
-        Sorter::multisort($array, 'name');
+        ArraySorter::multisort($array, 'name');
         $this->assertEquals(['name' => 'a', 'age' => 1], $array[0]);
         $this->assertEquals(['name' => 'b', 'age' => 3], $array[1]);
         $this->assertEquals(['name' => 'c', 'age' => 2], $array[2]);
@@ -33,7 +33,7 @@ final class SorterTest extends TestCase
             ['name' => 'a', 'age' => 2],
             ['name' => 'a', 'age' => 1],
         ];
-        Sorter::multisort($array, ['name', 'age']);
+        ArraySorter::multisort($array, ['name', 'age']);
         $this->assertEquals(['name' => 'a', 'age' => 1], $array[0]);
         $this->assertEquals(['name' => 'a', 'age' => 2], $array[1]);
         $this->assertEquals(['name' => 'b', 'age' => 3], $array[2]);
@@ -46,19 +46,19 @@ final class SorterTest extends TestCase
             ['name' => 'A', 'age' => 1],
         ];
 
-        Sorter::multisort($array, ['name', 'age'], SORT_ASC, [SORT_STRING, SORT_REGULAR]);
+        ArraySorter::multisort($array, ['name', 'age'], SORT_ASC, [SORT_STRING, SORT_REGULAR]);
         $this->assertEquals(['name' => 'A', 'age' => 1], $array[0]);
         $this->assertEquals(['name' => 'B', 'age' => 4], $array[1]);
         $this->assertEquals(['name' => 'a', 'age' => 3], $array[2]);
         $this->assertEquals(['name' => 'b', 'age' => 2], $array[3]);
 
-        Sorter::multisort($array, ['name', 'age'], SORT_ASC, [SORT_STRING | SORT_FLAG_CASE, SORT_REGULAR]);
+        ArraySorter::multisort($array, ['name', 'age'], SORT_ASC, [SORT_STRING | SORT_FLAG_CASE, SORT_REGULAR]);
         $this->assertEquals(['name' => 'A', 'age' => 1], $array[0]);
         $this->assertEquals(['name' => 'a', 'age' => 3], $array[1]);
         $this->assertEquals(['name' => 'b', 'age' => 2], $array[2]);
         $this->assertEquals(['name' => 'B', 'age' => 4], $array[3]);
 
-        Sorter::multisort($array, fn ($item) => ['age', 'name'], SORT_DESC);
+        ArraySorter::multisort($array, fn ($item) => ['age', 'name'], SORT_DESC);
 
         $this->assertEquals(['name' => 'B', 'age' => 4], $array[0]);
         $this->assertEquals(['name' => 'a', 'age' => 3], $array[1]);
@@ -88,12 +88,12 @@ final class SorterTest extends TestCase
 
         $this->assertEquals($obj2, $obj3);
 
-        Sorter::multisort($models, 'type', SORT_ASC);
+        ArraySorter::multisort($models, 'type', SORT_ASC);
         $this->assertEquals($obj2, $models[0]);
         $this->assertEquals($obj3, $models[1]);
         $this->assertEquals($obj1, $models[2]);
 
-        Sorter::multisort($models, 'type', SORT_DESC);
+        ArraySorter::multisort($models, 'type', SORT_DESC);
         $this->assertEquals($obj1, $models[0]);
         $this->assertEquals($obj2, $models[1]);
         $this->assertEquals($obj3, $models[2]);
@@ -111,7 +111,7 @@ final class SorterTest extends TestCase
             ['name' => 'a', 'age' => 1],
             ['name' => 'c', 'age' => 2],
         ];
-        Sorter::multisort($array, array_keys($orders), array_values($orders));
+        ArraySorter::multisort($array, array_keys($orders), array_values($orders));
         $this->assertEquals(['name' => 'a', 'age' => 1], $array[0]);
         $this->assertEquals(['name' => 'b', 'age' => 3], $array[1]);
         $this->assertEquals(['name' => 'c', 'age' => 2], $array[2]);
@@ -127,7 +127,7 @@ final class SorterTest extends TestCase
             ['name' => 'a', 'age' => 2],
             ['name' => 'a', 'age' => 1],
         ];
-        Sorter::multisort($array, array_keys($orders), array_values($orders));
+        ArraySorter::multisort($array, array_keys($orders), array_values($orders));
         $this->assertEquals(['name' => 'a', 'age' => 2], $array[0]);
         $this->assertEquals(['name' => 'a', 'age' => 1], $array[1]);
         $this->assertEquals(['name' => 'b', 'age' => 3], $array[2]);
@@ -143,7 +143,7 @@ final class SorterTest extends TestCase
             '- Bug: test4',
         ];
         $i = 0;
-        Sorter::multisort(
+        ArraySorter::multisort(
             $changelog,
             static function ($line) use (&$i) {
                 if (preg_match('/^- (Enh|Bug)( #\d+)?: .+$/', $line, $m)) {
@@ -172,13 +172,13 @@ final class SorterTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $data = ['foo' => 'bar'];
-        Sorter::multisort($data, ['foo'], []);
+        ArraySorter::multisort($data, ['foo'], []);
     }
 
     public function testMultisortInvalidArgumentExceptionSortFlag(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $data = ['foo' => 'bar'];
-        Sorter::multisort($data, ['foo'], ['foo'], []);
+        ArraySorter::multisort($data, ['foo'], ['foo'], []);
     }
 }

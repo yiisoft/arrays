@@ -223,7 +223,7 @@ $data = [
     ['age' => 30, 'name' => 'Brian'],
     ['age' => 19, 'name' => 'Barney'],
 ];
-Sorter::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
+ArraySorter::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
 ```
 
 После сортировки мы получим:
@@ -239,7 +239,7 @@ Sorter::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
 Второй аргумент, определяющий ключи для сортировки может быть строкой, если это один ключ, массивом, если используются несколько ключей или анонимной функцией, как в примере ниже:
 
 ```php
-Sorter::multisort($data, function($item) {
+ArraySorter::multisort($data, function($item) {
     return isset($item['age']) ? ['age', 'name'] : 'name';
 });
 ```
