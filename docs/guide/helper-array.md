@@ -294,7 +294,7 @@ $data = [
     ['age' => 30, 'name' => 'Brian'],
     ['age' => 19, 'name' => 'Barney'],
 ];
-ArrayHelper::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
+ArraySorter::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
 ```
 
 After sorting we'll get the following in `$data`:
@@ -311,7 +311,7 @@ Second argument that specifies keys to sort by can be a string if it's a single 
 or an anonymous function like the following one:
 
 ```php
-ArrayHelper::multisort($data, function($item) {
+ArraySorter::multisort($data, function($item) {
     return isset($item['age']) ? ['age', 'name'] : 'name';
 });
 ```

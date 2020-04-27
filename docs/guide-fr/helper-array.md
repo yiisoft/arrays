@@ -229,7 +229,7 @@ $data = [
     ['age' => 30, 'name' => 'Brian'],
     ['age' => 19, 'name' => 'Barney'],
 ];
-ArrayHelper::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
+ArraySorter::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
 ```
 
 Après le tri, `data` contient ce qui suit :
@@ -245,7 +245,7 @@ Après le tri, `data` contient ce qui suit :
 Le deuxième argument, qui spécifie les clés de tri peut être une chaîne de caractères si la clé est unique, un tableau dans le cas de clés multiples, ou une fonction anonyme telle que celle qui suit :
 
 ```php
-ArrayHelper::multisort($data, function($item) {
+ArraySorter::multisort($data, function($item) {
     return isset($item['age']) ? ['age', 'name'] : 'name';
 });
 ```

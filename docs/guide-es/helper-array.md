@@ -243,7 +243,7 @@ $data = [
     ['age' => 30, 'name' => 'Brian'],
     ['age' => 19, 'name' => 'Barney'],
 ];
-ArrayHelper::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
+ArraySorter::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
 ```
 
 Después del ordenado obtendremos lo siguiente en `$data`:
@@ -260,7 +260,7 @@ El segundo argumento que especifica las claves para ordenar puede ser una cadena
 o una función anónima como la siguiente
 
 ```php
-ArrayHelper::multisort($data, function($item) {
+ArraySorter::multisort($data, function($item) {
     return isset($item['age']) ? ['age', 'name'] : 'name';
 });
 ```
