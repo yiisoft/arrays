@@ -10,5 +10,5 @@ The Yii arrays package provides a helper with static methods allowing you to dea
 
 [![Latest Stable Version](https://poser.pugx.org/yiisoft/arrays/v/stable.png)](https://packagist.org/packages/yiisoft/arrays)
 [![Total Downloads](https://poser.pugx.org/yiisoft/arrays/downloads.png)](https://packagist.org/packages/yiisoft/arrays)
-[![Build Status](https://travis-ci.com/yiisoft/arrays.svg?branch=master)](https://travis-ci.com/yiisoft/arrays)
+[![Build status](https://github.com/yiisoft/arrays/workflows/build/badge.svg)](https://github.com/yiisoft/arrays/actions)
 
