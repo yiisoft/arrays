@@ -3,17 +3,17 @@
 namespace Yiisoft\Arrays;
 
 /**
- * ArrayableTrait provides a common implementation of the [[Arrayable]] interface.
+ * ArrayableTrait provides a common implementation of the {@see ArrayableInterface} interface.
  *
- * ArrayableTrait implements [[toArray()]] by respecting the field definitions as declared
- * in [[fields()]] and [[extraFields()]].
+ * ArrayableTrait implements {@see ArrayableInterface::toArray()} by respecting the field definitions as declared
+ * in {@see ArrayableInterface::fields()} and {@see ArrayableInterface::extraFields()}.
  */
 trait ArrayableTrait
 {
     /**
-     * Returns the list of fields that should be returned by default by [[toArray()]] when no specific fields are specified.
+     * Returns the list of fields that should be returned by default by {@see ArrayableInterface::toArray()} when no specific fields are specified.
      *
-     * A field is a named element in the returned array by [[toArray()]].
+     * A field is a named element in the returned array by {@see ArrayableInterface::toArray()}.
      *
      * This method should return an array of field names or field definitions.
      * If the former, the field name will be treated as an object property name whose value will be used
@@ -62,11 +62,11 @@ trait ArrayableTrait
     }
 
     /**
-     * Returns the list of fields that can be expanded further and returned by [[toArray()]].
+     * Returns the list of fields that can be expanded further and returned by {@see ArrayableInterface::toArray()}.
      *
-     * This method is similar to [[fields()]] except that the list of fields returned
-     * by this method are not returned by default by [[toArray()]]. Only when field names
-     * to be expanded are explicitly specified when calling [[toArray()]], will their values
+     * This method is similar to {@see ArrayableInterface::fields()} except that the list of fields returned
+     * by this method are not returned by default by {@see ArrayableInterface::toArray()}]. Only when field names
+     * to be expanded are explicitly specified when calling {@see ArrayableInterface::toArray()}, will their values
      * be exported.
      *
      * The default implementation returns an empty array.
@@ -75,7 +75,7 @@ trait ArrayableTrait
      * (e.g. the current application user).
      *
      * @return array the list of expandable field names or field definitions. Please refer
-     * to [[fields()]] on the format of the return value.
+     * to {@see ArrayableInterface::fields()} on the format of the return value.
      * @see toArray()
      * @see fields()
      */
@@ -87,16 +87,16 @@ trait ArrayableTrait
     /**
      * Converts the model into an array.
      *
-     * This method will first identify which fields to be included in the resulting array by calling [[resolveFields()]].
+     * This method will first identify which fields to be included in the resulting array by calling {@see resolveFields()}.
      * It will then turn the model into an array with these fields. If `$recursive` is true,
      * any embedded objects will also be converted into arrays.
-     * When embeded objects are [[Arrayable]], their respective nested fields will be extracted and passed to [[toArray()]].
+     * When embedded objects are {@see ArrayableInterface}, their respective nested fields will be extracted and passed to {@see ArrayableInterface::toArray()}.
      *
      * @param array $fields the fields being requested.
-     * If empty or if it contains '*', all fields as specified by [[fields()]] will be returned.
+     * If empty or if it contains '*', all fields as specified by {@see ArrayableInterface::fields()} will be returned.
      * Fields can be nested, separated with dots (.). e.g.: item.field.sub-field
      * `$recursive` must be true for nested fields to be extracted. If `$recursive` is false, only the root fields will be extracted.
-     * @param array $expand the additional fields being requested for exporting. Only fields declared in [[extraFields()]]
+     * @param array $expand the additional fields being requested for exporting. Only fields declared in {@see ArrayableInterface::extraFields()}
      * will be considered.
      * Expand can also be nested, separated with dots (.). e.g.: item.expand1.expand2
      * `$recursive` must be true for nested expands to be extracted. If `$recursive` is false, only the root expands will be extracted.
@@ -178,9 +178,9 @@ trait ArrayableTrait
     }
 
     /**
-     * Determines which fields can be returned by [[toArray()]].
+     * Determines which fields can be returned by {@see ArrayableInterface::toArray()}.
      * This method will first extract the root fields from the given fields.
-     * Then it will check the requested root fields against those declared in [[fields()]] and [[extraFields()]]
+     * Then it will check the requested root fields against those declared in {@see ArrayableInterface::fields()} and {@see ArrayableInterface::extraFields()}
      * to determine which fields can be returned.
      * @param array $fields the fields being requested for exporting
      * @param array $expand the additional fields being requested for exporting

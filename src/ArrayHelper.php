@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Arrays;
 
 use InvalidArgumentException;
@@ -191,7 +193,9 @@ class ArrayHelper
         }
 
         if (!is_array($array) && !is_object($array)) {
-            throw new \InvalidArgumentException('getValue() can not get value from ' . gettype($array) . '. Only array and object are supported.');
+            throw new \InvalidArgumentException(
+                'getValue() can not get value from ' . gettype($array) . '. Only array and object are supported.'
+            );
         }
 
         if (is_array($key)) {

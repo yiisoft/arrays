@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays;
 
 use InvalidArgumentException;
-use Yiisoft\Arrays\ArrayHelper;
 
 class ArraySorter
 {
@@ -60,7 +59,7 @@ class ArraySorter
      * purpose. The anonymous function signature should be: `function($item)`.
      * To sort by multiple keys, provide an array of keys here.
      *
-     * @return Array return the keys
+     * @return array return the keys
      */
     private static function getKeys(array &$array, $key): array
     {
@@ -96,7 +95,7 @@ class ArraySorter
      * Please refer to [PHP manual](http://php.net/manual/en/function.sort.php)
      * for more details. When sorting by multiple keys with different sort flags, use an array of sort flags.
      *
-     * @return Array return the arguments
+     * @return array return the arguments
      */
     private static function getArguments(array &$array, &$keys, $direction, $sortFlag): array
     {
