@@ -3,7 +3,7 @@
 namespace Yiisoft\Arrays\Modifier;
 
 /**
- * Object that represents the removal of array value while performing [[ArrayHelper::merge()]].
+ * Object that represents the removal of array value while performing {@see ArrayHelper::merge()}.
  *
  * Usage example:
  *

@@ -5,19 +5,19 @@ namespace Yiisoft\Arrays;
 /**
  * ArrayableInterface should be implemented by classes who want to support customizable representation of their instances.
  *
- * For example, if a class implements ArrayableInterface, by calling [[toArray()]], an instance of this class
+ * For example, if a class implements ArrayableInterface, by calling {@see ArrayableInterface::toArray()}, an instance of this class
  * can be turned into an array (including all its embedded objects) which can then be further transformed easily
  * into other formats, such as JSON, XML.
  *
- * The methods [[fields()]] and [[extraFields()]] allow the implementing classes to customize how and which of their data
- * should be formatted and put into the result of [[toArray()]].
+ * The methods {@see ArrayableInterface::fields()} and {@see ArrayableInterface::extraFields()} allow the implementing classes to customize how and which of their data
+ * should be formatted and put into the result of {@see ArrayableInterface::toArray()}.
  */
 interface ArrayableInterface
 {
     /**
-     * Returns the list of fields that should be returned by default by [[toArray()]] when no specific fields are specified.
+     * Returns the list of fields that should be returned by default by {@see toArray()} when no specific fields are specified.
      *
-     * A field is a named element in the returned array by [[toArray()]].
+     * A field is a named element in the returned array by {@see toArray()}.
      *
      * This method should return an array of field names or field definitions.
      * If the former, the field name will be treated as an object property name whose value will be used
@@ -56,14 +56,14 @@ interface ArrayableInterface
     public function fields(): array;
 
     /**
-     * Returns the list of additional fields that can be returned by [[toArray()]] in addition to those listed in [[fields()]].
+     * Returns the list of additional fields that can be returned by {@see toArray()} in addition to those listed in {@see fields()}.
      *
-     * This method is similar to [[fields()]] except that the list of fields declared
-     * by this method are not returned by default by [[toArray()]]. Only when a field in the list
-     * is explicitly requested, will it be included in the result of [[toArray()]].
+     * This method is similar to {@see fields()} except that the list of fields declared
+     * by this method are not returned by default by {@see toArray()}. Only when a field in the list
+     * is explicitly requested, will it be included in the result of {@see toArray()}.
      *
      * @return array the list of expandable field names or field definitions. Please refer
-     * to [[fields()]] on the format of the return value.
+     * to {@see fields()} on the format of the return value.
      * @see toArray()
      * @see fields()
      */
@@ -73,9 +73,9 @@ interface ArrayableInterface
      * Converts the object into an array.
      *
      * @param array $fields the fields that the output array should contain. Fields not specified
-     * in [[fields()]] will be ignored. If this parameter is empty, all fields as specified in [[fields()]] will be returned.
+     * in {@see fields()} will be ignored. If this parameter is empty, all fields as specified in {@see fields()} will be returned.
      * @param array $expand the additional fields that the output array should contain.
-     * Fields not specified in [[extraFields()]] will be ignored. If this parameter is empty, no extra fields
+     * Fields not specified in {@see extraFields()} will be ignored. If this parameter is empty, no extra fields
      * will be returned.
      * @param bool $recursive whether to recursively return array representation of embedded objects.
      * @return array the array representation of the object
