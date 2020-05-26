@@ -9,6 +9,7 @@ use stdClass;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Modifier\RemoveKeys;
+use Yiisoft\Arrays\Modifier\ReverseValues;
 use Yiisoft\Arrays\Modifier\ReplaceValue;
 use Yiisoft\Arrays\Modifier\UnsetValue;
 
@@ -346,6 +347,29 @@ final class ArrayHelperTest extends TestCase
         ];
 
         $this->assertEquals($expected, $result);
+    }
+
+    public function testMergeWithReverseValues(): void
+    {
+        $a = [
+            'name' => 'Yii',
+            'version' => '1.0',
+            ReverseValues::class => new ReverseValues(),
+        ];
+        $b = [
+            'version' => '1.1',
+            'options' => [],
+            ReverseValues::class => new ReverseValues(),
+        ];
+
+        $result = ArrayHelper::merge($a, $b);
+        $expected = [
+            'options' => [],
+            'version' => '1.1',
+            'name' => 'Yii',
+        ];
+
+        $this->assertSame($expected, $result);
     }
 
     public function testMergeWithNullValues(): void
