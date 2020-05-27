@@ -5,7 +5,7 @@ namespace Yiisoft\Arrays;
 use InvalidArgumentException;
 use Yiisoft\Arrays\Modifier\ModifierInterface;
 use Yiisoft\Strings\StringHelper;
-use Yiisoft\Arrays\Modifier\MergeReverse;
+use Yiisoft\Arrays\Modifier\ReverseBlockMerge;
 
 /**
  * Yii array helper provides static methods allowing you to deal with arrays more efficiently.
@@ -107,7 +107,7 @@ class ArrayHelper
     public static function merge(...$args): array
     {
         $lastArray = end($args);
-        if (isset($lastArray[MergeReverse::class]) && $lastArray[MergeReverse::class] instanceof MergeReverse) {
+        if (isset($lastArray[ReverseBlockMerge::class]) && $lastArray[ReverseBlockMerge::class] instanceof ReverseBlockMerge) {
             reset($lastArray);
             return self::applyModifiers(self::performMergeReverse(...$args));
         }
