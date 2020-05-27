@@ -108,7 +108,7 @@ class ArrayHelper
     {
         $lastArray = end($args);
         if (isset($lastArray[ReverseBlockMerge::class]) && $lastArray[ReverseBlockMerge::class] instanceof ReverseBlockMerge) {
-            reset($lastArray);
+            reset($args);
             return self::applyModifiers(self::performReverseBlockMerge(...$args));
         }
 
