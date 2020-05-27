@@ -109,7 +109,7 @@ class ArrayHelper
         $lastArray = end($args);
         if (isset($lastArray[ReverseBlockMerge::class]) && $lastArray[ReverseBlockMerge::class] instanceof ReverseBlockMerge) {
             reset($lastArray);
-            return self::applyModifiers(self::performMergeReverse(...$args));
+            return self::applyModifiers(self::performReverseBlockMerge(...$args));
         }
 
         return self::applyModifiers(self::performMerge(...$args));
@@ -137,7 +137,7 @@ class ArrayHelper
         return $res;
     }
 
-    private static function performMergeReverse(...$args): array
+    private static function performReverseBlockMerge(...$args): array
     {
         $res = array_pop($args) ?: [];
         while (!empty($args)) {
@@ -149,7 +149,7 @@ class ArrayHelper
                         $res[$k] = $v;
                     }
                 } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
-                    $res[$k] = self::performMergeReverse($v, $res[$k]);
+                    $res[$k] = self::performReverseBlockMerge($v, $res[$k]);
                 } elseif (!isset($res[$k])) {
                     $res[$k] = $v;
                 }

@@ -9,6 +9,7 @@ use stdClass;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Modifier\RemoveKeys;
+use Yiisoft\Arrays\Modifier\ReverseBlockMerge;
 use Yiisoft\Arrays\Modifier\ReverseValues;
 use Yiisoft\Arrays\Modifier\ReplaceValue;
 use Yiisoft\Arrays\Modifier\UnsetValue;
@@ -366,6 +367,40 @@ final class ArrayHelperTest extends TestCase
         $expected = [
             'options' => [],
             'version' => '1.1',
+            'name' => 'Yii',
+        ];
+
+        $this->assertSame($expected, $result);
+    }
+
+    public function testMergeWithReverseBlock(): void
+    {
+        $a = [
+            'name' => 'Yii',
+            'options' => [
+                'option1' => 'valueA',
+                'option3' => 'valueAA',
+            ],
+            'version' => '1.0',
+            ReverseBlockMerge::class => new ReverseBlockMerge(),
+        ];
+        $b = [
+            'version' => '1.1',
+            'options' => [
+                'option1' => 'valueB',
+                'option2' => 'valueBB',
+            ],
+            ReverseBlockMerge::class => new ReverseBlockMerge(),
+        ];
+
+        $result = ArrayHelper::merge($a, $b);
+        $expected = [
+            'version' => '1.1',
+            'options' => [
+                'option1' => 'valueB',
+                'option2' => 'valueBB',
+                'option3' => 'valueAA',
+            ],
             'name' => 'Yii',
         ];
 
