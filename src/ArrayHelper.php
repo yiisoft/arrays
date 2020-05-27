@@ -5,6 +5,7 @@ namespace Yiisoft\Arrays;
 use InvalidArgumentException;
 use Yiisoft\Arrays\Modifier\ModifierInterface;
 use Yiisoft\Strings\StringHelper;
+use Yiisoft\Arrays\Modifier\MergeReverse;
 
 /**
  * Yii array helper provides static methods allowing you to deal with arrays more efficiently.
@@ -105,6 +106,12 @@ class ArrayHelper
      */
     public static function merge(...$args): array
     {
+        $lastArray = end($args);
+        if (isset($lastArray[MergeReverse::class]) && $lastArray[MergeReverse::class] instanceof MergeReverse) {
+            reset($lastArray);
+            return self::applyModifiers(self::performMergeReverse(...$args));
+        }
+
         return self::applyModifiers(self::performMerge(...$args));
     }
 
@@ -122,6 +129,28 @@ class ArrayHelper
                 } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
                     $res[$k] = self::performMerge($res[$k], $v);
                 } else {
+                    $res[$k] = $v;
+                }
+            }
+        }
+
+        return $res;
+    }
+
+    private static function performMergeReverse(...$args): array
+    {
+        $res = array_pop($args) ?: [];
+        while (!empty($args)) {
+            foreach (array_pop($args) as $k => $v) {
+                if (is_int($k)) {
+                    if (array_key_exists($k, $res) && $res[$k] !== $v) {
+                        $res[] = $v;
+                    } else {
+                        $res[$k] = $v;
+                    }
+                } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
+                    $res[$k] = self::performMergeReverse($v, $res[$k]);
+                } elseif (!isset($res[$k])) {
                     $res[$k] = $v;
                 }
             }
