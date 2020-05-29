@@ -7,6 +7,12 @@ namespace Yiisoft\Arrays\Modifier;
  * It is especially useful for merging module config with core config
  * where more specific config has more priority.
  *
+ * The modifier should be specified as
+ *
+ * ```php
+ * ReverseBlockMerge::class => new ReverseBlockMerge(),
+ * ```
+ *
  * For example:
  *
  * ```php
@@ -61,8 +67,10 @@ namespace Yiisoft\Arrays\Modifier;
  *     2 => 'h',
  * ]
  * ```
+ *
+ * @see ArrayHelper::performReverseBlockMerge()
  */
-class ReverseBlockMerge implements ModifierInterface
+final class ReverseBlockMerge implements ModifierInterface
 {
     public function apply(array $data, string $key): array
     {

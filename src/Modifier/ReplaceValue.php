@@ -46,7 +46,7 @@ namespace Yiisoft\Arrays\Modifier;
  * ]
  * ```
  */
-class ReplaceValue implements ModifierInterface
+final class ReplaceValue implements ModifierInterface
 {
     /**
      * @var mixed value used as replacement.

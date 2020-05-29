@@ -335,7 +335,7 @@ final class ArrayHelperTest extends TestCase
         $b = [
             'version' => '1.1',
             'options' => [],
-            new RemoveKeys(),
+            RemoveKeys::class => new RemoveKeys(),
         ];
 
         $result = ArrayHelper::merge($a, $b);
