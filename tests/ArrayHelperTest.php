@@ -357,7 +357,6 @@ final class ArrayHelperTest extends TestCase
                 'option3' => 'valueAA',
             ],
             'version' => '1.0',
-            ReverseBlockMerge::class => new ReverseBlockMerge(),
         ];
         $b = [
             'version' => '1.1',

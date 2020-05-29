@@ -18,7 +18,6 @@ namespace Yiisoft\Arrays\Modifier;
  *     ],
  *     'g' => 'g1',
  *     'h',
- *     ReverseBlockMerge::class => new ReverseBlockMerge(),
  * ];
  *
  * $two = [
@@ -28,7 +27,6 @@ namespace Yiisoft\Arrays\Modifier;
  *         'b2' => 'bv2',
  *     ],
  *     'd',
- *     ReverseBlockMerge::class => new ReverseBlockMerge(),
  * ];
  *
  * $three = [
