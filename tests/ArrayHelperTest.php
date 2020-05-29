@@ -3,13 +3,12 @@
 namespace Yiisoft\Arrays\Tests;
 
 use ArrayObject;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Modifier\RemoveKeys;
-use Yiisoft\Arrays\Modifier\ReverseValues;
+use Yiisoft\Arrays\Modifier\ReverseBlockMerge;
 use Yiisoft\Arrays\Modifier\ReplaceValue;
 use Yiisoft\Arrays\Modifier\UnsetValue;
 
@@ -336,7 +335,7 @@ final class ArrayHelperTest extends TestCase
         $b = [
             'version' => '1.1',
             'options' => [],
-            new RemoveKeys(),
+            RemoveKeys::class => new RemoveKeys(),
         ];
 
         $result = ArrayHelper::merge($a, $b);
@@ -349,23 +348,33 @@ final class ArrayHelperTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testMergeWithReverseValues(): void
+    public function testMergeWithReverseBlock(): void
     {
         $a = [
             'name' => 'Yii',
+            'options' => [
+                'option1' => 'valueA',
+                'option3' => 'valueAA',
+            ],
             'version' => '1.0',
-            ReverseValues::class => new ReverseValues(),
         ];
         $b = [
             'version' => '1.1',
-            'options' => [],
-            ReverseValues::class => new ReverseValues(),
+            'options' => [
+                'option1' => 'valueB',
+                'option2' => 'valueBB',
+            ],
+            ReverseBlockMerge::class => new ReverseBlockMerge(),
         ];
 
         $result = ArrayHelper::merge($a, $b);
         $expected = [
-            'options' => [],
             'version' => '1.1',
+            'options' => [
+                'option1' => 'valueB',
+                'option2' => 'valueBB',
+                'option3' => 'valueAA',
+            ],
             'name' => 'Yii',
         ];
 

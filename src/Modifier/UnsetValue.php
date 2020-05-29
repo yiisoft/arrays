@@ -39,7 +39,7 @@ namespace Yiisoft\Arrays\Modifier;
  * ]
  * ```
  */
-class UnsetValue implements ModifierInterface
+final class UnsetValue implements ModifierInterface
 {
     public function apply(array $data, string $key): array
     {
