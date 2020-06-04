@@ -9,5 +9,5 @@ namespace Yiisoft\Arrays\Modifier;
  */
 interface ModifierInterface
 {
-    public function apply(array $data, string $key): array;
+    public function apply(array $data, $key): array;
 }

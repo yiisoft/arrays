@@ -60,7 +60,7 @@ final class ReplaceValue implements ModifierInterface
         $this->value = $value;
     }
 
-    public function apply(array $data, string $key): array
+    public function apply(array $data, $key): array
     {
         $data[$key] = $this->value;
 

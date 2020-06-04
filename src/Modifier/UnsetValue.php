@@ -43,7 +43,7 @@ namespace Yiisoft\Arrays\Modifier;
  */
 final class UnsetValue implements ModifierInterface
 {
-    public function apply(array $data, string $key): array
+    public function apply(array $data, $key): array
     {
         unset($data[$key]);
 

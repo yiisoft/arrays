@@ -74,7 +74,7 @@ namespace Yiisoft\Arrays\Modifier;
  */
 final class ReverseBlockMerge implements ModifierInterface
 {
-    public function apply(array $data, string $key): array
+    public function apply(array $data, $key): array
     {
         return $data;
     }
