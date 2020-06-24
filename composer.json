@@ -20,7 +20,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.4 || ^8.0",
-        "yiisoft/strings": "^3.0@dev"
+        "yiisoft/strings": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0"
