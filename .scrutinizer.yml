@@ -1,13 +1,14 @@
 build:
-  nodes:
-    analysis:
-      environment:
-        php:
-          version: 7.4.3
-      tests:
-        override:
-          - php-scrutinizer-run
-
+    environment:
+        php: "7.4"
+    nodes:
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run
+filter:
+    paths:
+        - "src/*"
 checks:
     php: true
 tools:
