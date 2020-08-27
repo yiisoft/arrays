@@ -172,6 +172,7 @@ class ArrayHelper
                 $data[$k] = self::applyModifiers($v);
             }
         }
+        ksort($modifiers);
         foreach ($modifiers as $key => $modifier) {
             $data = $modifier->apply($data, $key);
         }
