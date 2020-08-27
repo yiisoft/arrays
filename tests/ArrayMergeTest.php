@@ -6,6 +6,7 @@ namespace Yiisoft\Arrays\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Arrays\Modifier\InsertValueBeforeKey;
 use Yiisoft\Arrays\Modifier\RemoveKeys;
 use Yiisoft\Arrays\Modifier\ReplaceValue;
 use Yiisoft\Arrays\Modifier\ReverseBlockMerge;
@@ -245,7 +246,6 @@ final class ArrayMergeTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-
     public function testMergeIntegerKeyedArraysWithSameValue(): void
     {
         $a = ['2019-01-25'];
@@ -256,5 +256,28 @@ final class ArrayMergeTest extends TestCase
         $expected = ['2019-01-25'];
 
         $this->assertEquals($expected, $result);
+    }
+
+    public function testMergeWithInsertValueBeforekey(): void
+    {
+        $a = [
+            'name' => 'Yii',
+            'version' => '1.0',
+        ];
+        $b = [
+            'version' => '1.1',
+            'options' => [],
+            'vendor' => new InsertValueBeforeKey('Yiisoft', 'name'),
+        ];
+
+        $result = ArrayHelper::merge($a, $b);
+        $expected = [
+            'vendor' => 'Yiisoft',
+            'name' => 'Yii',
+            'version' => '1.1',
+            'options' => [],
+        ];
+
+        $this->assertSame($expected, $result);
     }
 }
