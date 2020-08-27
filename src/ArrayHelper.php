@@ -677,10 +677,10 @@ class ArrayHelper
         $d = [];
         foreach ($data as $key => $value) {
             if (!$valuesOnly && is_string($key)) {
-                $key = StringHelper::htmlspecialchars($key, ENT_QUOTES | ENT_SUBSTITUTE, $charset);
+                $key = StringHelper::htmlspecialchars($key, ENT_QUOTES | ENT_SUBSTITUTE, true, $charset);
             }
             if (is_string($value)) {
-                $d[$key] = StringHelper::htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $charset);
+                $d[$key] = StringHelper::htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, true, $charset);
             } elseif (is_array($value)) {
                 $d[$key] = static::htmlEncode($value, $valuesOnly, $charset);
             } else {
