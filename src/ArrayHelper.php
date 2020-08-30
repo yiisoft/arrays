@@ -527,7 +527,7 @@ class ArrayHelper
                 $value = static::getValue($element, $key);
                 if ($value !== null) {
                     if (is_float($value)) {
-                        $value = StringHelper::floatToString($value);
+                        $value = str_replace(',', '.', (string) $value);
                     }
                     $lastArray[$value] = $element;
                 }
@@ -668,22 +668,21 @@ class ArrayHelper
      * @param array $data data to be encoded
      * @param bool $valuesOnly whether to encode array values only. If false,
      * both the array keys and array values will be encoded.
-     * @param string $charset the charset that the data is using. If not set,
-     * [[\yii\base\Application::charset]] will be used.
+     * @param string|null $encoding The encoding to use, defaults to `ini_get('default_charset')`.
      * @return array the encoded data
      * @see http://www.php.net/manual/en/function.htmlspecialchars.php
      */
-    public static function htmlEncode(array $data, bool $valuesOnly = true, string $charset = null): array
+    public static function htmlEncode(array $data, bool $valuesOnly = true, string $encoding = null): array
     {
         $d = [];
         foreach ($data as $key => $value) {
             if (!$valuesOnly && is_string($key)) {
-                $key = StringHelper::htmlspecialchars($key, ENT_QUOTES | ENT_SUBSTITUTE, true, $charset);
+                $key = htmlspecialchars($key, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
             }
             if (is_string($value)) {
-                $d[$key] = StringHelper::htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, true, $charset);
+                $d[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
             } elseif (is_array($value)) {
-                $d[$key] = static::htmlEncode($value, $valuesOnly, $charset);
+                $d[$key] = static::htmlEncode($value, $valuesOnly, $encoding);
             } else {
                 $d[$key] = $value;
             }
