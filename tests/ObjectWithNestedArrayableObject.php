@@ -7,10 +7,10 @@ namespace Yiisoft\Arrays\Tests;
 class ObjectWithNestedArrayableObject
 {
     public int $id = 1;
-    public ArrayableObject $array;
+    public SimpleArrayableObject $array;
 
     public function __construct()
     {
-        $this->array = new ArrayableObject();
+        $this->array = new SimpleArrayableObject();
     }
 }
