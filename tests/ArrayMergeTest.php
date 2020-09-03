@@ -308,7 +308,7 @@ final class ArrayMergeTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function t1estMergeWithMiddleReverseBlockAndStringKeys(): void
+    public function testMergeWithMiddleReverseBlockAndStringKeys(): void
     {
         $a = [
             'A' => 1,
@@ -335,7 +335,7 @@ final class ArrayMergeTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function t1estMergeWithMiddleReverseBlockAndIntKeys(): void
+    public function testMergeWithMiddleReverseBlockAndIntKeys(): void
     {
         $a = [
             'A',
