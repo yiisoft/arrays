@@ -108,57 +108,52 @@ class ArrayHelper
      */
     public static function merge(...$args): array
     {
-        $lastArray = end($args);
-        if (isset($lastArray[ReverseBlockMerge::class]) && $lastArray[ReverseBlockMerge::class] instanceof ReverseBlockMerge) {
-            reset($args);
-            return self::applyModifiers(self::performReverseBlockMerge(...$args));
+        $result = array_shift($args) ?: [];
+        while (!empty($args)) {
+            $array = array_shift($args);
+            if (isset($array[ReverseBlockMerge::class]) && $array[ReverseBlockMerge::class] instanceof ReverseBlockMerge) {
+                $result = self::applyModifiers(self::performReverseBlockMerge($result, $array));
+            } else {
+                $result = self::applyModifiers(self::performMerge($result, $array));
+            }
         }
-
-        return self::applyModifiers(self::performMerge(...$args));
+        return $result;
     }
 
-    private static function performMerge(...$args): array
+    private static function performMerge(array $arrayA, array $arrayB): array
     {
-        $res = array_shift($args) ?: [];
-        while (!empty($args)) {
-            foreach (array_shift($args) as $k => $v) {
-                if (is_int($k)) {
-                    if (array_key_exists($k, $res) && $res[$k] !== $v) {
-                        $res[] = $v;
-                    } else {
-                        $res[$k] = $v;
-                    }
-                } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
-                    $res[$k] = self::performMerge($res[$k], $v);
+        foreach ($arrayB as $k => $v) {
+            if (is_int($k)) {
+                if (array_key_exists($k, $arrayA) && $arrayA[$k] !== $v) {
+                    $arrayA[] = $v;
                 } else {
-                    $res[$k] = $v;
+                    $arrayA[$k] = $v;
                 }
+            } elseif (is_array($v) && isset($arrayA[$k]) && is_array($arrayA[$k])) {
+                $arrayA[$k] = self::performMerge($arrayA[$k], $v);
+            } else {
+                $arrayA[$k] = $v;
             }
         }
-
-        return $res;
+        return $arrayA;
     }
 
-    private static function performReverseBlockMerge(...$args): array
+    private static function performReverseBlockMerge(array $arrayA, array $arrayB): array
     {
-        $res = array_pop($args) ?: [];
-        while (!empty($args)) {
-            foreach (array_pop($args) as $k => $v) {
-                if (is_int($k)) {
-                    if (array_key_exists($k, $res) && $res[$k] !== $v) {
-                        $res[] = $v;
-                    } else {
-                        $res[$k] = $v;
-                    }
-                } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
-                    $res[$k] = self::performReverseBlockMerge($v, $res[$k]);
-                } elseif (!isset($res[$k])) {
-                    $res[$k] = $v;
+        foreach ($arrayA as $k => $v) {
+            if (is_int($k)) {
+                if (array_key_exists($k, $arrayB) && $arrayB[$k] !== $v) {
+                    $arrayB[] = $v;
+                } else {
+                    $arrayB[$k] = $v;
                 }
+            } elseif (is_array($v) && isset($arrayB[$k]) && is_array($arrayB[$k])) {
+                $arrayB[$k] = self::performReverseBlockMerge($v, $arrayB[$k]);
+            } elseif (!isset($arrayB[$k])) {
+                $arrayB[$k] = $v;
             }
         }
-
-        return $res;
+        return $arrayB;
     }
 
     public static function applyModifiers(array $data): array

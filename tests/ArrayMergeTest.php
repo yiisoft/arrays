@@ -280,4 +280,113 @@ final class ArrayMergeTest extends TestCase
 
         $this->assertSame($expected, $result);
     }
+
+    public function testMergeWithEndReverseBlocks(): void
+    {
+        $a = [
+            'A' => 1,
+            'B' => 2,
+        ];
+        $b = [
+            'C' => 3,
+            'D' => 4,
+        ];
+        $c = [
+            'X' => 5,
+            ReverseBlockMerge::class => new ReverseBlockMerge(),
+        ];
+
+        $result = ArrayHelper::merge($a, $b, $c);
+        $expected = [
+            'X' => 5,
+            'A' => 1,
+            'B' => 2,
+            'C' => 3,
+            'D' => 4,
+        ];
+
+        $this->assertSame($expected, $result);
+    }
+
+    public function t1estMergeWithMiddleReverseBlockAndStringKeys(): void
+    {
+        $a = [
+            'A' => 1,
+            'B' => 2,
+        ];
+        $b = [
+            'C' => 3,
+            'D' => 4,
+            ReverseBlockMerge::class => new ReverseBlockMerge(),
+        ];
+        $c = [
+            'X' => 5,
+        ];
+
+        $result = ArrayHelper::merge($a, $b, $c);
+        $expected = [
+            'C' => 3,
+            'D' => 4,
+            'A' => 1,
+            'B' => 2,
+            'X' => 5,
+        ];
+
+        $this->assertSame($expected, $result);
+    }
+
+    public function t1estMergeWithMiddleReverseBlockAndIntKeys(): void
+    {
+        $a = [
+            'A',
+            'B',
+        ];
+        $b = [
+            'C',
+            'D',
+            ReverseBlockMerge::class => new ReverseBlockMerge(),
+        ];
+        $c = [
+            'X',
+        ];
+
+        $result = ArrayHelper::merge($a, $b, $c);
+        $expected = [
+            'C',
+            'D',
+            'A',
+            'B',
+            'X',
+        ];
+
+        $this->assertSame($expected, $result);
+    }
+
+    public function testMergeWithMiddleAndEndReverseBlocks(): void
+    {
+        $a = [
+            'A' => 1,
+            'B' => 2,
+        ];
+        $b = [
+            'C' => 3,
+            'D' => 4,
+            ReverseBlockMerge::class => new ReverseBlockMerge(),
+        ];
+        $c = [
+            'X' => 5,
+            ReverseBlockMerge::class => new ReverseBlockMerge(),
+        ];
+
+        $result = ArrayHelper::merge($a, $b, $c);
+        $expected = [
+            'X' => 5,
+            'C' => 3,
+            'D' => 4,
+            'A' => 1,
+            'B' => 2,
+        ];
+
+        $this->assertSame($expected, $result);
+    }
 }
