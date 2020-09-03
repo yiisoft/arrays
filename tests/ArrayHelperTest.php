@@ -1219,8 +1219,8 @@ final class ArrayHelperTest extends TestCase
     public function testGetObjectVars()
     {
         $this->assertSame([
-            'id' => 23,
-            'title' => 'tt'
-        ], ArrayHelper::getObjectVars(new Post1()));
+            'id' => 123,
+            'content' => 'test'
+        ], ArrayHelper::getObjectVars(new Post2()));
     }
 }
