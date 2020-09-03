@@ -1135,6 +1135,13 @@ final class ArrayHelperTest extends TestCase
             ],
             ArrayHelper::filter($array, ['A', '!A.D'])
         );
+
+        $this->assertEquals(
+            [
+                'G' => 1,
+            ],
+            ArrayHelper::filter($array, ['G', '!X'])
+        );
     }
 
     public function testFilterNonExistingKeys(): void
