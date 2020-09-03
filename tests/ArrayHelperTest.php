@@ -1208,4 +1208,12 @@ final class ArrayHelperTest extends TestCase
         $this->expectExceptionMessage('getValue() can not get value from integer. Only array and object are supported.');
         ArrayHelper::getValue(42, 'key');
     }
+
+    public function testGetObjectVars()
+    {
+        $this->assertSame([
+            'id' => 23,
+            'title' => 'tt'
+        ], ArrayHelper::getObjectVars(new Post1()));
+    }
 }
