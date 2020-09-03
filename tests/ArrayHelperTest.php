@@ -1202,4 +1202,10 @@ final class ArrayHelperTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         ArrayHelper::getValue($order, 'magic.name');
     }
+
+    public function testGetValueFromInvalidArray()
+    {
+        $this->expectExceptionMessage('getValue() can not get value from integer. Only array and object are supported.');
+        ArrayHelper::getValue(42, 'key');
+    }
 }
