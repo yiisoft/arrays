@@ -128,6 +128,17 @@ final class ArrayHelperTest extends TestCase
                 ]
             )
         );
+
+        $this->assertEquals(
+            [
+                'id' => 1,
+                'array' => [
+                    'a' => 1,
+                    'b' => 2,
+                ],
+            ],
+            ArrayHelper::toArray(new ObjectWithNestedArrayableObject())
+        );
     }
 
     public function testRemove(): void
