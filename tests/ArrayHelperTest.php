@@ -603,6 +603,13 @@ final class ArrayHelperTest extends TestCase
         $this->assertEquals(23, ArrayHelper::getValue($arrayObject, 'nonExisting'));
     }
 
+    public function testGetUndefinedPropertyFromObject(): void
+    {
+        $object = new stdClass();
+        $this->expectNotice();
+        ArrayHelper::getValue($object, 'var');
+    }
+
     /**
      * Data provider for [[testSetValue()]].
      * @return array test data
