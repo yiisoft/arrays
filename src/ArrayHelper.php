@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays;
 
 use InvalidArgumentException;
+use Throwable;
 use Yiisoft\Arrays\Modifier\ModifierInterface;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Arrays\Modifier\ReverseBlockMerge;
@@ -248,10 +249,11 @@ class ArrayHelper
                     }
                     $array = $array[$part];
                 } elseif (is_object($array)) {
-                    if (!property_exists($array, $part) && empty($array)) {
-                        return $default;
+                    try {
+                        $array = $array::$$part;
+                    } catch (Throwable $e) {
+                        $array = $array->$part;
                     }
-                    $array = $array->$part;
                 }
             }
 
@@ -259,9 +261,13 @@ class ArrayHelper
         }
 
         if (is_object($array)) {
-            // this is expected to fail if the property does not exist, or __get() is not implemented
-            // it is not reliably possible to check whether a property is accessible beforehand
-            return $array->$key;
+            try {
+                return $array::$$key;
+            } catch (Throwable $e) {
+                // this is expected to fail if the property does not exist, or __get() is not implemented
+                // it is not reliably possible to check whether a property is accessible beforehand
+                return $array->$key;
+            }
         }
 
         return $default;
