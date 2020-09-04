@@ -68,9 +68,36 @@ class ArrayableTraitTest extends TestCase
                 'some' => [
                     'A' => 42,
                     'B' => 84,
+                    'C' => [
+                        'C1' => 1,
+                        'C2' => 2,
+                    ],
                 ],
             ],
-            $object->toArray([''], ['some.A'], false)
+            $object->toArray([''], ['some'], false)
+        );
+        $this->assertSame(
+            [
+                'some' => [
+                    'A' => 42,
+                    'C' => [
+                        'C1' => 1,
+                        'C2' => 2,
+                    ],
+                ],
+            ],
+            $object->toArray([''], ['some.A', 'some.C'])
+        );
+        $this->assertSame(
+            [
+                'some' => [
+                    'A' => 42,
+                    'C' => [
+                        'C2' => 2,
+                    ],
+                ],
+            ],
+            $object->toArray([''], ['some.A', 'some.C.C2'])
         );
         $this->assertSame(
             [

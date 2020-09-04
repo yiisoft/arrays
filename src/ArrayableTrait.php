@@ -117,21 +117,34 @@ trait ArrayableTrait
                 if ($attribute instanceof ArrayableInterface) {
                     $attribute = $attribute->toArray($nestedFields, $nestedExpand);
                 } elseif (is_array($attribute)) {
-                    $attribute = array_map(
-                        static function ($item) use ($nestedFields, $nestedExpand) {
-                            if ($item instanceof ArrayableInterface) {
-                                return $item->toArray($nestedFields, $nestedExpand);
-                            }
-                            return $item;
-                        },
-                        $attribute
-                    );
+                    $attribute = $this->arrayToArray($attribute, $nestedFields, $nestedExpand);
                 }
             }
             $data[$field] = $attribute;
         }
 
         return $recursive ? ArrayHelper::toArray($data) : $data;
+    }
+
+    protected function arrayToArray(array $array, array $fields = [], array $expand = []): array
+    {
+        $data = [];
+        $rootFields = $this->extractRootFields($fields);
+        $rootExpand = $this->extractRootFields($expand);
+        foreach (array_merge($rootFields, $rootExpand) as $field) {
+            if (array_key_exists($field, $array)) {
+                $attribute = $array[$field];
+                $nestedFields = $this->extractFieldsFor($fields, $field);
+                $nestedExpand = $this->extractFieldsFor($expand, $field);
+                if ($attribute instanceof ArrayableInterface) {
+                    $attribute = $attribute->toArray($nestedFields, $nestedExpand, true);
+                } elseif (is_array($attribute) && ($nestedExpand || $nestedFields)) {
+                    $attribute = $this->arrayToArray($attribute, $nestedFields, $nestedExpand);
+                }
+                $data[$field] = $attribute;
+            }
+        }
+        return $data;
     }
 
     /**

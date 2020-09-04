@@ -20,6 +20,10 @@ class HardArrayableObject implements ArrayableInterface
     public array $some = [
         'A' => 42,
         'B' => 84,
+        'C' => [
+            'C1' => 1,
+            'C2' => 2,
+        ],
     ];
 
     public int $n = 4;
