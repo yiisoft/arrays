@@ -37,39 +37,39 @@ trait ArrayAccessTrait
 
     /**
      * This method is required by the interface {@see \ArrayAccess}.
-     * @param int $offset the offset to check on
+     * @param mixed $offset the offset to check on
      * @return bool
      */
-    public function offsetExists(int $offset): bool
+    public function offsetExists($offset): bool
     {
         return isset($this->data[$offset]);
     }
 
     /**
      * This method is required by the interface {@see \ArrayAccess}.
-     * @param int $offset the offset to retrieve element.
+     * @param mixed $offset the offset to retrieve element.
      * @return mixed the element at the offset, null if no element is found at the offset
      */
-    public function offsetGet(int $offset)
+    public function offsetGet($offset)
     {
         return $this->data[$offset] ?? null;
     }
 
     /**
      * This method is required by the interface {@see \ArrayAccess}.
-     * @param int $offset the offset to set element
-     * @param mixed $item the element value
+     * @param mixed $offset the offset to set element
+     * @param mixed $value the element value
      */
-    public function offsetSet(int $offset, $item): void
+    public function offsetSet($offset, $value): void
     {
-        $this->data[$offset] = $item;
+        $this->data[$offset] = $value;
     }
 
     /**
      * This method is required by the interface {@see \ArrayAccess}.
-     * @param int $offset the offset to unset element
+     * @param mixed $offset the offset to unset element
      */
-    public function offsetUnset(int $offset): void
+    public function offsetUnset($offset): void
     {
         unset($this->data[$offset]);
     }
