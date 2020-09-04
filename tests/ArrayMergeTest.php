@@ -280,4 +280,27 @@ final class ArrayMergeTest extends TestCase
 
         $this->assertSame($expected, $result);
     }
+
+    public function testMergeWithReverseBlockAndIntKeys(): void
+    {
+        $a = [
+            'A',
+            'B',
+        ];
+        $b = [
+            'C',
+            'D',
+            ReverseBlockMerge::class => new ReverseBlockMerge(),
+        ];
+
+        $result = ArrayHelper::merge($a, $b);
+        $expected = [
+            'C',
+            'D',
+            'A',
+            'B',
+        ];
+
+        $this->assertSame($expected, $result);
+    }
 }
