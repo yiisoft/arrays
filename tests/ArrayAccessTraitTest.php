@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 class ArrayAccessTraitTest extends TestCase
 {
-
     public function testIterator()
     {
         $object = new ArrayAccessObject();
