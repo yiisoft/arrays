@@ -126,7 +126,7 @@ trait ArrayableTrait
         return $recursive ? ArrayHelper::toArray($data) : $data;
     }
 
-    protected function arrayToArray(array $array, array $fields = [], array $expand = []): array
+    private function arrayToArray(array $array, array $fields = [], array $expand = []): array
     {
         $data = [];
         $rootFields = $this->extractRootFields($fields);
