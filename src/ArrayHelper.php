@@ -242,17 +242,12 @@ class ArrayHelper
 
         if (strpos($key, '.') !== false) {
             foreach (explode('.', $key) as $part) {
-                if (is_array($array)) {
-                    if (!array_key_exists($part, $array)) {
-                        return $default;
-                    }
-                    $array = $array[$part];
-                } elseif (is_object($array)) {
-                    try {
-                        $array = $array::$$part;
-                    } catch (Throwable $e) {
-                        $array = $array->$part;
-                    }
+                if (is_array($array) && !array_key_exists($part, $array)) {
+                    return $default;
+                }
+
+                if (is_array($array) || is_object($array)) {
+                    $array = self::getValue($array, $part);
                 }
             }
 
