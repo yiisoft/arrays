@@ -491,6 +491,13 @@ final class ArrayHelperTest extends TestCase
             ],
             [['version', '1.0', 'status'], 'released'],
             [['version', '1.0', 'date'], 'defaultValue', 'defaultValue'],
+            [['version', '1.0.name'], 'defaultValue', 'defaultValue'],
+            [['post', 'author.name'], 'defaultValue', 'defaultValue'],
+            ['version.1.0.status', null],
+            ['post.id.value', 'defaultValue', 'defaultValue'],
+            ['version.2', 'two'],
+            [['version', 2], 'two'],
+            [['version', 2.0], 'two'],
         ];
     }
 
@@ -523,7 +530,10 @@ final class ArrayHelperTest extends TestCase
             'version' => [
                 '1.0' => [
                     'status' => 'released',
+                    'name' => 'world',
                 ],
+                '1.0.status' => 'dev',
+                2 => 'two'
             ],
         ];
 
@@ -602,6 +612,14 @@ final class ArrayHelperTest extends TestCase
         $arrayObject = new ArrayObject(['id' => 23], ArrayObject::ARRAY_AS_PROPS);
         $this->assertEquals(23, ArrayHelper::getValue($arrayObject, 'nonExisting'));
     }
+
+   public function testGetValueFromStaticProperty(): void
+    {
+        $object = new StaticObject();
+        $this->assertSame(1, ArrayHelper::getValue($object, 'a'));
+        $this->assertSame(2, ArrayHelper::getValue($object, 'nested.b'));
+    }
+
 
     public function testGetUndefinedPropertyFromObject(): void
     {

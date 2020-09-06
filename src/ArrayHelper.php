@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays;
 
 use InvalidArgumentException;
+use Throwable;
 use Yiisoft\Arrays\Modifier\ModifierInterface;
 use Yiisoft\Arrays\Modifier\ReverseBlockMerge;
 
@@ -230,9 +231,9 @@ class ArrayHelper
         if (is_array($key)) {
             $lastKey = array_pop($key);
             foreach ($key as $keyPart) {
-                $array = static::getValue($array, $keyPart, $default);
+                $array = static::getRootValue($array, $keyPart, $default);
             }
-            return static::getValue($array, $lastKey, $default);
+            return static::getRootValue($array, $lastKey, $default);
         }
 
         if (is_array($array) && array_key_exists((string)$key, $array)) {
@@ -241,26 +242,44 @@ class ArrayHelper
 
         if (strpos($key, '.') !== false) {
             foreach (explode('.', $key) as $part) {
-                if (is_array($array)) {
-                    if (!array_key_exists($part, $array)) {
-                        return $default;
-                    }
-                    $array = $array[$part];
-                } elseif (is_object($array)) {
-                    if (!property_exists($array, $part) && empty($array)) {
-                        return $default;
-                    }
-                    $array = $array->$part;
+                if (is_array($array) && !array_key_exists($part, $array)) {
+                    return $default;
+                }
+
+                if (is_array($array) || is_object($array)) {
+                    $array = self::getValue($array, $part);
+                } else {
+                    return $default;
                 }
             }
 
             return $array;
         }
 
+        return static::getRootValue($array, $key, $default);
+    }
+
+    /**
+     * @param array|object $array array or object to extract value from
+     * @param string|int $key key name of the array element or property name of the object,
+     * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
+     * getting value from an object.
+     * @return mixed the value of the element if found, default value otherwise
+     */
+    private static function getRootValue($array, $key, $default)
+    {
+        if (is_array($array) && array_key_exists((string)$key, $array)) {
+            return $array[$key];
+        }
+
         if (is_object($array)) {
-            // this is expected to fail if the property does not exist, or __get() is not implemented
-            // it is not reliably possible to check whether a property is accessible beforehand
-            return $array->$key;
+            try {
+                return $array::$$key;
+            } catch (Throwable $e) {
+                // this is expected to fail if the property does not exist, or __get() is not implemented
+                // it is not reliably possible to check whether a property is accessible beforehand
+                return $array->$key;
+            }
         }
 
         return $default;
@@ -526,7 +545,7 @@ class ArrayHelper
                 $value = static::getValue($element, $key);
                 if ($value !== null) {
                     if (is_float($value)) {
-                        $value = str_replace(',', '.', (string) $value);
+                        $value = str_replace(',', '.', (string)$value);
                     }
                     $lastArray[$value] = $element;
                 }
