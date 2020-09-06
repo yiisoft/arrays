@@ -613,7 +613,7 @@ final class ArrayHelperTest extends TestCase
         $this->assertEquals(23, ArrayHelper::getValue($arrayObject, 'nonExisting'));
     }
 
-   public function testGetValueFromStaticProperty(): void
+    public function testGetValueFromStaticProperty(): void
     {
         $object = new StaticObject();
         $this->assertSame(1, ArrayHelper::getValue($object, 'a'));
