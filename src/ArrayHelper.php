@@ -270,7 +270,9 @@ class ArrayHelper
     {
         if (is_array($array) && array_key_exists((string)$key, $array)) {
             return $array[$key];
-        } elseif (is_object($array)) {
+        }
+
+        if (is_object($array)) {
             try {
                 return $array::$$key;
             } catch (Throwable $e) {
@@ -279,6 +281,7 @@ class ArrayHelper
                 return $array->$key;
             }
         }
+
         return $default;
     }
 
