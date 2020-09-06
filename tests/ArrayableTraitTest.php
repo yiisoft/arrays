@@ -6,10 +6,10 @@ namespace Yiisoft\Arrays\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-class ArrayableTraitTest extends TestCase
+final class ArrayableTraitTest extends TestCase
 {
 
-    public function testFields()
+    public function testFields(): void
     {
         $object = new SimpleArrayableObject();
         $this->assertSame([
@@ -18,13 +18,13 @@ class ArrayableTraitTest extends TestCase
         ], $object->fields());
     }
 
-    public function testExtraFields()
+    public function testExtraFields(): void
     {
         $object = new SimpleArrayableObject();
         $this->assertSame([], $object->extraFields());
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         $object = new SimpleArrayableObject();
         $this->assertSame(['a' => 1, 'b' => 2], $object->toArray());
