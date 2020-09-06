@@ -231,9 +231,9 @@ class ArrayHelper
         if (is_array($key)) {
             $lastKey = array_pop($key);
             foreach ($key as $keyPart) {
-                $array = static::getValue($array, $keyPart, $default);
+                $array = static::getRootValue($array, $keyPart, $default);
             }
-            return static::getValue($array, $lastKey, $default);
+            return static::getRootValue($array, $lastKey, $default);
         }
 
         if (is_array($array) && array_key_exists((string)$key, $array)) {
@@ -248,13 +248,29 @@ class ArrayHelper
 
                 if (is_array($array) || is_object($array)) {
                     $array = self::getValue($array, $part);
+                } else {
+                    return $default;
                 }
             }
 
             return $array;
         }
 
-        if (is_object($array)) {
+        return static::getRootValue($array, $key, $default);
+    }
+
+    /**
+     * @param array|object $array array or object to extract value from
+     * @param string $key key name of the array element or property name of the object,
+     * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
+     * getting value from an object.
+     * @return mixed the value of the element if found, default value otherwise
+     */
+    private static function getRootValue($array, string $key, $default)
+    {
+        if (is_array($array) && array_key_exists((string)$key, $array)) {
+            return $array[$key];
+        } elseif (is_object($array)) {
             try {
                 return $array::$$key;
             } catch (Throwable $e) {
@@ -263,7 +279,6 @@ class ArrayHelper
                 return $array->$key;
             }
         }
-
         return $default;
     }
 
@@ -527,7 +542,7 @@ class ArrayHelper
                 $value = static::getValue($element, $key);
                 if ($value !== null) {
                     if (is_float($value)) {
-                        $value = str_replace(',', '.', (string) $value);
+                        $value = str_replace(',', '.', (string)$value);
                     }
                     $lastArray[$value] = $element;
                 }

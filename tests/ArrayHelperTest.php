@@ -491,6 +491,10 @@ final class ArrayHelperTest extends TestCase
             ],
             [['version', '1.0', 'status'], 'released'],
             [['version', '1.0', 'date'], 'defaultValue', 'defaultValue'],
+            [['version', '1.0.name'], 'defaultValue', 'defaultValue'],
+            [['post', 'author.name'], 'defaultValue', 'defaultValue'],
+            ['version.1.0.status', null],
+            ['post.id.value', 'defaultValue', 'defaultValue'],
         ];
     }
 
@@ -523,7 +527,9 @@ final class ArrayHelperTest extends TestCase
             'version' => [
                 '1.0' => [
                     'status' => 'released',
+                    'name' => 'world',
                 ],
+                '1.0.status' => 'dev',
             ],
         ];
 
