@@ -128,6 +128,17 @@ final class ArrayHelperTest extends TestCase
                 ]
             )
         );
+
+        $this->assertEquals(
+            [
+                'id' => 1,
+                'array' => [
+                    'a' => 1,
+                    'b' => 2,
+                ],
+            ],
+            ArrayHelper::toArray(new ObjectWithNestedArrayableObject())
+        );
     }
 
     public function testRemove(): void
@@ -590,6 +601,17 @@ final class ArrayHelperTest extends TestCase
         $this->expectError();
         $arrayObject = new ArrayObject(['id' => 23], ArrayObject::ARRAY_AS_PROPS);
         $this->assertEquals(23, ArrayHelper::getValue($arrayObject, 'nonExisting'));
+    }
+
+    public function testGetUndefinedPropertyFromObject(): void
+    {
+        $object = new stdClass();
+        if (PHP_VERSION_ID >= 80000) {
+            $this->expectWarning();
+        } else {
+            $this->expectNotice();
+        }
+        ArrayHelper::getValue($object, 'var');
     }
 
     /**
@@ -1135,6 +1157,13 @@ final class ArrayHelperTest extends TestCase
             ],
             ArrayHelper::filter($array, ['A', '!A.D'])
         );
+
+        $this->assertEquals(
+            [
+                'G' => 1,
+            ],
+            ArrayHelper::filter($array, ['G', '!X'])
+        );
     }
 
     public function testFilterNonExistingKeys(): void
@@ -1201,5 +1230,19 @@ final class ArrayHelperTest extends TestCase
 
         $this->expectException(\InvalidArgumentException::class);
         ArrayHelper::getValue($order, 'magic.name');
+    }
+
+    public function testGetValueFromInvalidArray()
+    {
+        $this->expectExceptionMessage('getValue() can not get value from integer. Only array and object are supported.');
+        ArrayHelper::getValue(42, 'key');
+    }
+
+    public function testGetObjectVars()
+    {
+        $this->assertSame([
+            'id' => 123,
+            'content' => 'test'
+        ], ArrayHelper::getObjectVars(new Post2()));
     }
 }
