@@ -7,7 +7,6 @@ namespace Yiisoft\Arrays;
 use InvalidArgumentException;
 use Throwable;
 use Yiisoft\Arrays\Modifier\ModifierInterface;
-use Yiisoft\Strings\StringHelper;
 use Yiisoft\Arrays\Modifier\ReverseBlockMerge;
 
 /**
