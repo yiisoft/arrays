@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 final class ArrayableTraitTest extends TestCase
 {
-
     public function testFields(): void
     {
         $object = new SimpleArrayableObject();
