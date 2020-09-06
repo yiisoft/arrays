@@ -268,7 +268,7 @@ class ArrayHelper
      */
     private static function getRootValue($array, string $key, $default)
     {
-        if (is_array($array) && array_key_exists((string)$key, $array)) {
+        if (is_array($array) && array_key_exists($key, $array)) {
             return $array[$key];
         }
 
