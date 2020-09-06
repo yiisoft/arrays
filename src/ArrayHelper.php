@@ -261,14 +261,14 @@ class ArrayHelper
 
     /**
      * @param array|object $array array or object to extract value from
-     * @param string $key key name of the array element or property name of the object,
+     * @param string|int $key key name of the array element or property name of the object,
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
      * @return mixed the value of the element if found, default value otherwise
      */
-    private static function getRootValue($array, string $key, $default)
+    private static function getRootValue($array, $key, $default)
     {
-        if (is_array($array) && array_key_exists($key, $array)) {
+        if (is_array($array) && array_key_exists((string)$key, $array)) {
             return $array[$key];
         }
 
