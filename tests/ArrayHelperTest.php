@@ -606,7 +606,7 @@ final class ArrayHelperTest extends TestCase
     public function testGetUndefinedPropertyFromObject(): void
     {
         $object = new stdClass();
-        if (version_compare(PHP_VERSION, '8.0.0-dev') >= 0) {
+        if (PHP_VERSION_ID >= 80000) {
             $this->expectWarning();
         } else {
             $this->expectNotice();
