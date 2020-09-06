@@ -117,7 +117,7 @@ trait ArrayableTrait
                 if ($attribute instanceof ArrayableInterface) {
                     $attribute = $attribute->toArray($nestedFields, $nestedExpand);
                 } elseif (is_array($attribute)) {
-                    $attribute = $this->arrayToArray($attribute, $nestedFields, $nestedExpand);
+                    $attribute = $this->filterAndExpand($attribute, $nestedFields, $nestedExpand);
                 }
             }
             $data[$field] = $attribute;
@@ -126,7 +126,7 @@ trait ArrayableTrait
         return $recursive ? ArrayHelper::toArray($data) : $data;
     }
 
-    private function arrayToArray(array $array, array $fields = [], array $expand = []): array
+    private function filterAndExpand(array $array, array $fields = [], array $expand = []): array
     {
         $data = [];
         $rootFields = $this->extractRootFields($fields);
@@ -139,7 +139,7 @@ trait ArrayableTrait
                 if ($attribute instanceof ArrayableInterface) {
                     $attribute = $attribute->toArray($nestedFields, $nestedExpand, true);
                 } elseif (is_array($attribute) && ($nestedExpand || $nestedFields)) {
-                    $attribute = $this->arrayToArray($attribute, $nestedFields, $nestedExpand);
+                    $attribute = $this->filterAndExpand($attribute, $nestedFields, $nestedExpand);
                 }
                 $data[$field] = $attribute;
             }
