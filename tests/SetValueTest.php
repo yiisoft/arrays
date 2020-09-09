@@ -11,10 +11,9 @@ final class SetValueTest extends TestCase
 {
 
     /**
-     * Data provider for [[testSetValue()]].
-     * @return array test data
+     * @return array[] common test data for [[testSetValue()]] and [[testSetValueByPath()]]
      */
-    public function dataProviderSetValue(): array
+    private function commonDataProvider(): array
     {
         return [
             [
@@ -83,6 +82,15 @@ final class SetValueTest extends TestCase
     }
 
     /**
+     * Data provider for [[testSetValue()]].
+     * @return array test data
+     */
+    public function dataProviderSetValue(): array
+    {
+        return $this->commonDataProvider();
+    }
+
+    /**
      * @dataProvider dataProviderSetValue
      *
      * @param array $arrayInput
@@ -102,7 +110,7 @@ final class SetValueTest extends TestCase
      */
     public function dataProviderSetValueByPath(): array
     {
-        return array_merge($this->dataProviderSetValue(), [
+        return array_merge($this->commonDataProvider(), [
             [
                 [
                     'key1' => 'val1',

@@ -12,19 +12,6 @@ use Yiisoft\Arrays\ArrayHelper;
 final class GetValueTest extends TestCase
 {
 
-    /**
-     * @see https://github.com/yiisoft/yii2/pull/11549
-     */
-    public function testFloatKey(): void
-    {
-        $array = [];
-        $array[1.0] = 'some value';
-
-        $result = ArrayHelper::getValue($array, 1.0);
-
-        $this->assertEquals('some value', $result);
-    }
-
     private array $array = [
         'name' => 'test',
         'date' => '31-12-2113',
@@ -52,7 +39,10 @@ final class GetValueTest extends TestCase
         ],
     ];
 
-    public function getValueFromArrayProvider(): array
+    /**
+     * @return array[] common test data for [[testGetValue()]] and [[testGetValueByPath()]]
+     */
+    private function commonDataProviderFromArray(): array
     {
         return [
             ['name', 'test'],
@@ -65,8 +55,6 @@ final class GetValueTest extends TestCase
                 '31-12-2113test',
                 'test',
             ],
-            ['admin.firstname', 'Qiang'],
-            ['admin.lastname', 'Xue'],
             [['version', '1.0', 'status'], 'released'],
             [['version', '1.0', 'date'], 'defaultValue', 'defaultValue'],
             [['version', '1.0.name'], 'defaultValue', 'defaultValue'],
@@ -76,8 +64,16 @@ final class GetValueTest extends TestCase
         ];
     }
 
+    public function dataProviderGetValueFromArray(): array
+    {
+        return array_merge($this->commonDataProviderFromArray(), [
+            ['admin.firstname', 'Qiang'],
+            ['admin.lastname', 'Xue'],
+        ]);
+    }
+
     /**
-     * @dataProvider getValueFromArrayProvider
+     * @dataProvider dataProviderGetValueFromArray
      *
      * @param $key
      * @param $expected
@@ -88,25 +84,9 @@ final class GetValueTest extends TestCase
         $this->assertEquals($expected, ArrayHelper::getValue($this->array, $key, $default));
     }
 
-    public function getValueByPathFromArrayProvider(): array
+    public function dataProviderGetValueByPathFromArray(): array
     {
-        return [
-            ['name', 'test'],
-            ['noname', null],
-            ['noname', 'test', 'test'],
-            [
-                static function ($array, $defaultValue) {
-                    return $array['date'] . $defaultValue;
-                },
-                '31-12-2113test',
-                'test',
-            ],
-            [['version', '1.0', 'status'], 'released'],
-            [['version', '1.0', 'date'], 'defaultValue', 'defaultValue'],
-            [['version', '1.0.name'], 'defaultValue', 'defaultValue'],
-            [['post', 'author.name'], 'defaultValue', 'defaultValue'],
-            [['version', 2], 'two'],
-            [['version', 2.0], 'two'],
+        return array_merge($this->commonDataProviderFromArray(), [
             ['post.id', 5],
             ['post.id', 5, 'test'],
             ['nopost.id', null],
@@ -120,11 +100,11 @@ final class GetValueTest extends TestCase
             ['version.1.0.status', null],
             ['post.id.value', 'defaultValue', 'defaultValue'],
             ['version.2', 'two'],
-        ];
+        ]);
     }
 
     /**
-     * @dataProvider getValueByPathFromArrayProvider
+     * @dataProvider dataProviderGetValueByPathFromArray
      *
      * @param $key
      * @param $expected
@@ -158,6 +138,19 @@ final class GetValueTest extends TestCase
         $this->assertEquals(null, ArrayHelper::getValueByPath($array, 'a.b.c'));
         ArrayHelper::setValueByPath($array, 'a.b.c', 'newValue');
         $this->assertEquals('newValue', ArrayHelper::getValueByPath($array, 'a.b.c'));
+    }
+
+    /**
+     * @see https://github.com/yiisoft/yii2/pull/11549
+     */
+    public function testFloatKey(): void
+    {
+        $array = [];
+        $array[1.0] = 'some value';
+
+        $result = ArrayHelper::getValue($array, 1.0);
+
+        $this->assertEquals('some value', $result);
     }
 
     public function testGetValueObjects(): void
