@@ -280,7 +280,7 @@ final class SetValueTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderSetValue
+     * @dataProvider dataProviderSetValueByPath
      *
      * @param array $arrayInput
      * @param string|array|null $path
