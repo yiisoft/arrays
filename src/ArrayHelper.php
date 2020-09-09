@@ -299,6 +299,17 @@ class ArrayHelper
         if (is_string($path)) {
             $path = explode('.', $path);
         }
+        if (is_array($path)) {
+            $newPath = [];
+            foreach ($path as $key) {
+                if (is_string($key)) {
+                    $newPath = array_merge($newPath, explode('.', $key));
+                } else {
+                    $newPath[] = $key;
+                }
+            }
+            $path = $newPath;
+        }
         return static::getValue($array, $path, $default);
     }
 

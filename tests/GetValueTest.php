@@ -55,10 +55,6 @@ final class GetValueTest extends TestCase
                 '31-12-2113test',
                 'test',
             ],
-            [['version', '1.0', 'status'], 'released'],
-            [['version', '1.0', 'date'], 'defaultValue', 'defaultValue'],
-            [['version', '1.0.name'], 'defaultValue', 'defaultValue'],
-            [['post', 'author.name'], 'defaultValue', 'defaultValue'],
             [['version', 2], 'two'],
             [['version', 2.0], 'two'],
         ];
@@ -69,6 +65,10 @@ final class GetValueTest extends TestCase
         return array_merge($this->commonDataProviderFromArray(), [
             ['admin.firstname', 'Qiang'],
             ['admin.lastname', 'Xue'],
+            [['version', '1.0', 'status'], 'released'],
+            [['version', '1.0', 'date'], 'defaultValue', 'defaultValue'],
+            [['version', '1.0.name'], 'defaultValue', 'defaultValue'],
+            [['post', 'author.name'], 'defaultValue', 'defaultValue'],
         ]);
     }
 
@@ -100,6 +100,9 @@ final class GetValueTest extends TestCase
             ['version.1.0.status', null],
             ['post.id.value', 'defaultValue', 'defaultValue'],
             ['version.2', 'two'],
+            [['version', '1.0', 'status'], null],
+            [['version', '1.0'], 'defaultValue', 'defaultValue'],
+            [['post', 'author.name'], 'cebe'],
         ]);
     }
 
