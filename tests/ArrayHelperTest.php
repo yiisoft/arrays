@@ -1263,4 +1263,23 @@ final class ArrayHelperTest extends TestCase
             'content' => 'test'
         ], ArrayHelper::getObjectVars(new Post2()));
     }
+
+    public function testNestedPathStaysNestedAfterSet()
+    {
+        $array = ['a' => ['b' => ['c' => 'old']]];
+        ArrayHelper::setValue($array, 'a.b.c', 'new');
+        $value = ArrayHelper::getValue($array, 'a.b.c');
+        $this->assertEquals('new', $value);
+    }
+
+    /**
+     * https://github.com/yiisoft/arrays/issues/48
+     */
+    public function testFlatPathStaysFlatAfterSet()
+    {
+        $array = ['a.b.c' => 'old'];
+        ArrayHelper::setValue($array, 'a.b.c', 'new');
+        $newValue = ArrayHelper::getValue($array, 'a.b.c');
+        $this->assertEquals('new', $newValue);
+    }
 }
