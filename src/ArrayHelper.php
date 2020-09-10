@@ -344,6 +344,11 @@ class ArrayHelper
             return;
         }
 
+        if (is_array($array) && is_string($path) && (isset($array[$path]) || array_key_exists($path, $array))) {
+            $array[$path] = $value;
+            return;
+        }
+
         $keys = is_array($path) ? $path : explode('.', $path);
 
         while (count($keys) > 1) {
