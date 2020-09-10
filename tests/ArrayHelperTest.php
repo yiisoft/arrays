@@ -1267,9 +1267,16 @@ final class ArrayHelperTest extends TestCase
     public function testNestedPathStaysNestedAfterSet()
     {
         $array = ['a' => ['b' => ['c' => 'old']]];
+
+        $value = ArrayHelper::getValue($array, 'a.b.c');
+        $this->assertEquals('old', $value);
+
         ArrayHelper::setValue($array, 'a.b.c', 'new');
+
         $value = ArrayHelper::getValue($array, 'a.b.c');
         $this->assertEquals('new', $value);
+
+        $this->assertEquals(['a' => ['b' => ['c' => 'new']]], $array);
     }
 
     /**
@@ -1278,8 +1285,15 @@ final class ArrayHelperTest extends TestCase
     public function testFlatPathStaysFlatAfterSet()
     {
         $array = ['a.b.c' => 'old'];
+
+        $value = ArrayHelper::getValue($array, 'a.b.c');
+        $this->assertEquals('old', $value);
+
         ArrayHelper::setValue($array, 'a.b.c', 'new');
-        $newValue = ArrayHelper::getValue($array, 'a.b.c');
-        $this->assertEquals('new', $newValue);
+
+        $value = ArrayHelper::getValue($array, 'a.b.c');
+        $this->assertEquals('new', $value);
+
+        $this->assertEquals(['a.b.c' => 'new'], $array);
     }
 }
