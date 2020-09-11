@@ -118,6 +118,22 @@ final class GetValueTest extends TestCase
         $this->assertEquals($expected, ArrayHelper::getValueByPath($this->array, $key, $default));
     }
 
+    public function testGetValueByPathWithCustomDelimiter(): void
+    {
+        $array = [
+            'post' => [
+                'caption' => 'Hello, World!',
+                'author' => [
+                    'name' => 'Vladimir',
+                ],
+            ],
+        ];
+
+        $this->assertEquals('Hello, World!', ArrayHelper::getValueByPath($array, 'post~caption', null, '~'));
+        $this->assertEquals('Vladimir', ArrayHelper::getValueByPath($array, ['post', 'author~name'], null, '~'));
+        $this->assertNull(ArrayHelper::getValueByPath($array, 'post.caption', null, '~'));
+    }
+
     /**
      * @see https://github.com/yiisoft/arrays/issues/1
      */
@@ -220,7 +236,6 @@ final class GetValueTest extends TestCase
         $this->assertSame(1, ArrayHelper::getValue($object, 'a'));
         $this->assertSame(2, ArrayHelper::getValueByPath($object, 'nested.b'));
     }
-
 
     public function testGetUndefinedPropertyFromObject(): void
     {

@@ -53,6 +53,24 @@ final class SetValueTest extends TestCase
             ],
             [
                 [
+                    'key' => ['val'],
+                ],
+                null,
+                'data',
+                'data',
+            ],
+        ];
+    }
+
+    /**
+     * Data provider for [[testSetValue()]].
+     * @return array test data
+     */
+    public function dataProviderSetValue(): array
+    {
+        return array_merge($this->commonDataProvider(), [
+            [
+                [
                     'key' => [
                         'in.array' => [
                             'key' => 'val',
@@ -70,24 +88,7 @@ final class SetValueTest extends TestCase
                     ],
                 ],
             ],
-            [
-                [
-                    'key' => ['val'],
-                ],
-                null,
-                'data',
-                'data',
-            ],
-        ];
-    }
-
-    /**
-     * Data provider for [[testSetValue()]].
-     * @return array test data
-     */
-    public function dataProviderSetValue(): array
-    {
-        return $this->commonDataProvider();
+        ]);
     }
 
     /**
@@ -290,6 +291,48 @@ final class SetValueTest extends TestCase
     public function testSetValueByPath(array $arrayInput, $path, $value, $expected): void
     {
         ArrayHelper::setValueByPath($arrayInput, $path, $value);
+        $this->assertEquals($expected, $arrayInput);
+    }
+
+    public function setValueByPathWithCustomDelimiterData(): array
+    {
+        return [
+            [
+                [],
+                'post~caption',
+                'Hello, World!',
+                [
+                    'post' => [
+                        'caption' => 'Hello, World!',
+                    ],
+                ],
+            ],
+            [
+                [],
+                ['post', 'author~name'],
+                'Vladimir',
+                [
+                    'post' => [
+                        'author' => [
+                            'name' => 'Vladimir',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider setValueByPathWithCustomDelimiterData
+     *
+     * @param array $arrayInput
+     * @param string|array|null $path
+     * @param mixed $value
+     * @param mixed $expected
+     */
+    public function testSetValueByPathWithCustomDelimiter(array $arrayInput, $path, $value, $expected): void
+    {
+        ArrayHelper::setValueByPath($arrayInput, $path, $value, '~');
         $this->assertEquals($expected, $arrayInput);
     }
 }
