@@ -292,12 +292,12 @@ class ArrayHelper
      * `function($array, $defaultValue)`.
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
-     * @param string $pathDelimiter
+     * @param string $delimiter
      * @return mixed the value of the element if found, default value otherwise
      */
-    public static function getValueByPath($array, $path, $default = null, string $pathDelimiter = '.')
+    public static function getValueByPath($array, $path, $default = null, string $delimiter = '.')
     {
-        return static::getValue($array, static::parsePath($path, $pathDelimiter), $default);
+        return static::getValue($array, static::parsePath($path, $delimiter), $default);
     }
 
     /**
@@ -409,28 +409,28 @@ class ArrayHelper
      * you can also describe the path as an array of keys
      * if the path is null then `$array` will be assigned the `$value`
      * @param mixed $value the value to be written
-     * @param string $pathDelimiter
+     * @param string $delimiter
      */
-    public static function setValueByPath(array &$array, $path, $value, string $pathDelimiter = '.'): void
+    public static function setValueByPath(array &$array, $path, $value, string $delimiter = '.'): void
     {
-        static::setValue($array, static::parsePath($path, $pathDelimiter), $value);
+        static::setValue($array, static::parsePath($path, $delimiter), $value);
     }
 
     /**
      * @param mixed $path
-     * @param string $pathDelimiter
+     * @param string $delimiter
      * @return mixed
      */
-    private static function parsePath($path, string $pathDelimiter)
+    private static function parsePath($path, string $delimiter)
     {
         if (is_string($path)) {
-            return explode($pathDelimiter, $path);
+            return explode($delimiter, $path);
         }
         if (is_array($path)) {
             $newPath = [];
             foreach ($path as $key) {
                 if (is_string($key) || is_array($key)) {
-                    $newPath = array_merge($newPath, static::parsePath($key, $pathDelimiter));
+                    $newPath = array_merge($newPath, static::parsePath($key, $delimiter));
                 } else {
                     $newPath[] = $key;
                 }
