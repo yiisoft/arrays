@@ -11,7 +11,6 @@ use Yiisoft\Arrays\ArrayHelper;
 
 final class GetValueTest extends TestCase
 {
-
     private array $array = [
         'name' => 'test',
         'date' => '31-12-2113',

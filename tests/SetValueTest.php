@@ -9,7 +9,6 @@ use Yiisoft\Arrays\ArrayHelper;
 
 final class SetValueTest extends TestCase
 {
-
     /**
      * @return array[] common test data for [[testSetValue()]] and [[testSetValueByPath()]]
      */
