@@ -9,7 +9,6 @@ use Yiisoft\Arrays\ArrayHelper;
 
 class RemoveTest extends TestCase
 {
-
     public function removeData(): array
     {
         return [
