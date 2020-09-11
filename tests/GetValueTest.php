@@ -103,6 +103,7 @@ final class GetValueTest extends TestCase
             [['version', '1.0', 'status'], null],
             [['version', '1.0'], 'defaultValue', 'defaultValue'],
             [['post', 'author.name'], 'cebe'],
+            [['post', ['author', ['profile.title']]], '1337'],
         ]);
     }
 

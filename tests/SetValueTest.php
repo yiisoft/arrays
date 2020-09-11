@@ -319,6 +319,20 @@ final class SetValueTest extends TestCase
                     ],
                 ],
             ],
+            [
+                [],
+                ['post', ['author', ['name~firstName']]],
+                'Vladimir',
+                [
+                    'post' => [
+                        'author' => [
+                            'name' => [
+                                'firstName' => 'Vladimir',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 

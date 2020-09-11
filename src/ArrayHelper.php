@@ -429,8 +429,8 @@ class ArrayHelper
         if (is_array($path)) {
             $newPath = [];
             foreach ($path as $key) {
-                if (is_string($key)) {
-                    $newPath = array_merge($newPath, explode($pathDelimiter, $key));
+                if (is_string($key) || is_array($key)) {
+                    $newPath = array_merge($newPath, static::parsePath($key, $pathDelimiter));
                 } else {
                     $newPath[] = $key;
                 }
