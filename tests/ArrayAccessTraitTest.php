@@ -8,7 +8,7 @@ use ArrayIterator;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\Tests\Objects\ArrayAccessObject;
 
-class ArrayAccessTraitTest extends TestCase
+final class ArrayAccessTraitTest extends TestCase
 {
     public function testIterator()
     {
