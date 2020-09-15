@@ -455,13 +455,13 @@ class ArrayHelper
      * ```
      *
      * @param array $array the array to extract value from
-     * @param string|array $key key name of the array element or associative array at the key path specified
+     * @param string|int|float|array $key key name of the array element or associative array at the key path specified
      * @param mixed $default the default value to be returned if the specified key does not exist
      * @return mixed the value of the element if found, default value otherwise
      */
     public static function remove(array &$array, $key, $default = null)
     {
-        $keys = is_string($key) ? [$key] : $key;
+        $keys = is_array($key) ? $key : [$key];
 
         while (count($keys) > 1) {
             $key = array_shift($keys);
@@ -472,7 +472,7 @@ class ArrayHelper
         }
 
         $key = array_shift($keys);
-        if (array_key_exists($key, $array)) {
+        if (array_key_exists((string)$key, $array)) {
             $value = $array[$key];
             unset($array[$key]);
             return $value;
