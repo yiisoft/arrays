@@ -103,7 +103,7 @@ class ArrayHelper
      * For integer-keyed elements, the elements from the latter array will
      * be appended to the former array.
      * You can use modifiers to change merging result.
-     * @param array $args arrays to be merged
+     * @param array ...$args arrays to be merged
      * @return array the merged array (the original arrays are not changed.)
      */
     public static function merge(...$args): array
