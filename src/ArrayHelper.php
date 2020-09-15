@@ -201,8 +201,9 @@ class ArrayHelper
      * ```
      *
      * @param array|object $array array or object to extract value from
-     * @param string|\Closure|array $key key name of the array element, an array of keys or property name of the object,
-     * or an anonymous function returning the value. The anonymous function signature should be:
+     * @param string|int|float|\Closure|array $key key name of the array element,
+     * an array of keys or property name of the object, or an anonymous function
+     * returning the value. The anonymous function signature should be:
      * `function($array, $defaultValue)`.
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
@@ -233,7 +234,7 @@ class ArrayHelper
 
     /**
      * @param array|object $array array or object to extract value from
-     * @param string|int $key key name of the array element or property name of the object,
+     * @param string|int|float $key key name of the array element or property name of the object,
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
      * @return mixed the value of the element if found, default value otherwise
@@ -287,7 +288,7 @@ class ArrayHelper
      * ```
      *
      * @param array|object $array array or object to extract value from
-     * @param string|\Closure|array $path key name of the array element, an array of keys or property name
+     * @param string|int|float|\Closure|array $path key name of the array element, an array of keys or property name
      * of the object, or an anonymous function returning the value. The anonymous function signature should be:
      * `function($array, $defaultValue)`.
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
