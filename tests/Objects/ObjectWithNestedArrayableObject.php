@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Arrays\Tests;
+namespace Yiisoft\Arrays\Tests\Objects;
+
+use Yiisoft\Arrays\Tests\Objects\SimpleArrayableObject;
 
 class ObjectWithNestedArrayableObject
 {

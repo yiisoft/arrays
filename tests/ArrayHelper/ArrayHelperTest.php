@@ -2,13 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Arrays\Tests;
+namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use ArrayObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Arrays\Tests\Objects\ObjectWithNestedArrayableObject;
+use Yiisoft\Arrays\Tests\Objects\Post1;
+use Yiisoft\Arrays\Tests\Objects\Post2;
+use Yiisoft\Arrays\Tests\Objects\Post3;
 
 final class ArrayHelperTest extends TestCase
 {

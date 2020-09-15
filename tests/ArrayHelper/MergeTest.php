@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Arrays\Tests;
+namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
@@ -13,7 +13,7 @@ use Yiisoft\Arrays\Modifier\ReverseBlockMerge;
 use Yiisoft\Arrays\Modifier\ReverseValues;
 use Yiisoft\Arrays\Modifier\UnsetValue;
 
-final class ArrayMergeTest extends TestCase
+final class MergeTest extends TestCase
 {
     public function testEmptyMerge(): void
     {
