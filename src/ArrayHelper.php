@@ -455,20 +455,56 @@ class ArrayHelper
      * ```
      *
      * @param array $array the array to extract value from
-     * @param string $key key name of the array element
+     * @param string|int|float|array $key key name of the array element or associative array at the key path specified
      * @param mixed $default the default value to be returned if the specified key does not exist
      * @return mixed the value of the element if found, default value otherwise
      */
-    public static function remove(array &$array, string $key, $default = null)
+    public static function remove(array &$array, $key, $default = null)
     {
-        if (array_key_exists($key, $array)) {
+        $keys = is_array($key) ? $key : [$key];
+
+        while (count($keys) > 1) {
+            $key = array_shift($keys);
+            if (!isset($array[$key]) || !is_array($array[$key])) {
+                return $default;
+            }
+            $array = &$array[$key];
+        }
+
+        $key = array_shift($keys);
+        if (array_key_exists((string)$key, $array)) {
             $value = $array[$key];
             unset($array[$key]);
-
             return $value;
         }
 
         return $default;
+    }
+
+    /**
+     * Removes an item from an array and returns the value. If the key does not exist in the array, the default value
+     * will be returned instead.
+     *
+     * Usage examples,
+     *
+     * ```php
+     * // $array = ['type' => 'A', 'options' => [1, 2]];
+     * // working with array
+     * $type = \Yiisoft\Arrays\ArrayHelper::remove($array, 'type');
+     * // $array content
+     * // $array = ['options' => [1, 2]];
+     * ```
+     *
+     * @param array $array the array to extract value from
+     * @param string|array $path key name of the array element or associative array at the key path specified
+     * the path can be described by a string when each key should be separated by a delimiter (default is dot)
+     * @param mixed $default the default value to be returned if the specified key does not exist
+     * @param string $delimiter
+     * @return mixed the value of the element if found, default value otherwise
+     */
+    public static function removeByPath(array &$array, $path, $default = null, string $delimiter = '.')
+    {
+        return static::remove($array, static::parsePath($path, $delimiter), $default);
     }
 
     /**

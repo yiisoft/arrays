@@ -141,18 +141,6 @@ final class ArrayHelperTest extends TestCase
         );
     }
 
-    public function testRemove(): void
-    {
-        $array = ['name' => 'b', 'age' => 3];
-        $name = ArrayHelper::remove($array, 'name');
-
-        $this->assertEquals('b', $name);
-        $this->assertEquals(['age' => 3], $array);
-
-        $default = ArrayHelper::remove($array, 'nonExisting', 'defaultValue');
-        $this->assertEquals('defaultValue', $default);
-    }
-
     public function testRemoveValueMultiple(): void
     {
         $array = [
