@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Arrays\Tests;
+namespace Yiisoft\Arrays\Tests\Objects;
 
 final class Magic
 {

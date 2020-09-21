@@ -2,12 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Arrays\Tests;
+namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use ArrayObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Arrays\Tests\Objects\Magic;
+use Yiisoft\Arrays\Tests\Objects\Post1;
+use Yiisoft\Arrays\Tests\Objects\StaticObject;
 
 final class GetValueTest extends TestCase
 {

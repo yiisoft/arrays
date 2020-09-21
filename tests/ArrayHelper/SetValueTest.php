@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Arrays\Tests;
+namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
@@ -58,6 +58,18 @@ final class SetValueTest extends TestCase
                 'data',
                 'data',
             ],
+            [
+                [1 => 'a'],
+                3,
+                'c',
+                [1 => 'a', 3 => 'c'],
+            ],
+            [
+                [1 => 'a'],
+                3.0,
+                'c',
+                [1 => 'a', 3 => 'c'],
+            ],
         ];
     }
 
@@ -94,7 +106,7 @@ final class SetValueTest extends TestCase
      * @dataProvider dataProviderSetValue
      *
      * @param array $arrayInput
-     * @param string|array|null $key
+     * @param string|int|float|array|null $key
      * @param mixed $value
      * @param mixed $expected
      */
@@ -283,7 +295,7 @@ final class SetValueTest extends TestCase
      * @dataProvider dataProviderSetValueByPath
      *
      * @param array $arrayInput
-     * @param string|array|null $path
+     * @param string|int|float|array|null $path
      * @param mixed $value
      * @param mixed $expected
      */
@@ -339,7 +351,7 @@ final class SetValueTest extends TestCase
      * @dataProvider setValueByPathWithCustomDelimiterData
      *
      * @param array $arrayInput
-     * @param string|array|null $path
+     * @param string|int|float|array|null $path
      * @param mixed $value
      * @param mixed $expected
      */

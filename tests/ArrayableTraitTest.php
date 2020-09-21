@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Arrays\Tests\Objects\HardArrayableObject;
+use Yiisoft\Arrays\Tests\Objects\SimpleArrayableObject;
 
 final class ArrayableTraitTest extends TestCase
 {

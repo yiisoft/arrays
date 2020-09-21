@@ -103,7 +103,7 @@ class ArrayHelper
      * For integer-keyed elements, the elements from the latter array will
      * be appended to the former array.
      * You can use modifiers to change merging result.
-     * @param array $args arrays to be merged
+     * @param array ...$args arrays to be merged
      * @return array the merged array (the original arrays are not changed.)
      */
     public static function merge(...$args): array
@@ -201,8 +201,9 @@ class ArrayHelper
      * ```
      *
      * @param array|object $array array or object to extract value from
-     * @param string|\Closure|array $key key name of the array element, an array of keys or property name of the object,
-     * or an anonymous function returning the value. The anonymous function signature should be:
+     * @param string|int|float|\Closure|array $key key name of the array element,
+     * an array of keys or property name of the object, or an anonymous function
+     * returning the value. The anonymous function signature should be:
      * `function($array, $defaultValue)`.
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
@@ -233,7 +234,7 @@ class ArrayHelper
 
     /**
      * @param array|object $array array or object to extract value from
-     * @param string|int $key key name of the array element or property name of the object,
+     * @param string|int|float $key key name of the array element or property name of the object,
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
      * @return mixed the value of the element if found, default value otherwise
@@ -287,7 +288,7 @@ class ArrayHelper
      * ```
      *
      * @param array|object $array array or object to extract value from
-     * @param string|\Closure|array $path key name of the array element, an array of keys or property name
+     * @param string|int|float|\Closure|array $path key name of the array element, an array of keys or property name
      * of the object, or an anonymous function returning the value. The anonymous function signature should be:
      * `function($array, $defaultValue)`.
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
@@ -330,7 +331,7 @@ class ArrayHelper
      * ```
      *
      * @param array $array the array to write the value to
-     * @param string|array|null $key the path of where do you want to write a value to `$array`
+     * @param string|int|float|array|null $key the path of where do you want to write a value to `$array`
      * the path can be described by an array of keys
      * if the path is null then `$array` will be assigned the `$value`
      * @param mixed $value the value to be written
@@ -404,7 +405,7 @@ class ArrayHelper
      * ```
      *
      * @param array $array the array to write the value to
-     * @param string|array|null $path the path of where do you want to write a value to `$array`
+     * @param string|int|float|array|null $path the path of where do you want to write a value to `$array`
      * the path can be described by a string when each key should be separated by a dot
      * you can also describe the path as an array of keys
      * if the path is null then `$array` will be assigned the `$value`
