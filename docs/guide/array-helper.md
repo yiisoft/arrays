@@ -483,6 +483,51 @@ ArrayHelper::isIn('a', new ArrayObject(['a']));
 ArrayHelper::isSubset(new ArrayObject(['a', 'c']), new ArrayObject(['a', 'b', 'c']));
 ```
 
+## Filtering of array
+
+`ArrayHelper::filter()` filters array according to rules specified.
+
+Rules that define array keys which should be left or removed from results. Each rule is:
+- `var` - `$array['var']` will be left in result.
+- `var.key` = only `$array['var']['key']` will be left in result.
+- `!var.key` = `$array['var']['key']` will be removed from result.
+
+For example:
+
+```php
+$array = [
+  'A' => [1, 2],
+  'B' => [
+      'C' => 1,
+      'D' => 2,
+  ],
+  'E' => 1,
+];
+
+$result = ArrayHelper::filter($array, ['A']);
+// $result will be:
+// [
+//     'A' => [1, 2],
+// ]
+
+$result = ArrayHelper::filter($array, ['A', 'B.C']);
+// $result will be:
+// [
+//     'A' => [1, 2],
+//     'B' => [
+//         'C' => 1,
+//     ],
+// ]
+
+$result = ArrayHelper::filter($array, ['B', '!B.C']);
+// $result will be:
+// [
+//     'B' => [
+//         'D' => 2,
+//     ],
+// ]
+```
+
 ## Getting the public member variables of an object 
 
 `ArrayHelper::getObjectVars()` return the public member variables of an object:
