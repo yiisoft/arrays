@@ -464,23 +464,30 @@ The result of conversion above for single model will be:
 It is possible to provide default way of converting object to array for a specific class by implementing
 [[Yiisoft\Arrays\Arrayable|Arrayable]] interface in that class.
 
-## Testing against Arrays <span id="testing-arrays"></span>
+## Testing against arrays
 
 Often you need to check if an element is in an array or a set of elements is a subset of another.
-While PHP offers `in_array()`, this does not support subsets or `\Traversable` objects.
+While PHP offers [in_array()](https://www.php.net/manual/en/function.in-array.php),
+this does not support subsets or `\Traversable` objects.
 
-To aid these kinds of tests, [[Yiisoft\Arrays\ArrayHelper]] provides [[Yiisoft\Arrays\ArrayHelper::isIn()|isIn()]]
-and [[Yiisoft\Arrays\ArrayHelper::isSubset()|isSubset()]] with the same signature as
-[in_array()](http://php.net/manual/en/function.in-array.php).
+To aid these kinds of tests, `ArrayHelper` provide `isIn()` and `isSubset()` with the same signature as
+[in_array()](https://www.php.net/manual/en/function.in-array.php).
 
 ```php
 // true
 ArrayHelper::isIn('a', ['a']);
+
 // true
 ArrayHelper::isIn('a', new ArrayObject(['a']));
 
+// false
+ArrayHelper::isIn(42, ['42'], true);
+
 // true 
 ArrayHelper::isSubset(new ArrayObject(['a', 'c']), new ArrayObject(['a', 'b', 'c']));
+
+// false
+ArrayHelper::isSubset(new ArrayObject([1, 3]), new ArrayObject(['1', '2', '3']), true);
 ```
 
 ## Filtering of array
