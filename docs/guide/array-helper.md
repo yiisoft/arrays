@@ -482,3 +482,17 @@ ArrayHelper::isIn('a', new ArrayObject(['a']));
 // true 
 ArrayHelper::isSubset(new ArrayObject(['a', 'c']), new ArrayObject(['a', 'b', 'c']));
 ```
+
+## Getting the public member variables of an object 
+
+`ArrayHelper::getObjectVars()` return the public member variables of an object:
+
+```php
+$vars = ArrayHelper::getObjectVars($object);
+```
+
+It is different from [get_object_vars()](https://www.php.net/manual/en/function.get-object-vars.php)
+because the latter will return private and protected variables if it is called within the object itself.
+
+If not given object, this method will be return `null`.
+
