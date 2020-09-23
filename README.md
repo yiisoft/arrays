@@ -52,7 +52,7 @@ Overall the helper has the following method groups.
 - setValue
 - setValueByPath
 
-### Remove data
+### Removing data
 
 - remove
 - removeByPath
