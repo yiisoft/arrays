@@ -32,7 +32,7 @@ composer require yiisoft/arrays
 
 ## ArrayHelper usage
 
-String helper methods are static so usage is like the following:
+Array helper methods are static so usage is like the following:
 
 ```php
 $username = ArrayHelper::getValue($_POST, 'username');
