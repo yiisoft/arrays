@@ -419,15 +419,14 @@ The result will be:
 ```
 
 
-## Converting Objects to Arrays <span id="converting-objects-to-arrays"></span>
+## Converting objects to arrays
 
-Often you need to convert an object or an array of objects into an array. The most common case is converting active record
+Often you need to convert an object or an array of objects into an array. The most common case is converting
 models in order to serve data arrays via REST API or use it otherwise. The following code could be used to do it:
 
 ```php
-$posts = Post::find()->limit(10)->all();
 $data = ArrayHelper::toArray($posts, [
-    'app\models\Post' => [
+    Post::class => [
         'id',
         'title',
         // the key name in array result => property name
@@ -440,7 +439,7 @@ $data = ArrayHelper::toArray($posts, [
 ]);
 ```
 
-The first argument contains the data we want to convert. In our case we're converting a `Post` AR model.
+The first argument contains the data we want to convert. In our case we're converting a `Post` model.
 
 The second argument is conversion mapping per class. We're setting a mapping for `Post` model.
 Each mapping array contains a set of mappings. Each mapping could be:
@@ -451,7 +450,6 @@ Each mapping array contains a set of mappings. Each mapping could be:
 
 The result of conversion above for single model will be:
 
-
 ```php
 [
     'id' => 123,
@@ -461,8 +459,11 @@ The result of conversion above for single model will be:
 ]
 ```
 
+Third optional boolean argument (default value is `false`) 
+allow to recursively converts properties which are objects into arrays.
+
 It is possible to provide default way of converting object to array for a specific class by implementing
-[[Yiisoft\Arrays\Arrayable|Arrayable]] interface in that class.
+`Yiisoft\Arrays\ArrayableInterface` interface in that class.
 
 ## Testing against arrays
 

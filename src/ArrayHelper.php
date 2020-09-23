@@ -22,7 +22,7 @@ class ArrayHelper
      *
      * ```php
      * [
-     *     'app\models\Post' => [
+     *     Post::class => [
      *         'id',
      *         'title',
      *         // the key name in array result => property name
