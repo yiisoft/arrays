@@ -1028,8 +1028,8 @@ class ArrayHelper
      * @param array $filters Rules that define array keys which should be left or removed from results.
      * Each rule is:
      * - `var` - `$array['var']` will be left in result.
-     * - `var.key` = only `$array['var']['key'] will be left in result.
-     * - `!var.key` = `$array['var']['key'] will be removed from result.
+     * - `var.key` = only `$array['var']['key']` will be left in result.
+     * - `!var.key` = `$array['var']['key']` will be removed from result.
      * @return array Filtered array
      */
     public static function filter(array $array, array $filters): array
@@ -1091,6 +1091,7 @@ class ArrayHelper
      * and protected variables if it is called within the object itself.
      * @param object $object the object to be handled
      * @return array|null the public member variables of the object or null if not object given
+     * @see https://www.php.net/manual/en/function.get-object-vars.php
      */
     public static function getObjectVars(object $object): ?array
     {
