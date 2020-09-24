@@ -96,7 +96,38 @@ ArraySorter::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
 
 ## ArrayAccessTrait usage
 
-...
+`ArrayAccessTrait` provides the implementation for
+[\IteratorAggregate](https://www.php.net/manual/class.iteratoraggregate),
+[\ArrayAccess](https://www.php.net/manual/class.arrayaccess) and
+[\Countable](https://www.php.net/manualn/class.countable.php).
+ 
+Note that `ArrayAccessTrait` requires the class using it contain a property named `data` which should be an array.
+The data will be exposed by ArrayAccessTrait to support accessing the class object like an array.
+
+Example of use:
+
+```php
+class OfficeClassification implements \IteratorAggregate, \ArrayAccess, \Countable
+{
+    use ArrayAccessTrait;
+
+    public array $data = [
+        'a' => 'Class A',
+        'b' => 'Class B',
+        'c' => 'Class C',
+    ];
+}
+
+$classification = new OfficeClassification();
+
+echo 'Count classes: ' . $classification->count() . "\n"; // 3
+
+$iterator = $classification->getIterator();
+while ($iterator->valid()) {
+    echo $iterator->current() . "\n"; // Class A, Class B, Class C
+    $iterator->next();
+}
+```
 
 ## ArrayableInterface and ArrayableTrait usage
 
