@@ -6,7 +6,6 @@ namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use ArrayObject;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Tests\Objects\ObjectWithNestedArrayableObject;
@@ -582,17 +581,6 @@ final class ArrayHelperTest extends TestCase
 
         $this->assertFalse(ArrayHelper::isSubset([1], new ArrayObject(['1', 'b']), true));
         $this->assertFalse(ArrayHelper::isSubset(new ArrayObject([1]), ['1', 'b'], true));
-    }
-
-    public function testIsArray(): void
-    {
-        $this->assertTrue(ArrayHelper::isTraversable(['a']));
-        $this->assertTrue(ArrayHelper::isTraversable(new ArrayObject(['1'])));
-        $this->assertFalse(ArrayHelper::isTraversable(new stdClass()));
-        $this->assertFalse(ArrayHelper::isTraversable('A,B,C'));
-        $this->assertFalse(ArrayHelper::isTraversable(12));
-        $this->assertFalse(ArrayHelper::isTraversable(false));
-        $this->assertFalse(ArrayHelper::isTraversable(null));
     }
 
     public function testFilter(): void

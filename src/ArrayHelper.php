@@ -967,20 +967,6 @@ class ArrayHelper
     }
 
     /**
-     * Checks whether a variable is an array or [[\Traversable]].
-     *
-     * This method does the same as the PHP function [is_array()](http://php.net/manual/en/function.is-array.php)
-     * but additionally works on objects that implement the [[\Traversable]] interface.
-     * @param mixed $var The variable being evaluated.
-     * @return bool whether $var is array-like
-     * @see http://php.net/manual/en/function.is-array.php
-     */
-    public static function isTraversable($var): bool
-    {
-        return is_iterable($var);
-    }
-
-    /**
      * Checks whether an array or `\Traversable` is a subset of another array or `\Traversable`.
      *
      * This method will return `true`, if all elements of `$needles` are contained in
