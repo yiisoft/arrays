@@ -10,6 +10,28 @@ class ArraySorter
 {
     /**
      * Sorts an array of objects or arrays (with the same structure) by one or several keys.
+     *
+     * For example:
+     *
+     * ```php
+     * $data = [
+     *     ['age' => 30, 'name' => 'Alexander'],
+     *     ['age' => 30, 'name' => 'Brian'],
+     *     ['age' => 19, 'name' => 'Barney'],
+     * ];
+     * ArraySorter::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
+     * ```
+     *
+     * After sorting we'll get the following in `$data`:
+     *
+     * ```php
+     * [
+     *     ['age' => 19, 'name' => 'Barney'],
+     *     ['age' => 30, 'name' => 'Brian'],
+     *     ['age' => 30, 'name' => 'Alexander'],
+     * ];
+     * ```
+     *
      * @param array $array the array to be sorted. The array will be modified after calling this method.
      * @param string|\Closure|array $key the key(s) to be sorted by. This refers to a key name of the sub-array
      * elements, a property name of the objects, or an anonymous function returning the values for comparison
@@ -21,8 +43,8 @@ class ArraySorter
      * `SORT_REGULAR`, `SORT_NUMERIC`, `SORT_STRING`, `SORT_LOCALE_STRING`, `SORT_NATURAL` and `SORT_FLAG_CASE`.
      * Please refer to [PHP manual](http://php.net/manual/en/function.sort.php)
      * for more details. When sorting by multiple keys with different sort flags, use an array of sort flags.
-     * @throws InvalidArgumentException if the $direction or $sortFlag parameters do not have
-     * correct number of elements as that of $key.
+     * @throws InvalidArgumentException if the `$direction` or `$sortFlag` parameters do not have
+     * correct number of elements as that of $key.`
      */
     public static function multisort(array &$array, $key, $direction = SORT_ASC, $sortFlag = SORT_REGULAR): void
     {
@@ -58,7 +80,6 @@ class ArraySorter
      * elements, a property name of the objects, or an anonymous function returning the values for comparison
      * purpose. The anonymous function signature should be: `function($item)`.
      * To sort by multiple keys, provide an array of keys here.
-     *
      * @return array return the keys
      */
     private static function getKeys(array &$array, $key): array
@@ -94,7 +115,6 @@ class ArraySorter
      * `SORT_REGULAR`, `SORT_NUMERIC`, `SORT_STRING`, `SORT_LOCALE_STRING`, `SORT_NATURAL` and `SORT_FLAG_CASE`.
      * Please refer to [PHP manual](http://php.net/manual/en/function.sort.php)
      * for more details. When sorting by multiple keys with different sort flags, use an array of sort flags.
-     *
      * @return array return the arguments
      */
     private static function getArguments(array &$array, &$keys, $direction, $sortFlag): array
