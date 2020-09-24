@@ -171,8 +171,14 @@ class ArrayHelper
     }
 
     /**
+     * Apply modifiers (classes that implement {@link ModifierInterface}) in array.
+     *
+     * For example, {@link \Yiisoft\Arrays\Modifier\UnsetValue} to unset value from previous array or
+     * {@link \Yiisoft\Arrays\ReplaceArrayValue} to force replace former value instead of recursive merging.
+     *
      * @param array $data
      * @return array
+     * @see ModifierInterface
      */
     public static function applyModifiers(array $data): array
     {
