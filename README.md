@@ -131,4 +131,21 @@ while ($iterator->valid()) {
 
 ## ArrayableInterface and ArrayableTrait usage
 
-...
+`ArrayableInterface` and its implementation `ArrayableTrait` intended for use in classes who want to support customizable representation of their instances.
+
+Example of use:
+
+```php
+class Car implements ArrayableInterface
+{
+    use ArrayableTrait;
+
+    public string $type = 'Crossover';
+    public string $color = 'Red';
+    public int $torque = 472;
+}
+
+$car = new Car();
+
+$data = $car->toArray(['type', 'color']); // ['type' => 'Crossover', 'color' => 'Red']
+```
