@@ -1,7 +1,7 @@
 {
     "name": "yiisoft/arrays",
     "type": "library",
-    "description": "Yii - Array Helper",
+    "description": "Yii Array Helper",
     "keywords": [
         "yii",
         "helper",
@@ -12,8 +12,8 @@
     "support": {
         "source": "https://github.com/yiisoft/arrays",
         "issues": "https://github.com/yiisoft/arrays/issues",
-        "forum": "http://www.yiiframework.com/forum/",
-        "wiki": "http://www.yiiframework.com/wiki/",
+        "forum": "https://forum.yiiframework.com/",
+        "wiki": "https://www.yiiframework.com/wiki/",
         "irc": "irc://irc.freenode.net/yii"
     },
     "minimum-stability": "dev",

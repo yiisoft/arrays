@@ -16,18 +16,15 @@ class ArrayHelper
 {
     /**
      * Converts an object or an array of objects into an array.
-     * @param object|array|string $object the object to be converted into an array
-     * @param array $properties a mapping from object class names to the properties that need to put into the resulting arrays.
-     * The properties specified for each class is an array of the following format:
+     *
+     * For example:
      *
      * ```php
      * [
-     *     'app\models\Post' => [
+     *     Post::class => [
      *         'id',
      *         'title',
-     *         // the key name in array result => property name
      *         'createTime' => 'created_at',
-     *         // the key name in array result => anonymous function
      *         'length' => function ($post) {
      *             return strlen($post->content);
      *         },
@@ -45,6 +42,18 @@ class ArrayHelper
      *     'length' => 301,
      * ]
      * ```
+     *
+     * @param object|array|string $object the object to be converted into an array.
+     *
+     * It is possible to provide default way of converting object to array for a specific class by implementing
+     * `Yiisoft\Arrays\ArrayableInterface` interface in that class.
+     *
+     * @param array $properties a mapping from object class names to the properties that need to put into the resulting arrays.
+     * The properties specified for each class is an array of the following format:
+     *
+     * - A field name to include as is.
+     * - A key-value pair of desired array key name and model column name to take value from.
+     * - A key-value pair of desired array key name and a callback which returns value.
      *
      * @param bool $recursive whether to recursively converts properties which are objects into arrays.
      * @return array the array representation of the object
@@ -97,14 +106,14 @@ class ArrayHelper
     /**
      * Merges two or more arrays into one recursively.
      * If each array has an element with the same string key value, the latter
-     * will overwrite the former (different from array_merge_recursive).
+     * will overwrite the former (different from `array_merge_recursive`).
      * Recursive merging will be conducted if both arrays have an element of array
      * type and are having the same key.
      * For integer-keyed elements, the elements from the latter array will
      * be appended to the former array.
-     * You can use modifiers to change merging result.
+     * You can use modifiers {@see ArrayHelper::applyModifiers()} to change merging result.
      * @param array ...$args arrays to be merged
-     * @return array the merged array (the original arrays are not changed.)
+     * @return array the merged array (the original arrays are not changed)
      */
     public static function merge(...$args): array
     {
@@ -161,6 +170,16 @@ class ArrayHelper
         return $res;
     }
 
+    /**
+     * Apply modifiers (classes that implement {@link ModifierInterface}) in array.
+     *
+     * For example, {@link \Yiisoft\Arrays\Modifier\UnsetValue} to unset value from previous array or
+     * {@link \Yiisoft\Arrays\ReplaceArrayValue} to force replace former value instead of recursive merging.
+     *
+     * @param array $data
+     * @return array
+     * @see ModifierInterface
+     */
     public static function applyModifiers(array $data): array
     {
         $modifiers = [];
@@ -753,7 +772,7 @@ class ArrayHelper
      * @param array $array
      * @param string|\Closure $from
      * @param string|\Closure $to
-     * @param string|\Closure $group
+     * @param string|\Closure|null $group
      * @return array
      */
     public static function map(array $array, $from, $to, $group = null): array
@@ -805,7 +824,7 @@ class ArrayHelper
      * both the array keys and array values will be encoded.
      * @param string|null $encoding The encoding to use, defaults to `ini_get('default_charset')`.
      * @return array the encoded data
-     * @see http://www.php.net/manual/en/function.htmlspecialchars.php
+     * @see https://www.php.net/manual/en/function.htmlspecialchars.php
      */
     public static function htmlEncode(array $data, bool $valuesOnly = true, string $encoding = null): array
     {
@@ -835,7 +854,7 @@ class ArrayHelper
      * @param bool $valuesOnly whether to decode array values only. If false,
      * both the array keys and array values will be decoded.
      * @return array the decoded data
-     * @see http://www.php.net/manual/en/function.htmlspecialchars-decode.php
+     * @see https://www.php.net/manual/en/function.htmlspecialchars-decode.php
      */
     public static function htmlDecode(array $data, bool $valuesOnly = true): array
     {
@@ -927,16 +946,16 @@ class ArrayHelper
     }
 
     /**
-     * Check whether an array or [[\Traversable]] contains an element.
+     * Check whether an array or `\Traversable` contains an element.
      *
-     * This method does the same as the PHP function [in_array()](http://php.net/manual/en/function.in-array.php)
-     * but additionally works for objects that implement the [[\Traversable]] interface.
+     * This method does the same as the PHP function [in_array()](https://php.net/manual/en/function.in-array.php)
+     * but additionally works for objects that implement the `\Traversable` interface.
      * @param mixed $needle The value to look for.
      * @param iterable $haystack The set of values to search.
      * @param bool $strict Whether to enable strict (`===`) comparison.
      * @return bool `true` if `$needle` was found in `$haystack`, `false` otherwise.
      * @throws InvalidArgumentException if `$haystack` is neither traversable nor an array.
-     * @see http://php.net/manual/en/function.in-array.php
+     * @see https://php.net/manual/en/function.in-array.php
      */
     public static function isIn($needle, iterable $haystack, bool $strict = false): bool
     {
@@ -954,7 +973,7 @@ class ArrayHelper
     }
 
     /**
-     * Checks whether an array or [[\Traversable]] is a subset of another array or [[\Traversable]].
+     * Checks whether an array or `\Traversable` is a subset of another array or `\Traversable`.
      *
      * This method will return `true`, if all elements of `$needles` are contained in
      * `$haystack`. If at least one element is missing, `false` will be returned.
@@ -1014,8 +1033,8 @@ class ArrayHelper
      * @param array $filters Rules that define array keys which should be left or removed from results.
      * Each rule is:
      * - `var` - `$array['var']` will be left in result.
-     * - `var.key` = only `$array['var']['key'] will be left in result.
-     * - `!var.key` = `$array['var']['key'] will be removed from result.
+     * - `var.key` = only `$array['var']['key']` will be left in result.
+     * - `!var.key` = `$array['var']['key']` will be removed from result.
      * @return array Filtered array
      */
     public static function filter(array $array, array $filters): array
@@ -1073,10 +1092,11 @@ class ArrayHelper
     /**
      * Returns the public member variables of an object.
      * This method is provided such that we can get the public member variables of an object.
-     * It is different from "get_object_vars()" because the latter will return private
+     * It is different from `get_object_vars()` because the latter will return private
      * and protected variables if it is called within the object itself.
      * @param object $object the object to be handled
      * @return array|null the public member variables of the object or null if not object given
+     * @see https://www.php.net/manual/en/function.get-object-vars.php
      */
     public static function getObjectVars(object $object): ?array
     {
