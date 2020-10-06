@@ -24,6 +24,10 @@ The package provides:
 [\Countable](https://www.php.net/manualn/class.countable.php);
 - `ArrayableInterface` and `ArrayableTrait` for use in classes who want to support customizable representation of their instances.
 
+## Requirements
+
+- PHP 7.4 or higher.
+
 ## Installation
 
 ```
