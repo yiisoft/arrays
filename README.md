@@ -168,6 +168,14 @@ The package tests are checked with [Infection](https://infection.github.io/) mut
 ./vendor/bin/infection
 ```
 
+### Static analysis
+
+The code is statically analyzed with [Psalm](https://psalm.dev/). To run static analysis:
+
+```
+./vendor/bin/psalm
+```
+
 ## License
 
 The Yii Arrays is free software. It is released under the terms of the BSD License.
