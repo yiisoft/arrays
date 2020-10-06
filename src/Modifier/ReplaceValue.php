@@ -51,10 +51,13 @@ namespace Yiisoft\Arrays\Modifier;
 final class ReplaceValue implements ModifierInterface
 {
     /**
-     * @var mixed value used as replacement.
+     * @var mixed value used as replacement
      */
     public $value;
 
+    /**
+     * @param mixed $value value used as replacement
+     */
     public function __construct($value)
     {
         $this->value = $value;

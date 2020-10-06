@@ -126,7 +126,7 @@ class ArrayHelper
         return self::applyModifiers(self::performMerge(...$args));
     }
 
-    private static function performMerge(...$args): array
+    private static function performMerge(array ...$args): array
     {
         $res = array_shift($args) ?: [];
         while (!empty($args)) {
@@ -148,7 +148,7 @@ class ArrayHelper
         return $res;
     }
 
-    private static function performReverseBlockMerge(...$args): array
+    private static function performReverseBlockMerge(array ...$args): array
     {
         $res = array_pop($args) ?: [];
         while (!empty($args)) {
@@ -831,9 +831,11 @@ class ArrayHelper
         $d = [];
         foreach ($data as $key => $value) {
             if (!$valuesOnly && is_string($key)) {
+                /** @psalm-suppress PossiblyNullArgument */
                 $key = htmlspecialchars($key, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
             }
             if (is_string($value)) {
+                /** @psalm-suppress PossiblyNullArgument */
                 $d[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
             } elseif (is_array($value)) {
                 $d[$key] = static::htmlEncode($value, $valuesOnly, $encoding);
