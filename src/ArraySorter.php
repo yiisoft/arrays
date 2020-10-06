@@ -89,7 +89,7 @@ class ArraySorter
             return [];
         }
 
-        if (is_callable($key)) {
+        if ($key instanceof \Closure) {
             $keysTemp = ArrayHelper::getColumn($array, $key);
             // Check if the array is multidimensional
             if (count($keysTemp) !== count($keysTemp, COUNT_RECURSIVE)) {
