@@ -234,6 +234,7 @@ class ArrayHelper
             return $key($array, $default);
         }
 
+        /** @psalm-suppress DocblockTypeContradiction */
         if (!is_array($array) && !is_object($array)) {
             throw new \InvalidArgumentException(
                 'getValue() can not get value from ' . gettype($array) . '. Only array and object are supported.'
@@ -261,7 +262,7 @@ class ArrayHelper
     private static function getRootValue($array, $key, $default)
     {
         if (is_array($array) && array_key_exists((string)$key, $array)) {
-            return $array[$key];
+            return $array[(string)$key];
         }
 
         if (is_object($array)) {
