@@ -150,12 +150,22 @@ $car = new Car();
 $data = $car->toArray(['type', 'color']); // ['type' => 'Crossover', 'color' => 'Red']
 ```
 
-## Unit testing
+## Testing
+
+### Unit testing
 
 The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
 
-```php
+```
 ./vendor/bin/phpunit
+```
+
+### Mutation testing
+
+The package tests are checked with [Infection](https://infection.github.io/) mutation framework. To run it:
+
+```
+./vendor/bin/infection
 ```
 
 ## License
