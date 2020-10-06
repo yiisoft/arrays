@@ -1078,8 +1078,10 @@ class ArrayHelper
                 }
 
                 if ($i < $numNestedKeys) {
+                    /** @psalm-suppress EmptyArrayAccess */
                     $excludeNode = &$excludeNode[$key];
                 } else {
+                    /** @psalm-suppress EmptyArrayAccess */
                     unset($excludeNode[$key]);
                     break;
                 }
