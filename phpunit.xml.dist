@@ -10,7 +10,7 @@
     </exclude>
   </coverage>
   <testsuites>
-    <testsuite name="Yii - Arrays tests">
+    <testsuite name="Yii Arrays tests">
       <directory>./tests</directory>
     </testsuite>
   </testsuites>

@@ -75,21 +75,21 @@ class ArraySorter
     /**
      * Get keys for get arguments
      *
-     * @param array $array the array to be sorted. The array will be modified after calling this method.
+     * @param array $array the array to be sorted
      * @param string|\Closure|array $key the keys to be sorted by. This refers to a key name of the sub-array
      * elements, a property name of the objects, or an anonymous function returning the values for comparison
      * purpose. The anonymous function signature should be: `function($item)`.
      * To sort by multiple keys, provide an array of keys here.
      * @return array return the keys
      */
-    private static function getKeys(array &$array, $key): array
+    private static function getKeys(array $array, $key): array
     {
         $keys = is_array($key) ? $key : [$key];
         if (empty($keys) || empty($array)) {
             return [];
         }
 
-        if (is_callable($key)) {
+        if ($key instanceof \Closure) {
             $keysTemp = ArrayHelper::getColumn($array, $key);
             // Check if the array is multidimensional
             if (count($keysTemp) !== count($keysTemp, COUNT_RECURSIVE)) {
@@ -104,20 +104,13 @@ class ArraySorter
     /**
      * Get arguments for multisort
      *
-     * @param array $array the array to be sorted. The array will be modified after calling this method.
-     * @param string|\Closure|array $keys the keys to be sorted by. This refers to a key name of the sub-array
-     * elements, a property name of the objects, or an anonymous function returning the values for comparison
-     * purpose. The anonymous function signature should be: `function($item)`.
-     * To sort by multiple keys, provide an array of keys here.
-     * @param int|array $direction the sorting direction. It can be either `SORT_ASC` or `SORT_DESC`.
-     * When sorting by multiple keys with different sorting directions, use an array of sorting directions.
-     * @param int|array $sortFlag the PHP sort flag. Valid values include
-     * `SORT_REGULAR`, `SORT_NUMERIC`, `SORT_STRING`, `SORT_LOCALE_STRING`, `SORT_NATURAL` and `SORT_FLAG_CASE`.
-     * Please refer to [PHP manual](http://php.net/manual/en/function.sort.php)
-     * for more details. When sorting by multiple keys with different sort flags, use an array of sort flags.
+     * @param array $array the array to be sorted
+     * @param array $keys array of keys
+     * @param array $direction array of sorting directions
+     * @param array $sortFlag array of sort flags
      * @return array return the arguments
      */
-    private static function getArguments(array &$array, &$keys, $direction, $sortFlag): array
+    private static function getArguments(array $array, array $keys, array $direction, array $sortFlag): array
     {
         $args = [];
         foreach ($keys as $i => $iKey) {

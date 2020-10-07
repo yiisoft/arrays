@@ -24,6 +24,10 @@ The package provides:
 [\Countable](https://www.php.net/manualn/class.countable.php);
 - `ArrayableInterface` and `ArrayableTrait` for use in classes who want to support customizable representation of their instances.
 
+## Requirements
+
+- PHP 7.4 or higher.
+
 ## Installation
 
 ```
@@ -150,12 +154,30 @@ $car = new Car();
 $data = $car->toArray(['type', 'color']); // ['type' => 'Crossover', 'color' => 'Red']
 ```
 
-## Unit testing
+## Testing
+
+### Unit testing
 
 The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
 
-```php
+```
 ./vendor/bin/phpunit
+```
+
+### Mutation testing
+
+The package tests are checked with [Infection](https://infection.github.io/) mutation framework. To run it:
+
+```
+./vendor/bin/infection
+```
+
+### Static analysis
+
+The code is statically analyzed with [Psalm](https://psalm.dev/). To run static analysis:
+
+```
+./vendor/bin/psalm
 ```
 
 ## License

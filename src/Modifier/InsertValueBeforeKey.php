@@ -45,6 +45,10 @@ final class InsertValueBeforeKey implements ModifierInterface
 
     private string $key;
 
+    /**
+     * @param mixed $value value of any type
+     * @param string $key
+     */
     public function __construct($value, string $key)
     {
         $this->value = $value;
