@@ -39,6 +39,7 @@ final class GetValueTest extends TestCase
             '1.0.status' => 'dev',
             2 => 'two'
         ],
+        '42.7' => 500,
     ];
 
     /**
@@ -59,6 +60,7 @@ final class GetValueTest extends TestCase
             ],
             [['version', 2], 'two'],
             [['version', 2.0], 'two'],
+            [42.7, 500],
         ];
     }
 
@@ -71,6 +73,7 @@ final class GetValueTest extends TestCase
             [['version', '1.0', 'date'], 'defaultValue', 'defaultValue'],
             [['version', '1.0.name'], 'defaultValue', 'defaultValue'],
             [['post', 'author.name'], 'defaultValue', 'defaultValue'],
+            ['42.7', 500],
         ]);
     }
 
@@ -106,6 +109,7 @@ final class GetValueTest extends TestCase
             [['version', '1.0'], 'defaultValue', 'defaultValue'],
             [['post', 'author.name'], 'cebe'],
             [['post', ['author', ['profile.title']]], '1337'],
+            ['42.7', null],
         ]);
     }
 
