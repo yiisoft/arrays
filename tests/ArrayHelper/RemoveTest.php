@@ -95,6 +95,16 @@ class RemoveTest extends TestCase
         $this->assertSame([1 => 'a', 3 => 'c'], $array);
     }
 
+    public function testRemoveByFloatKey2(): void
+    {
+        $array = [1 => 'a', '2.01' => 'b', 3 => 'c'];
+
+        $value = ArrayHelper::remove($array, 2.01);
+
+        $this->assertSame('b', $value);
+        $this->assertSame([1 => 'a', 3 => 'c'], $array);
+    }
+
     public function removeByPathData(): array
     {
         return [
