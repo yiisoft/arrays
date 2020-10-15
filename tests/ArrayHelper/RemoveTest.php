@@ -85,24 +85,38 @@ class RemoveTest extends TestCase
         $this->assertSame([1 => 'a', 3 => 'c'], $array);
     }
 
-    public function testRemoveByFloatKey(): void
+    public function dataRemoveByFloatKey(): array
     {
-        $array = [1 => 'a', 2 => 'b', 3 => 'c'];
-
-        $value = ArrayHelper::remove($array, 2.0);
-
-        $this->assertSame('b', $value);
-        $this->assertSame([1 => 'a', 3 => 'c'], $array);
+        return [
+            [
+                [1 => 'a', 2 => 'b', 3 => 'c'],
+                2.0,
+                'b',
+                [1 => 'a', 3 => 'c'],
+            ],
+            [
+                [1 => 'a', '2.01' => 'b', 3 => 'c'],
+                2.01,
+                'b',
+                [1 => 'a', 3 => 'c'],
+            ]
+        ];
     }
 
-    public function testRemoveByFloatKey2(): void
+    /**
+     * @dataProvider dataRemoveByFloatKey
+     *
+     * @param array $array
+     * @param float $key
+     * @param string $expectedValue
+     * @param array$expectedArray
+     */
+    public function testRemoveByFloatKey(array $array, float $key, string $expectedValue, array $expectedArray): void
     {
-        $array = [1 => 'a', '2.01' => 'b', 3 => 'c'];
+        $value = ArrayHelper::remove($array, $key);
 
-        $value = ArrayHelper::remove($array, 2.01);
-
-        $this->assertSame('b', $value);
-        $this->assertSame([1 => 'a', 3 => 'c'], $array);
+        $this->assertSame($expectedValue, $value);
+        $this->assertSame($expectedArray, $array);
     }
 
     public function removeByPathData(): array
