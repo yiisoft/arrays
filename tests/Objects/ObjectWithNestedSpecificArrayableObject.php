@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Tests\Objects;
 
-final class ObjectWithNestedArrayableObject
+final class ObjectWithNestedSpecificArrayableObject
 {
     public int $id = 1;
-    public SimpleArrayableObject $array;
+    public SpecificArrayableObject $array;
 
     public function __construct()
     {
-        $this->array = new SimpleArrayableObject();
+        $this->array = new SpecificArrayableObject();
     }
 }

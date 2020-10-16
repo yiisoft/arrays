@@ -70,6 +70,12 @@ final class SetValueTest extends TestCase
                 'c',
                 [1 => 'a', 3 => 'c'],
             ],
+            [
+                [1 => 'a'],
+                3.01,
+                'c',
+                [1 => 'a', '3.01' => 'c'],
+            ],
         ];
     }
 

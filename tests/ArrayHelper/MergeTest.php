@@ -178,6 +178,7 @@ final class MergeTest extends TestCase
                 'option3' => 'valueAA',
             ],
             'version' => '1.0',
+            'meta' => ['a' => 1],
         ];
         $b = [
             'version' => '1.1',
@@ -197,9 +198,43 @@ final class MergeTest extends TestCase
                 'option3' => 'valueAA',
             ],
             'name' => 'Yii',
+            'meta' => ['a' => 1],
         ];
 
         $this->assertSame($expected, $result);
+    }
+
+    public function testMergeSimpleArrayWithReverseBlock(): void
+    {
+        $a = [
+            'A',
+            'B',
+        ];
+        $b = [
+            'C',
+            'B',
+            ReverseBlockMerge::class => new ReverseBlockMerge(),
+        ];
+
+        $this->assertSame(['C', 'B', 'A'], ArrayHelper::merge($a, $b));
+    }
+
+    public function testMergeWithAlmostReverseBlock(): void
+    {
+        $a = [
+            'name' => 'Yii',
+            'version' => '1.0',
+        ];
+        $b = [
+            'version' => '1.1',
+            ReverseBlockMerge::class => 'hello',
+        ];
+
+        $this->assertSame([
+            'name' => 'Yii',
+            'version' => '1.1',
+            ReverseBlockMerge::class => 'hello',
+        ], ArrayHelper::merge($a, $b));
     }
 
     public function testMergeWithReverseValues(): void

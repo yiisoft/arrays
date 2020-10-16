@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays;
 
+use Closure;
 use InvalidArgumentException;
 use Throwable;
 use Yiisoft\Arrays\Modifier\ModifierInterface;
 use Yiisoft\Arrays\Modifier\ReverseBlockMerge;
+use Yiisoft\Strings\NumericHelper;
 
 /**
  * Yii array helper provides static methods allowing you to deal with arrays more efficiently.
@@ -220,7 +222,7 @@ class ArrayHelper
      * ```
      *
      * @param array|object $array array or object to extract value from
-     * @param string|int|float|\Closure|array $key key name of the array element,
+     * @param string|int|float|Closure|array $key key name of the array element,
      * an array of keys or property name of the object, or an anonymous function
      * returning the value. The anonymous function signature should be:
      * `function($array, $defaultValue)`.
@@ -230,7 +232,7 @@ class ArrayHelper
      */
     public static function getValue($array, $key, $default = null)
     {
-        if ($key instanceof \Closure) {
+        if ($key instanceof Closure) {
             return $key($array, $default);
         }
 
@@ -261,8 +263,9 @@ class ArrayHelper
      */
     private static function getRootValue($array, $key, $default)
     {
-        if (is_array($array) && array_key_exists((string)$key, $array)) {
-            return $array[(string)$key];
+        if (is_array($array)) {
+            $key = static::normalizeArrayKey($key);
+            return array_key_exists($key, $array) ? $array[$key] : $default;
         }
 
         if (is_object($array)) {
@@ -308,7 +311,7 @@ class ArrayHelper
      * ```
      *
      * @param array|object $array array or object to extract value from
-     * @param string|int|float|\Closure|array $path key name of the array element, an array of keys or property name
+     * @param string|int|float|Closure|array $path key name of the array element, an array of keys or property name
      * of the object, or an anonymous function returning the value. The anonymous function signature should be:
      * `function($array, $defaultValue)`.
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
@@ -366,7 +369,7 @@ class ArrayHelper
         $keys = is_array($key) ? $key : [$key];
 
         while (count($keys) > 1) {
-            $k = array_shift($keys);
+            $k = static::normalizeArrayKey(array_shift($keys));
             if (!isset($array[$k])) {
                 $array[$k] = [];
             }
@@ -376,7 +379,7 @@ class ArrayHelper
             $array = &$array[$k];
         }
 
-        $array[array_shift($keys)] = $value;
+        $array[static::normalizeArrayKey(array_shift($keys))] = $value;
     }
 
     /**
@@ -485,15 +488,15 @@ class ArrayHelper
         $keys = is_array($key) ? $key : [$key];
 
         while (count($keys) > 1) {
-            $key = array_shift($keys);
+            $key = static::normalizeArrayKey(array_shift($keys));
             if (!isset($array[$key]) || !is_array($array[$key])) {
                 return $default;
             }
             $array = &$array[$key];
         }
 
-        $key = array_shift($keys);
-        if (array_key_exists((string)$key, $array)) {
+        $key = static::normalizeArrayKey(array_shift($keys));
+        if (array_key_exists($key, $array)) {
             $value = $array[$key];
             unset($array[$key]);
             return $value;
@@ -651,8 +654,8 @@ class ArrayHelper
      * ```
      *
      * @param array $array the array that needs to be indexed or grouped
-     * @param string|\Closure|null $key the column name or anonymous function which result will be used to index the array
-     * @param string|string[]|\Closure[]|null $groups the array of keys, that will be used to group the input array
+     * @param string|Closure|null $key the column name or anonymous function which result will be used to index the array
+     * @param string|string[]|Closure[]|null $groups the array of keys, that will be used to group the input array
      * by one or more keys. If the $key attribute or its value for the particular element is null and $groups is not
      * defined, the array element will be discarded. Otherwise, if $groups is specified, array element will be added
      * to the result array without any key.
@@ -681,10 +684,7 @@ class ArrayHelper
             } else {
                 $value = static::getValue($element, $key);
                 if ($value !== null) {
-                    if (is_float($value)) {
-                        $value = str_replace(',', '.', (string)$value);
-                    }
-                    $lastArray[$value] = $element;
+                    $lastArray[static::normalizeArrayKey($value)] = $element;
                 }
             }
             unset($lastArray);
@@ -714,7 +714,7 @@ class ArrayHelper
      * ```
      *
      * @param array $array
-     * @param string|\Closure $name
+     * @param string|Closure $name
      * @param bool $keepKeys whether to maintain the array keys. If false, the resulting array
      * will be re-indexed with integers.
      * @return array the list of column values
@@ -771,9 +771,9 @@ class ArrayHelper
      * ```
      *
      * @param array $array
-     * @param string|\Closure $from
-     * @param string|\Closure $to
-     * @param string|\Closure|null $group
+     * @param string|Closure $from
+     * @param string|Closure $to
+     * @param string|Closure|null $group
      * @return array
      */
     public static function map(array $array, $from, $to, $group = null): array
@@ -1106,5 +1106,14 @@ class ArrayHelper
     public static function getObjectVars(object $object): ?array
     {
         return get_object_vars($object);
+    }
+
+    /**
+     * @param int|string|float $key
+     * @return string
+     */
+    private static function normalizeArrayKey($key): string
+    {
+        return is_float($key) ? NumericHelper::normalize($key) : (string)$key;
     }
 }
