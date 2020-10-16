@@ -170,6 +170,7 @@ final class ArrayHelperTest extends TestCase
                 '23' => true,
             ],
             'invalid' => "a\x80b",
+            'quotes \'"' => '\'"',
         ];
         $this->assertEquals(
             [
@@ -182,6 +183,7 @@ final class ArrayHelperTest extends TestCase
                     '23' => true,
                 ],
                 'invalid' => 'a�b',
+                'quotes \'"' => '&#039;&quot;',
             ],
             ArrayHelper::htmlEncode($array)
         );
@@ -196,6 +198,7 @@ final class ArrayHelperTest extends TestCase
                     '23' => true,
                 ],
                 'invalid' => 'a�b',
+                'quotes &#039;&quot;' => '&#039;&quot;',
             ],
             ArrayHelper::htmlEncode($array, false)
         );
