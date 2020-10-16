@@ -173,6 +173,7 @@ final class ArraySorterTest extends TestCase
     public function testMultisortInvalidArgumentExceptionDirection(): void
     {
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The length of $direction parameter must be the same as that of $keys.');
         $data = ['foo' => 'bar'];
         ArraySorter::multisort($data, ['foo'], []);
     }
