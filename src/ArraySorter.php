@@ -93,8 +93,8 @@ class ArraySorter
             $keysTemp = ArrayHelper::getColumn($array, $key);
             // Check if the array is multidimensional
             if (count($keysTemp) !== count($keysTemp, COUNT_RECURSIVE)) {
-                // If it is multidimensional then unify array and get keys
-                $keys = array_unique($keysTemp, SORT_REGULAR)[0];
+                // If it is multidimensional then get keys
+                $keys = $keysTemp[0];
             }
         }
 
