@@ -110,5 +110,14 @@ final class ArrayableTraitTest extends TestCase
             ],
             $object->toArray(['nested2.X.a'])
         );
+        $this->assertSame(
+            [
+                'z' => 3,
+                'some' => [
+                    'A' => 42,
+                ],
+            ],
+            $object->toArray([''], ['z', 'some.A'])
+        );
     }
 }
