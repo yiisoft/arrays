@@ -155,6 +155,7 @@ final class ArrayHelperTest extends TestCase
         $this->assertTrue(ArrayHelper::isIndexed([1, 2, 3]));
         $this->assertTrue(ArrayHelper::isIndexed([2 => 'a', 3 => 'b']));
         $this->assertFalse(ArrayHelper::isIndexed([2 => 'a', 3 => 'b'], true));
+        $this->assertTrue(ArrayHelper::isIndexed([0 => 'a', 1 => 'b'], true));
         $this->assertFalse(ArrayHelper::isIndexed(['a' => 'b'], false));
     }
 
