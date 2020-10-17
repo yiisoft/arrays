@@ -119,5 +119,15 @@ final class ArrayableTraitTest extends TestCase
             ],
             $object->toArray([''], ['z', 'some.A'])
         );
+        $this->assertSame(
+            [
+                'specific' => [
+                    '/x' => [
+                        'a' => 1,
+                    ],
+                ],
+            ],
+            $object->toArray(['specific./x.a'])
+        );
     }
 }
