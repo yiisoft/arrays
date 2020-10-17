@@ -39,6 +39,7 @@ class HardArrayableObject implements ArrayableInterface
         $this->nested = new SimpleArrayableObject();
         $this->nested2 = [
             'X' => new SimpleArrayableObject(),
+            'Y' => new ArrayableWithArraysObject(),
         ];
     }
 
