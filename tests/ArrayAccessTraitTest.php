@@ -43,11 +43,13 @@ final class ArrayAccessTraitTest extends TestCase
         $object = new ArrayAccessObject();
         $object->offsetSet('a', 4);
         $object->offsetSet('x', 5);
+        $object[] = 6;
         $this->assertSame([
             'a' => 4,
             'b' => 2,
             'c' => 3,
             'x' => 5,
+            6,
         ], $object->data);
     }
 

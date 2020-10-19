@@ -155,6 +155,7 @@ final class ArrayHelperTest extends TestCase
         $this->assertTrue(ArrayHelper::isIndexed([1, 2, 3]));
         $this->assertTrue(ArrayHelper::isIndexed([2 => 'a', 3 => 'b']));
         $this->assertFalse(ArrayHelper::isIndexed([2 => 'a', 3 => 'b'], true));
+        $this->assertTrue(ArrayHelper::isIndexed([0 => 'a', 1 => 'b'], true));
         $this->assertFalse(ArrayHelper::isIndexed(['a' => 'b'], false));
     }
 
@@ -170,6 +171,7 @@ final class ArrayHelperTest extends TestCase
                 '23' => true,
             ],
             'invalid' => "a\x80b",
+            'quotes \'"' => '\'"',
         ];
         $this->assertEquals(
             [
@@ -182,6 +184,7 @@ final class ArrayHelperTest extends TestCase
                     '23' => true,
                 ],
                 'invalid' => 'a�b',
+                'quotes \'"' => '&#039;&quot;',
             ],
             ArrayHelper::htmlEncode($array)
         );
@@ -196,6 +199,7 @@ final class ArrayHelperTest extends TestCase
                     '23' => true,
                 ],
                 'invalid' => 'a�b',
+                'quotes &#039;&quot;' => '&#039;&quot;',
             ],
             ArrayHelper::htmlEncode($array, false)
         );
