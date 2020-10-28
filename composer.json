@@ -23,7 +23,7 @@
         "yiisoft/strings": "^1.0.1"
     },
     "require-dev": {
-        "infection/infection": "^0.18.0",
+        "infection/infection": "^0.18.0 || ^0.19.0",
         "phpunit/phpunit": "^9.4",
         "vimeo/psalm": "^3.17"
     },
