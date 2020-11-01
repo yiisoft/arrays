@@ -120,8 +120,10 @@ class ArrayHelper
     public static function merge(...$args): array
     {
         $lastArray = end($args);
-        if (isset($lastArray[ReverseBlockMerge::class]) && $lastArray[ReverseBlockMerge::class] instanceof ReverseBlockMerge) {
-            reset($args);
+        if (
+            isset($lastArray[ReverseBlockMerge::class]) &&
+            $lastArray[ReverseBlockMerge::class] instanceof ReverseBlockMerge
+        ) {
             return self::applyModifiers(self::performReverseBlockMerge(...$args));
         }
 

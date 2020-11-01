@@ -28,17 +28,24 @@ class HardArrayableObject implements ArrayableInterface
 
     public int $n = 4;
 
+    public array $specific = [
+        '/x' => [
+            'a' => 1,
+        ],
+    ];
+
     public function __construct()
     {
         $this->nested = new SimpleArrayableObject();
         $this->nested2 = [
             'X' => new SimpleArrayableObject(),
+            'Y' => new ArrayableWithArraysObject(),
         ];
     }
 
     public function fields(): array
     {
-        return ['x', 'y', 'nested', 'nested2'];
+        return ['x', 'y', 'nested', 'nested2', 'specific'];
     }
 
     public function extraFields(): array

@@ -160,7 +160,7 @@ trait ArrayableTrait
         $result = [];
 
         foreach ($fields as $field) {
-            $result[] = current(explode('.', $field, 2));
+            $result[] = stristr($field . '.', '.', true);
         }
 
         if (in_array('*', $result, true)) {
