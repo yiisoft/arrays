@@ -27,9 +27,10 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
         $this->data = $data;
     }
 
-    public function setData(array $data): void
+    public function setData(array $data): self
     {
         $this->data = $data;
+        return $this;
     }
 
     /**

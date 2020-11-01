@@ -33,7 +33,7 @@ final class ArrayCollectionHelper
             $collections[] = $collection;
         }
 
-        return static::mergeBase(...$args);
+        return static::mergeBase(...$collections);
     }
 
     /**
