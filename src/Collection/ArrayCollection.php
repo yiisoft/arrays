@@ -8,6 +8,7 @@ use ArrayAccess;
 use Countable;
 use IteratorAggregate;
 use Yiisoft\Arrays\ArrayAccessTrait;
+use Yiisoft\Arrays\Collection\Modifier\DataModifierInterface;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface;
 
 final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
@@ -26,9 +27,11 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
         $this->data = $data;
     }
 
-    public function setData(array $data): void
+    public function withData(array $data): self
     {
-        $this->data = $data;
+        $new = clone $this;
+        $new->data = $data;
+        return $new;
     }
 
     /**
@@ -85,7 +88,9 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
         $array = $this->performArray($this->getIterator()->getArrayCopy());
 
         foreach ($this->modifiers as $modifier) {
-            $array = $modifier->apply($array);
+            if ($modifier instanceof DataModifierInterface) {
+                $array = $modifier->apply($array);
+            }
         }
 
         return $array;

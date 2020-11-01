@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Collection\Modifier;
 
-final class InsertValueBeforeKey implements ModifierInterface
+final class InsertValueBeforeKey implements DataModifierInterface
 {
     private $key;
 

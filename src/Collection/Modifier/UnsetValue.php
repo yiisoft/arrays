@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Collection\Modifier;
 
-final class UnsetValue implements ModifierInterface
+final class UnsetValue implements DataModifierInterface
 {
     private $key = null;
 

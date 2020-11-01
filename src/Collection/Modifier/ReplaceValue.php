@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Collection\Modifier;
 
-final class ReplaceValue implements ModifierInterface
+final class ReplaceValue implements DataModifierInterface
 {
     private $key = null;
     private $value = null;
