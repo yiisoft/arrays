@@ -6,12 +6,25 @@ namespace Yiisoft\Arrays\Collection\Modifier;
 
 final class InsertValueBeforeKey implements DataModifierInterface
 {
-    private $key;
+    /**
+     * @var int|string|null
+     */
+    private $key = null;
 
-    private $value;
+    /**
+     * @var mixed
+     */
+    private $value = null;
 
-    private $beforeKey;
+    /**
+     * @var int|string|null
+     */
+    private $beforeKey = null;
 
+    /**
+     * @param int|string $key
+     * @return self
+     */
     public function withKey($key): self
     {
         $new = clone $this;
@@ -19,6 +32,10 @@ final class InsertValueBeforeKey implements DataModifierInterface
         return $new;
     }
 
+    /**
+     * @param mixed $value
+     * @return self
+     */
     public function setValue($value): self
     {
         $new = clone $this;
@@ -26,6 +43,10 @@ final class InsertValueBeforeKey implements DataModifierInterface
         return $new;
     }
 
+    /**
+     * @param int|string $key
+     * @return self
+     */
     public function beforeKey($key): self
     {
         $new = clone $this;
@@ -33,17 +54,20 @@ final class InsertValueBeforeKey implements DataModifierInterface
         return $new;
     }
 
-
     public function apply(array $data): array
     {
-        $res = [];
-        foreach ($data as $k => $v) {
-            if ($k === $this->beforeKey) {
-                $res[$this->key] = $this->value;
-            }
-            $res[$k] = $v;
+        if ($this->key === null || $this->beforeKey === null) {
+            return $data;
         }
 
-        return $res;
+        $result = [];
+        foreach ($data as $k => $v) {
+            if ($k === $this->beforeKey) {
+                $result[$this->key] = $this->value;
+            }
+            $result[$k] = $v;
+        }
+
+        return $result;
     }
 }

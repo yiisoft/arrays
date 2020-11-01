@@ -9,6 +9,10 @@ use Yiisoft\Arrays\Collection\Modifier\BeforeMergeModifierInterface;
 
 final class ArrayCollectionHelper
 {
+    /**
+     * @param array|ArrayCollection ...$args
+     * @return ArrayCollection
+     */
     public static function merge(...$args): ArrayCollection
     {
         $arrays = [];
@@ -22,7 +26,7 @@ final class ArrayCollectionHelper
             foreach ($collection->getModifiers() as $modifier) {
                 if ($modifier instanceof BeforeMergeModifierInterface) {
                     $collection->setData(
-                        $modifier->beforeMerge($arg->getData(), $arrays)
+                        $modifier->beforeMerge($collection->getData(), $arrays)
                     );
                 }
             }
@@ -32,6 +36,10 @@ final class ArrayCollectionHelper
         return static::mergeBase(...$args);
     }
 
+    /**
+     * @param array|ArrayCollection ...$args
+     * @return ArrayCollection
+     */
     private static function mergeBase(...$args): ArrayCollection
     {
         $collection = new ArrayCollection();
@@ -69,6 +77,10 @@ final class ArrayCollectionHelper
         return $collection;
     }
 
+    /**
+     * @param mixed $value
+     * @return bool
+     */
     private static function isMergable($value): bool
     {
         return is_array($value) || $value instanceof ArrayCollection;

@@ -50,9 +50,9 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
         return $this;
     }
 
-    public function addModifier(ModifierInterface $modifier): self
+    public function addModifier(ModifierInterface ...$modifiers): self
     {
-        $this->modifiers[] = $modifier;
+        $this->modifiers = array_merge($this->modifiers, $modifiers);
         return $this;
     }
 
@@ -76,6 +76,10 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
         return $this->data;
     }
 
+    /**
+     * @param int|string $key
+     * @return bool
+     */
     public function keyExists($key): bool
     {
         return array_key_exists($key, $this->data);
