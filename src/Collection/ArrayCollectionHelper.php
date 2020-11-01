@@ -21,7 +21,7 @@ final class ArrayCollectionHelper
             $collection = $arg instanceof ArrayCollection ? $arg : new ArrayCollection($arg);
             foreach ($collection->getModifiers() as $modifier) {
                 if ($modifier instanceof BeforeMergeModifierInterface) {
-                    $collection = $collection->withData(
+                    $collection->setData(
                         $modifier->beforeMerge($arg->getData(), $arrays)
                     );
                 }
@@ -41,7 +41,7 @@ final class ArrayCollectionHelper
 
             if ($array instanceof ArrayCollection) {
                 $collection->pullCollectionArgs($array);
-                $collection = $collection->withData(
+                $collection->setData(
                     static::mergeBase($collection->getData(), $array->getData())->getData()
                 );
                 continue;

@@ -27,11 +27,9 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
         $this->data = $data;
     }
 
-    public function withData(array $data): self
+    public function setData(array $data): void
     {
-        $new = clone $this;
-        $new->data = $data;
-        return $new;
+        $this->data = $data;
     }
 
     /**
