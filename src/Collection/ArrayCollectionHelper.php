@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Collection;
 
 use InvalidArgumentException;
-use Yiisoft\Arrays\Collection\Modifier\BeforeMergeModifierInterface;
+use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\AfterMergeModifierInterface;
+use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\BeforeMergeModifierInterface;
 
 final class ArrayCollectionHelper
 {
@@ -21,19 +22,27 @@ final class ArrayCollectionHelper
         }
 
         $collections = [];
-        foreach ($args as $arg) {
+        foreach ($args as $index => $arg) {
             $collection = $arg instanceof ArrayCollection ? $arg : new ArrayCollection($arg);
             foreach ($collection->getModifiers() as $modifier) {
                 if ($modifier instanceof BeforeMergeModifierInterface) {
                     $collection->setData(
-                        $modifier->beforeMerge($collection->getData(), $arrays)
+                        $modifier->beforeMerge($arrays, $index)
                     );
                 }
             }
-            $collections[] = $collection;
+            $collections[$index] = $collection;
         }
 
-        return static::mergeBase(...$collections);
+        $collection = static::mergeBase(...$collections);
+
+        foreach ($collection->getModifiers() as $modifier) {
+            if ($modifier instanceof AfterMergeModifierInterface) {
+                $collection->setData($modifier->afterMerge($collection->getData()));
+            }
+        }
+
+        return $collection;
     }
 
     /**
@@ -53,8 +62,6 @@ final class ArrayCollectionHelper
                     static::mergeBase($collection->getData(), $array->getData())->getData()
                 );
                 continue;
-            } elseif (!is_array($array)) {
-                throw new InvalidArgumentException();
             }
 
             foreach ($array as $k => $v) {

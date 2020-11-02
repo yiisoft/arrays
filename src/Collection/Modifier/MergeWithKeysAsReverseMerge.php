@@ -5,18 +5,20 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Collection\Modifier;
 
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\AfterMergeModifierInterface;
+use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\BeforeMergeModifierInterface;
 
-final class MergeWithKeysAsReverseMerge implements BeforeMergeModifierInterface, DataModifierInterface
+final class MergeWithKeysAsReverseMerge implements BeforeMergeModifierInterface, AfterMergeModifierInterface
 {
     private array $array = [];
 
-    public function beforeMerge(array $array, array $allArrays): array
+    public function beforeMerge(array $arrays, int $index): array
     {
-        $this->array = $array;
-        return $array;
+        $this->array = $arrays[$index];
+        return $this->array;
     }
 
-    public function apply(array $data): array
+    public function afterMerge(array $data): array
     {
         return $this->applyOrder($data, $this->array);
     }

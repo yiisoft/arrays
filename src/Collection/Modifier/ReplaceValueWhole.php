@@ -4,12 +4,22 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Collection\Modifier;
 
-final class ReplaceValueWhole implements BeforeMergeModifierInterface
+use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\AfterMergeModifierInterface;
+use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\BeforeMergeModifierInterface;
+
+final class ReplaceValueWhole implements BeforeMergeModifierInterface, AfterMergeModifierInterface
 {
     /**
      * @var int|string
      */
     private $key;
+
+    /**
+     * @var mixed
+     */
+    private $value;
+
+    private bool $setValueAfterMerge = false;
 
     /**
      * @param int|string $key
@@ -30,23 +40,38 @@ final class ReplaceValueWhole implements BeforeMergeModifierInterface
         return $new;
     }
 
-    public function beforeMerge(array $array, array $allArrays): array
+    public function beforeMerge(array $arrays, int $index): array
     {
-        if (!array_key_exists($this->key, $array)) {
-            return $array;
+        $currentArray = $arrays[$index];
+
+        if (!array_key_exists($this->key, $currentArray)) {
+            return $arrays[$index];
         }
 
-        $n = 0;
-        foreach ($allArrays as $arr) {
-            if (array_key_exists($this->key, $arr)) {
-                $n++;
-            }
-            if ($n > 1) {
-                unset($array[$this->key]);
-                return $array;
+        foreach (array_slice($arrays, $index + 1) as $array) {
+            if (array_key_exists($this->key, $array)) {
+                $currentArray[$this->key] = null;
+                return $currentArray;
             }
         }
 
-        return $array;
+        foreach (array_slice($arrays, 0, $index) as $array) {
+            if (array_key_exists($this->key, $array)) {
+                $this->value = $currentArray[$this->key];
+                $this->setValueAfterMerge = true;
+                return $currentArray;
+            }
+        }
+
+        return $currentArray;
+    }
+
+    public function afterMerge(array $data): array
+    {
+        if ($this->setValueAfterMerge) {
+            $data[$this->key] = $this->value;
+            $this->setValueAfterMerge = false;
+        }
+        return $data;
     }
 }

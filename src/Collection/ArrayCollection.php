@@ -8,8 +8,8 @@ use ArrayAccess;
 use Countable;
 use IteratorAggregate;
 use Yiisoft\Arrays\ArrayAccessTrait;
-use Yiisoft\Arrays\Collection\Modifier\DataModifierInterface;
-use Yiisoft\Arrays\Collection\Modifier\ModifierInterface;
+use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
+use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\ModifierInterface;
 
 final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
 {

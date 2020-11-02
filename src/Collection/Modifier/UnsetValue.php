@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Collection\Modifier;
 
+use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
+
 final class UnsetValue implements DataModifierInterface
 {
     /**

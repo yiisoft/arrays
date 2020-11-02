@@ -49,29 +49,65 @@ final class ReplaceValueWholeTest extends TestCase
 
     public function testForKey(): void
     {
-        $array = ['x' => [1, 2], 'y' => [3, 4]];
-        $allArrays = [
-            $array,
+        $modifier = new ReplaceValueWhole('x');
+        $modifier = $modifier->forKey('y');
+
+        $arrays = [
+            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->addModifier($modifier),
             ['x' => [5], 'y' => [6]],
         ];
 
-        $modifierX = new ReplaceValueWhole('x');
-        $modifierY = $modifierX->forKey('y');
-
-        $this->assertSame(['y' => [3, 4]], $modifierX->beforeMerge($array, $allArrays));
-        $this->assertSame(['x' => [1, 2]], $modifierY->beforeMerge($array, $allArrays));
+        $this->assertSame(
+            ['x' => [1, 2, 5], 'y' => [6]],
+            ArrayCollectionHelper::merge(...$arrays)->toArray()
+        );
     }
 
     public function testWithoutKeysInAllArrays(): void
     {
-        $array = ['x' => [1, 2], 'y' => [3, 4], 'z' => [5, 6]];
-        $allArrays = [
-            $array,
+        $modifier = new ReplaceValueWhole('z');
+
+        $arrays = [
+            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4], 'z' => [5, 6]]))->addModifier($modifier),
             ['x' => [5], 'y' => [6]],
         ];
 
-        $modifier = new ReplaceValueWhole('z');
+        $this->assertSame(
+            ['x' => [1, 2, 5], 'y' => [3, 4, 6], 'z' => [5, 6]],
+            ArrayCollectionHelper::merge(...$arrays)->toArray()
+        );
+    }
 
-        $this->assertSame(['x' => [1, 2], 'y' => [3, 4], 'z' => [5, 6]], $modifier->beforeMerge($array, $allArrays));
+    public function testWithKeysInArrayBeforeCurrent(): void
+    {
+        $modifier = new ReplaceValueWhole('y');
+
+        $arrays = [
+            ['y' => [5]],
+            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->addModifier($modifier),
+            ['z' => [6]],
+        ];
+
+
+        $this->assertSame(
+            ['y' => [3, 4], 'x' => [1, 2], 'z' => [6]],
+            ArrayCollectionHelper::merge(...$arrays)->toArray()
+        );
+    }
+
+    public function testWithKeysInArrayBeforeAndAfterCurrent(): void
+    {
+        $modifier = new ReplaceValueWhole('y');
+
+        $arrays = [
+            ['y' => [5]],
+            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->addModifier($modifier),
+            ['z' => [6], 'y' => [7]],
+        ];
+
+        $this->assertSame(
+            ['y' => [7], 'x' => [1, 2], 'z' => [6]],
+            ArrayCollectionHelper::merge(...$arrays)->toArray()
+        );
     }
 }
