@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Collection;
 
-use InvalidArgumentException;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\AfterMergeModifierInterface;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\BeforeMergeModifierInterface;
 
