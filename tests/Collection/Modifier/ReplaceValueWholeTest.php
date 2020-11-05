@@ -14,8 +14,8 @@ final class ReplaceValueWholeTest extends TestCase
     public function testBase(): void
     {
         $a = (new ArrayCollection())
-            ->addModifier(new ReplaceValueWhole('options'))
-            ->setData([
+            ->withModifier(new ReplaceValueWhole('options'))
+            ->withData([
                 'name' => 'Yii',
                 'version' => '1.0',
                 'options' => [
@@ -53,7 +53,7 @@ final class ReplaceValueWholeTest extends TestCase
         $modifier = $modifier->forKey('y');
 
         $arrays = [
-            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->addModifier($modifier),
+            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifier($modifier),
             ['x' => [5], 'y' => [6]],
         ];
 
@@ -68,7 +68,7 @@ final class ReplaceValueWholeTest extends TestCase
         $modifier = new ReplaceValueWhole('z');
 
         $arrays = [
-            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4], 'z' => [5, 6]]))->addModifier($modifier),
+            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4], 'z' => [5, 6]]))->withModifier($modifier),
             ['x' => [5], 'y' => [6]],
         ];
 
@@ -84,7 +84,7 @@ final class ReplaceValueWholeTest extends TestCase
 
         $arrays = [
             ['y' => [5]],
-            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->addModifier($modifier),
+            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifier($modifier),
             ['z' => [6]],
         ];
 
@@ -101,7 +101,7 @@ final class ReplaceValueWholeTest extends TestCase
 
         $arrays = [
             ['y' => [5]],
-            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->addModifier($modifier),
+            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifier($modifier),
             ['z' => [6], 'y' => [7]],
         ];
 

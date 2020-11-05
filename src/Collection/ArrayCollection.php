@@ -29,10 +29,11 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
         $this->data = $data;
     }
 
-    public function setData(array $data): self
+    public function withData(array $data): self
     {
-        $this->data = $data;
-        return $this;
+        $new = clone $this;
+        $new->data = $data;
+        return $new;
     }
 
     /**
@@ -43,30 +44,36 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
         return $this->modifiers;
     }
 
-    /**
-     * @param ModifierInterface[] $modifiers
-     * @return self
-     */
-    public function setModifiers(array $modifiers): self
+    public function withModifier(ModifierInterface ...$modifiers): self
     {
-        $this->modifiers = $modifiers;
-        return $this;
-    }
-
-    public function addModifier(ModifierInterface ...$modifiers): self
-    {
-        $this->modifiers = array_merge($this->modifiers, $modifiers);
-        return $this;
+        return $this->withModifiers($modifiers);
     }
 
     /**
      * @param ModifierInterface[] $modifiers
      * @return self
      */
-    public function addModifiers(array $modifiers): self
+    public function withModifiers(array $modifiers): self
     {
-        $this->modifiers = array_merge($this->modifiers, $modifiers);
-        return $this;
+        $new = clone $this;
+        $new->modifiers = $modifiers;
+        return $new;
+    }
+
+    public function withAddedModifier(ModifierInterface ...$modifiers): self
+    {
+        return $this->withAddedModifiers($modifiers);
+    }
+
+    /**
+     * @param ModifierInterface[] $modifiers
+     * @return self
+     */
+    public function withAddedModifiers(array $modifiers): self
+    {
+        $new = clone $this;
+        $new->modifiers = array_merge($new->modifiers, $modifiers);
+        return $new;
     }
 
     /**
@@ -132,15 +139,15 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
                 if (is_int($k)) {
                     if ($collection->keyExists($k)) {
                         if ($collection[$k] !== $v) {
-                            $collection[] = $v;
+                            $collection->data[] = $v;
                         }
                     } else {
-                        $collection[$k] = $v;
+                        $collection->data[$k] = $v;
                     }
                 } elseif (static::isMergable($v) && isset($collection[$k]) && static::isMergable($collection[$k])) {
-                    $collection[$k] = $this->merge($collection[$k], $v)->data;
+                    $collection->data[$k] = $this->merge($collection[$k], $v)->data;
                 } else {
-                    $collection[$k] = $v;
+                    $collection->data[$k] = $v;
                 }
             }
         }
@@ -182,5 +189,22 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         return $array;
+    }
+
+    /**
+     * @param mixed $offset the offset to set element
+     * @param mixed $value the element value
+     */
+    public function offsetSet($offset, $value): void
+    {
+        throw new ArrayCollectionIsImmutableException();
+    }
+
+    /**
+     * @param mixed $offset the offset to unset element
+     */
+    public function offsetUnset($offset): void
+    {
+        throw new ArrayCollectionIsImmutableException();
     }
 }

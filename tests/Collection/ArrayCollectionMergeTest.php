@@ -41,7 +41,7 @@ final class ArrayCollectionMergeTest extends TestCase
             'features' => [
                 'gii',
             ],
-        ]))->addModifier(
+        ]))->withModifier(
             (new UnsetValue())->forKey('options')
         );
 
@@ -81,7 +81,7 @@ final class ArrayCollectionMergeTest extends TestCase
 //                    'gii',
 //                ]
 //            ),
-        ]))->addModifier(
+        ]))->withModifier(
             (new ReplaceValue())
                 ->forKey('features')
                 ->toValue(['gii'])
@@ -113,7 +113,7 @@ final class ArrayCollectionMergeTest extends TestCase
             'version' => '1.1',
             'options' => [],
 //            new RemoveKeys(),
-        ]))->addModifier(
+        ]))->withModifier(
             new RemoveKeys()
         );
 
@@ -145,7 +145,7 @@ final class ArrayCollectionMergeTest extends TestCase
                 'option2' => 'valueBB',
             ],
 //            ReverseBlockMerge::class => new ReverseBlockMerge(),
-        ]))->addModifier(
+        ]))->withModifier(
             new MergeWithKeysAsReverseMerge(),
         );
 
@@ -174,7 +174,7 @@ final class ArrayCollectionMergeTest extends TestCase
             'C',
             'B',
             //  ReverseBlockMerge::class => new ReverseBlockMerge(),
-        ]))->addModifier(
+        ]))->withModifier(
             new MergeWithKeysAsReverseMerge()
         );
 
@@ -209,7 +209,7 @@ final class ArrayCollectionMergeTest extends TestCase
             'version' => '1.1',
             'options' => [],
             //ReverseValues::class => new ReverseValues(),
-        ]))->addModifier(
+        ]))->withModifier(
             new ReverseValues()
         );
 
@@ -267,7 +267,7 @@ final class ArrayCollectionMergeTest extends TestCase
             'version' => '1.1',
             'options' => [],
 //            'vendor' => new InsertValueBeforeKey('Yiisoft', 'name'),
-        ]))->addModifier(
+        ]))->withModifier(
             (new InsertValueBeforeKey())
                 ->setValue('Yiisoft')
                 ->withKey('vendor')
@@ -295,7 +295,7 @@ final class ArrayCollectionMergeTest extends TestCase
             'C',
             'D',
             //ReverseBlockMerge::class => new ReverseBlockMerge(),
-        ]))->addModifier(
+        ]))->withModifier(
             new MergeWithKeysAsReverseMerge()
         );
 
