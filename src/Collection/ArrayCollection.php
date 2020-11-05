@@ -69,16 +69,6 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
         return $this;
     }
 
-    public function pullCollectionArgs(ArrayCollection $collection): void
-    {
-        $this->modifiers = array_merge($this->modifiers, $collection->modifiers);
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
-    }
-
     /**
      * @param int|string $key
      * @return bool
@@ -96,7 +86,7 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
     {
         $arrays = [];
         foreach ($args as $arg) {
-            $arrays[] = $arg instanceof self ? $arg->getData() : $arg;
+            $arrays[] = $arg instanceof self ? $arg->data : $arg;
         }
 
         $collections = [];
@@ -104,9 +94,7 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
             $collection = $arg instanceof self ? $arg : new self($arg);
             foreach ($collection->getModifiers() as $modifier) {
                 if ($modifier instanceof BeforeMergeModifierInterface) {
-                    $collection->setData(
-                        $modifier->beforeMerge($arrays, $index)
-                    );
+                    $collection->data = $modifier->beforeMerge($arrays, $index);
                 }
             }
             $collections[$index] = $collection;
@@ -116,7 +104,7 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
 
         foreach ($collection->getModifiers() as $modifier) {
             if ($modifier instanceof AfterMergeModifierInterface) {
-                $collection->setData($modifier->afterMerge($collection->getData()));
+                $collection->data = $modifier->afterMerge($collection->data);
             }
         }
 
@@ -135,10 +123,8 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
             $array = array_shift($args);
 
             if ($array instanceof ArrayCollection) {
-                $collection->pullCollectionArgs($array);
-                $collection->setData(
-                    $this->merge($collection->getData(), $array->getData())->getData()
-                );
+                $collection->modifiers = array_merge($collection->modifiers, $array->modifiers);
+                $collection->data = $this->merge($collection->data, $array->data)->data;
                 continue;
             }
 
@@ -152,7 +138,7 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
                         $collection[$k] = $v;
                     }
                 } elseif (static::isMergable($v) && isset($collection[$k]) && static::isMergable($collection[$k])) {
-                    $collection[$k] = $this->merge($collection[$k], $v)->getData();
+                    $collection[$k] = $this->merge($collection[$k], $v)->data;
                 } else {
                     $collection[$k] = $v;
                 }
