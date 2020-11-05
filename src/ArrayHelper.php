@@ -7,6 +7,7 @@ namespace Yiisoft\Arrays;
 use Closure;
 use InvalidArgumentException;
 use Throwable;
+use Yiisoft\Arrays\Collection\ArrayCollection;
 use Yiisoft\Strings\NumericHelper;
 
 /**
@@ -112,34 +113,12 @@ class ArrayHelper
      * For integer-keyed elements, the elements from the latter array will
      * be appended to the former array.
      * You can use modifiers {@see ArrayHelper::applyModifiers()} to change merging result.
-     * @param array ...$args arrays to be merged
+     * @param array|ArrayCollection ...$args arrays to be merged
      * @return array the merged array (the original arrays are not changed)
      */
     public static function merge(...$args): array
     {
-        return self::performMerge(...$args);
-    }
-
-    private static function performMerge(array ...$args): array
-    {
-        $res = array_shift($args) ?: [];
-        while (!empty($args)) {
-            foreach (array_shift($args) as $k => $v) {
-                if (is_int($k)) {
-                    if (array_key_exists($k, $res) && $res[$k] !== $v) {
-                        $res[] = $v;
-                    } else {
-                        $res[$k] = $v;
-                    }
-                } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
-                    $res[$k] = self::performMerge($res[$k], $v);
-                } else {
-                    $res[$k] = $v;
-                }
-            }
-        }
-
-        return $res;
+        return (new ArrayCollection())->mergeWith(...$args)->toArray();
     }
 
     /**

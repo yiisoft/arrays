@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Tests\Collection\Modifier;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Collection\ArrayCollection;
-use Yiisoft\Arrays\Collection\ArrayCollectionHelper;
 use Yiisoft\Arrays\Collection\Modifier\ReplaceValueWhole;
 
 final class ReplaceValueWholeTest extends TestCase
@@ -44,7 +44,7 @@ final class ReplaceValueWholeTest extends TestCase
             ],
         ];
 
-        $this->assertEquals($expected, ArrayCollectionHelper::merge($a, $b)->toArray());
+        $this->assertEquals($expected, ArrayHelper::merge($a, $b));
     }
 
     public function testForKey(): void
@@ -59,7 +59,7 @@ final class ReplaceValueWholeTest extends TestCase
 
         $this->assertSame(
             ['x' => [1, 2, 5], 'y' => [6]],
-            ArrayCollectionHelper::merge(...$arrays)->toArray()
+            ArrayHelper::merge(...$arrays)
         );
     }
 
@@ -74,7 +74,7 @@ final class ReplaceValueWholeTest extends TestCase
 
         $this->assertSame(
             ['x' => [1, 2, 5], 'y' => [3, 4, 6], 'z' => [5, 6]],
-            ArrayCollectionHelper::merge(...$arrays)->toArray()
+            ArrayHelper::merge(...$arrays)
         );
     }
 
@@ -91,7 +91,7 @@ final class ReplaceValueWholeTest extends TestCase
 
         $this->assertSame(
             ['y' => [3, 4], 'x' => [1, 2], 'z' => [6]],
-            ArrayCollectionHelper::merge(...$arrays)->toArray()
+            ArrayHelper::merge(...$arrays)
         );
     }
 
@@ -107,7 +107,7 @@ final class ReplaceValueWholeTest extends TestCase
 
         $this->assertSame(
             ['y' => [7], 'x' => [1, 2], 'z' => [6]],
-            ArrayCollectionHelper::merge(...$arrays)->toArray()
+            ArrayHelper::merge(...$arrays)
         );
     }
 }

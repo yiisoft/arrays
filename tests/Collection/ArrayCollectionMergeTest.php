@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Tests\Collection;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Collection\ArrayCollection;
-use Yiisoft\Arrays\Collection\ArrayCollectionHelper;
 use Yiisoft\Arrays\Collection\Modifier\InsertValueBeforeKey;
 use Yiisoft\Arrays\Collection\Modifier\MergeWithKeysAsReverseMerge;
 use Yiisoft\Arrays\Collection\Modifier\RemoveKeys;
@@ -14,64 +14,13 @@ use Yiisoft\Arrays\Collection\Modifier\ReplaceValue;
 use Yiisoft\Arrays\Collection\Modifier\ReverseValues;
 use Yiisoft\Arrays\Collection\Modifier\UnsetValue;
 
-final class ArrayCollectionHelperTest extends TestCase
+final class ArrayCollectionMergeTest extends TestCase
 {
     public function testEmptyMerge(): void
     {
-        $this->assertEquals([], ArrayCollectionHelper::merge(...[])->toArray());
+        $this->assertEquals([], (new ArrayCollection())->mergeWith(...[])->toArray());
     }
 
-    public function testMerge(): void
-    {
-        $a = [
-            'name' => 'Yii',
-            'version' => '1.0',
-            'options' => [
-                'namespace' => false,
-                'unittest' => false,
-            ],
-            'features' => [
-                'mvc',
-            ],
-        ];
-        $b = [
-            'version' => '1.1',
-            'options' => [
-                'unittest' => true,
-            ],
-            'features' => [
-                'gii',
-            ],
-        ];
-        $c = [
-            'version' => '2.0',
-            'options' => [
-                'namespace' => true,
-            ],
-            'features' => [
-                'debug',
-            ],
-            'foo',
-        ];
-
-        $result = ArrayCollectionHelper::merge($a, $b, $c)->toArray();
-        $expected = [
-            'name' => 'Yii',
-            'version' => '2.0',
-            'options' => [
-                'namespace' => true,
-                'unittest' => true,
-            ],
-            'features' => [
-                'mvc',
-                'gii',
-                'debug',
-            ],
-            'foo',
-        ];
-
-        $this->assertEquals($expected, $result);
-    }
 
     public function testMergeWithUnset(): void
     {
@@ -96,7 +45,7 @@ final class ArrayCollectionHelperTest extends TestCase
             (new UnsetValue())->forKey('options')
         );
 
-        $result = ArrayCollectionHelper::merge($a, $b)->toArray();
+        $result = ArrayHelper::merge($a, $b);
         $expected = [
             'name' => 'Yii',
             'version' => '1.1',
@@ -138,7 +87,7 @@ final class ArrayCollectionHelperTest extends TestCase
                 ->toValue(['gii'])
         );
 
-        $result = ArrayCollectionHelper::merge($a, $b)->toArray();
+        $result = ArrayHelper::merge($a, $b);
         $expected = [
             'name' => 'Yii',
             'version' => '1.1',
@@ -168,7 +117,7 @@ final class ArrayCollectionHelperTest extends TestCase
             new RemoveKeys()
         );
 
-        $result = ArrayCollectionHelper::merge($a, $b)->toArray();
+        $result = ArrayHelper::merge($a, $b);
         $expected = [
             'Yii',
             '1.1',
@@ -200,7 +149,7 @@ final class ArrayCollectionHelperTest extends TestCase
             new MergeWithKeysAsReverseMerge(),
         );
 
-        $result = ArrayCollectionHelper::merge($a, $b)->toArray();
+        $result = ArrayHelper::merge($a, $b);
         $expected = [
             'version' => '1.1',
             'options' => [
@@ -224,12 +173,12 @@ final class ArrayCollectionHelperTest extends TestCase
         $b = (new ArrayCollection([
             'C',
             'B',
-          //  ReverseBlockMerge::class => new ReverseBlockMerge(),
+            //  ReverseBlockMerge::class => new ReverseBlockMerge(),
         ]))->addModifier(
             new MergeWithKeysAsReverseMerge()
         );
 
-        $this->assertSame(['C', 'B', 'A'], ArrayCollectionHelper::merge($a, $b)->toArray());
+        $this->assertSame(['C', 'B', 'A'], ArrayHelper::merge($a, $b));
     }
 
 //    public function testMergeWithAlmostReverseBlock(): void
@@ -264,7 +213,7 @@ final class ArrayCollectionHelperTest extends TestCase
             new ReverseValues()
         );
 
-        $result = ArrayCollectionHelper::merge($a, $b)->toArray();
+        $result = ArrayHelper::merge($a, $b);
         $expected = [
             'options' => [],
             'version' => '1.1',
@@ -285,7 +234,7 @@ final class ArrayCollectionHelperTest extends TestCase
             'thirdValue'
         ];
 
-        $result = ArrayCollectionHelper::merge($a, $b)->toArray();
+        $result = ArrayHelper::merge($a, $b);
         $expected = [
             'firstValue',
             null,
@@ -302,7 +251,7 @@ final class ArrayCollectionHelperTest extends TestCase
         $b = ['2019-01-25'];
         $c = ['2019-01-25'];
 
-        $result = ArrayCollectionHelper::merge($a, $b, $c)->toArray();
+        $result = ArrayHelper::merge($a, $b, $c);
         $expected = ['2019-01-25'];
 
         $this->assertEquals($expected, $result);
@@ -320,12 +269,12 @@ final class ArrayCollectionHelperTest extends TestCase
 //            'vendor' => new InsertValueBeforeKey('Yiisoft', 'name'),
         ]))->addModifier(
             (new InsertValueBeforeKey())
-            ->setValue('Yiisoft')
-            ->withKey('vendor')
-            ->beforeKey('name')
+                ->setValue('Yiisoft')
+                ->withKey('vendor')
+                ->beforeKey('name')
         );
 
-        $result = ArrayCollectionHelper::merge($a, $b)->toArray();
+        $result = ArrayHelper::merge($a, $b);
         $expected = [
             'vendor' => 'Yiisoft',
             'name' => 'Yii',
@@ -350,7 +299,7 @@ final class ArrayCollectionHelperTest extends TestCase
             new MergeWithKeysAsReverseMerge()
         );
 
-        $result = ArrayCollectionHelper::merge($a, $b)->toArray();
+        $result = ArrayHelper::merge($a, $b);
         $expected = [
             'C',
             'D',
