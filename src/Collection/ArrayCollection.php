@@ -87,6 +87,8 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
      */
     public function mergeWith(...$args): self
     {
+        array_unshift($args, $this);
+
         $arrays = [];
         foreach ($args as $arg) {
             $arrays[] = $arg instanceof self ? $arg->data : $arg;
@@ -141,7 +143,10 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
                         $collection->data[$k] = $v;
                     }
                 } elseif (static::isMergable($v) && isset($collection[$k]) && static::isMergable($collection[$k])) {
-                    $collection->data[$k] = $this->merge($collection[$k], $v)->data;
+                    $mergedCollection = $this->merge($collection[$k], $v);
+                    $collection->data[$k] = ($collection[$k] instanceof self || $v instanceof self)
+                        ? $mergedCollection
+                        : $mergedCollection->data;
                 } else {
                     $collection->data[$k] = $v;
                 }

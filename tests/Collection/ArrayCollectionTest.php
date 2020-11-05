@@ -73,4 +73,22 @@ final class ArrayCollectionTest extends TestCase
 
         $this->assertSame($expected, $collection->toArray());
     }
+
+    public function testMergeWith(): void
+    {
+        $collection = (new ArrayCollection(['a' => 1, 'b' => 3]))
+            ->mergeWith(['b' => 2, 'c' => 3]);
+
+        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3], $collection->toArray());
+    }
+
+    public function testMergeWithNestedCollections(): void
+    {
+        $collection = (new ArrayCollection())->mergeWith(
+            ['x' => new ArrayCollection(['a' => 1, 'b' => 2], new RemoveKeys())],
+            ['x' => new ArrayCollection(['b' => 5, 'c' => 9])]
+        );
+
+        $this->assertSame(['x' => [1, 5, 9]], $collection->toArray());
+    }
 }
