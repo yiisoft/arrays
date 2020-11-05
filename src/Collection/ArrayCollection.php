@@ -77,15 +77,6 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
     }
 
     /**
-     * @param int|string $key
-     * @return bool
-     */
-    public function keyExists($key): bool
-    {
-        return array_key_exists($key, $this->data);
-    }
-
-    /**
      * @param array|self ...$args
      * @return self
      */
@@ -137,7 +128,7 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
 
             foreach ($array as $k => $v) {
                 if (is_int($k)) {
-                    if ($collection->keyExists($k)) {
+                    if (array_key_exists($k, $collection->data)) {
                         if ($collection[$k] !== $v) {
                             $collection->data[] = $v;
                         }
