@@ -6,29 +6,12 @@ namespace Yiisoft\Arrays\Tests\Collection;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\Collection\ArrayCollection;
-use Yiisoft\Arrays\Collection\ArrayCollectionIsImmutableException;
 use Yiisoft\Arrays\Collection\Modifier\RemoveKeys;
 use Yiisoft\Arrays\Collection\Modifier\ReverseValues;
 use Yiisoft\Arrays\Collection\Modifier\UnsetValue;
 
 final class ArrayCollectionTest extends TestCase
 {
-    public function testImmutableSet(): void
-    {
-        $collection = new ArrayCollection();
-
-        $this->expectException(ArrayCollectionIsImmutableException::class);
-        $collection[7] = 42;
-    }
-
-    public function testImmutableUnset(): void
-    {
-        $collection = new ArrayCollection([7 => 42]);
-
-        $this->expectException(ArrayCollectionIsImmutableException::class);
-        unset($collection[7]);
-    }
-
     public function testWithAddedModifier(): void
     {
         $collection = new ArrayCollection();

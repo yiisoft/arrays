@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Collection;
 
 use ArrayAccess;
+use ArrayIterator;
 use Countable;
 use IteratorAggregate;
-use Yiisoft\Arrays\ArrayAccessTrait;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\AfterMergeModifierInterface;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\BeforeMergeModifierInterface;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
@@ -15,9 +15,12 @@ use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\ModifierInterface;
 
 final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
 {
-    use ArrayAccessTrait;
-
     private array $data;
+
+    /**
+     * @var array|null Result array cache
+     */
+    private ?array $array = null;
 
     /**
      * @var ModifierInterface[]
@@ -136,15 +139,19 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
             foreach ($array as $k => $v) {
                 if (is_int($k)) {
                     if (array_key_exists($k, $collection->data)) {
-                        if ($collection[$k] !== $v) {
+                        if ($collection->data[$k] !== $v) {
                             $collection->data[] = $v;
                         }
                     } else {
                         $collection->data[$k] = $v;
                     }
-                } elseif (static::isMergable($v) && isset($collection[$k]) && static::isMergable($collection[$k])) {
-                    $mergedCollection = $this->merge($collection[$k], $v);
-                    $collection->data[$k] = ($collection[$k] instanceof self || $v instanceof self)
+                } elseif (
+                    static::isMergable($v) &&
+                    isset($collection->data[$k]) &&
+                    static::isMergable($collection->data[$k])
+                ) {
+                    $mergedCollection = $this->merge($collection->data[$k], $v);
+                    $collection->data[$k] = ($collection->data[$k] instanceof self || $v instanceof self)
                         ? $mergedCollection
                         : $mergedCollection->data;
                 } else {
@@ -167,15 +174,16 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
 
     public function toArray(): array
     {
-        $array = $this->performArray($this->getIterator()->getArrayCopy());
+        if ($this->array === null) {
+            $this->array = $this->performArray($this->data);
 
-        foreach ($this->modifiers as $modifier) {
-            if ($modifier instanceof DataModifierInterface) {
-                $array = $modifier->apply($array);
+            foreach ($this->modifiers as $modifier) {
+                if ($modifier instanceof DataModifierInterface) {
+                    $this->array = $modifier->apply($this->array);
+                }
             }
         }
-
-        return $array;
+        return $this->array;
     }
 
     private function performArray(array $array): array
@@ -190,6 +198,47 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         return $array;
+    }
+
+    /**
+     * Returns an iterator for traversing the data.
+     * This method is required by the SPL interface {@see IteratorAggregate}.
+     * It will be implicitly called when you use `foreach` to traverse the collection.
+     * @return ArrayIterator an iterator for traversing the cookies in the collection.
+     */
+    public function getIterator(): ArrayIterator
+    {
+        return new ArrayIterator($this->toArray());
+    }
+
+    /**
+     * Returns the number of data items.
+     * This method is required by {@see Countable} interface.
+     * @return int number of data elements.
+     */
+    public function count(): int
+    {
+        return count($this->toArray());
+    }
+
+    /**
+     * This method is required by the interface {@see ArrayAccess}.
+     * @param mixed $offset the offset to check on
+     * @return bool
+     */
+    public function offsetExists($offset): bool
+    {
+        return isset($this->toArray()[$offset]);
+    }
+
+    /**
+     * This method is required by the interface {@see ArrayAccess}.
+     * @param mixed $offset the offset to retrieve element.
+     * @return mixed the element at the offset, null if no element is found at the offset
+     */
+    public function offsetGet($offset)
+    {
+        return $this->toArray()[$offset] ?? null;
     }
 
     /**
