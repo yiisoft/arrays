@@ -139,4 +139,9 @@ final class ArrayCollectionTest extends TestCase
 
         $this->assertSame(['x' => [1, 2, 3, 4, 5, 6]], $collection->toArray());
     }
+
+    public function testEmptyMerge(): void
+    {
+        $this->assertEquals([], (new ArrayCollection())->mergeWith(...[])->toArray());
+    }
 }
