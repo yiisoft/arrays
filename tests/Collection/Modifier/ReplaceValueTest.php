@@ -7,49 +7,55 @@ namespace Yiisoft\Arrays\Tests\Collection\Modifier;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Collection\ArrayCollection;
-use Yiisoft\Arrays\Collection\Modifier\ReplaceValueWhole;
+use Yiisoft\Arrays\Collection\Modifier\ReplaceValue;
 
-final class ReplaceValueWholeTest extends TestCase
+final class ReplaceValueTest extends TestCase
 {
     public function testBase(): void
     {
-        $a = (new ArrayCollection())
-            ->withModifier(new ReplaceValueWhole('options'))
-            ->withData([
-                'name' => 'Yii',
-                'version' => '1.0',
-                'options' => [
-                    'namespace' => false,
-                    'unittest' => false,
-                ],
-            ]);
-        $b = [
-            'version' => '1.1',
-            'options' => [
-                'unittest' => true,
-            ],
-            'features' => [
-                'gii',
-            ],
-        ];
-
-        $expected = [
+        $a = [
             'name' => 'Yii',
             'version' => '1.1',
             'options' => [
-                'unittest' => true,
+                'namespace' => false,
+                'unittest' => false,
             ],
             'features' => [
-                'gii',
+                'mvc',
             ],
         ];
+        $b = new ArrayCollection(
+            [
+                'version' => '3.0',
+                'options' => [
+                    'unittest' => true,
+                ],
+                'features' => [
+                    'gii',
+                ],
+            ],
+            new ReplaceValue('features')
+        );
 
-        $this->assertEquals($expected, ArrayHelper::merge($a, $b));
+        $this->assertEquals(
+            [
+                'name' => 'Yii',
+                'version' => '3.0',
+                'options' => [
+                    'namespace' => false,
+                    'unittest' => true,
+                ],
+                'features' => [
+                    'gii',
+                ],
+            ],
+            ArrayHelper::merge($a, $b)
+        );
     }
 
     public function testForKey(): void
     {
-        $modifierX = new ReplaceValueWhole('x');
+        $modifierX = new ReplaceValue('x');
         $modifierY = $modifierX->forKey('y');
 
         $arrays = [
@@ -73,7 +79,7 @@ final class ReplaceValueWholeTest extends TestCase
 
     public function testWithoutKeysInAllArrays(): void
     {
-        $modifier = new ReplaceValueWhole('z');
+        $modifier = new ReplaceValue('z');
 
         $arrays = [
             (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4], 'z' => [5, 6]]))->withModifier($modifier),
@@ -88,7 +94,7 @@ final class ReplaceValueWholeTest extends TestCase
 
     public function testWithKeysInArrayBeforeCurrent(): void
     {
-        $modifier = new ReplaceValueWhole('y');
+        $modifier = new ReplaceValue('y');
 
         $arrays = [
             ['y' => [5]],
@@ -104,7 +110,7 @@ final class ReplaceValueWholeTest extends TestCase
 
     public function testWithKeysInArrayBeforeAndAfterCurrent(): void
     {
-        $modifier = new ReplaceValueWhole('y');
+        $modifier = new ReplaceValue('y');
 
         $arrays = [
             ['y' => [5]],
@@ -120,7 +126,7 @@ final class ReplaceValueWholeTest extends TestCase
 
     public function testWithoutKeyInArray(): void
     {
-        $modifier = new ReplaceValueWhole('a');
+        $modifier = new ReplaceValue('a');
 
         $arrays = [
             (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifier($modifier),
@@ -135,7 +141,7 @@ final class ReplaceValueWholeTest extends TestCase
 
     public function testResetModifier(): void
     {
-        $modifier = new ReplaceValueWhole('y');
+        $modifier = new ReplaceValue('y');
 
         $collection = (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifier($modifier);
 

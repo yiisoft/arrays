@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Collection\ArrayCollection;
 use Yiisoft\Arrays\Collection\Modifier\MergeWithKeysAsReverseMerge;
-use Yiisoft\Arrays\Collection\Modifier\ReplaceValue;
 
 final class ArrayCollectionMergeTest extends TestCase
 {
@@ -16,52 +15,6 @@ final class ArrayCollectionMergeTest extends TestCase
     {
         $this->assertEquals([], (new ArrayCollection())->mergeWith(...[])->toArray());
     }
-
-    public function testMergeWithReplace(): void
-    {
-        $a = [
-            'name' => 'Yii',
-            'version' => '1.0',
-            'options' => [
-                'namespace' => false,
-                'unittest' => false,
-            ],
-            'features' => [
-                'mvc',
-            ],
-        ];
-        $b = (new ArrayCollection([
-            'version' => '1.1',
-            'options' => [
-                'unittest' => true,
-            ],
-//            'features' => new ReplaceValue(
-//                [
-//                    'gii',
-//                ]
-//            ),
-        ]))->withModifier(
-            (new ReplaceValue())
-                ->forKey('features')
-                ->toValue(['gii'])
-        );
-
-        $result = ArrayHelper::merge($a, $b);
-        $expected = [
-            'name' => 'Yii',
-            'version' => '1.1',
-            'options' => [
-                'namespace' => false,
-                'unittest' => true,
-            ],
-            'features' => [
-                'gii',
-            ],
-        ];
-
-        $this->assertEquals($expected, $result);
-    }
-
     public function testMergeWithReverseBlock(): void
     {
         $a = [
