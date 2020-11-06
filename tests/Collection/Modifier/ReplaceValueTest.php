@@ -53,10 +53,10 @@ final class ReplaceValueTest extends TestCase
         );
     }
 
-    public function testForKey(): void
+    public function testWithKey(): void
     {
         $modifierX = new ReplaceValue('x');
-        $modifierY = $modifierX->forKey('y');
+        $modifierY = $modifierX->withKey('y');
 
         $arrays = [
             (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifier($modifierX),

@@ -49,7 +49,7 @@ final class ReplaceValue implements BeforeMergeModifierInterface, AfterMergeModi
      * @param int|string $key
      * @return self
      */
-    public function forKey($key): self
+    public function withKey($key): self
     {
         $new = clone $this;
         $new->key = $key;
