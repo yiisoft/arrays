@@ -29,7 +29,7 @@ final class ArrayCollectionTest extends TestCase
         $collection = new ArrayCollection();
 
         $collectionWithModifier = $collection
-            ->withAddedModifier(new UnsetValue());
+            ->withAddedModifier(new UnsetValue('a'));
 
         // Test immutable
         $this->assertEmpty($collection->getModifiers());
@@ -44,7 +44,7 @@ final class ArrayCollectionTest extends TestCase
         $collection = new ArrayCollection();
 
         $collectionWithModifiers = $collection
-            ->withModifiers([new UnsetValue()])
+            ->withModifiers([new UnsetValue('a')])
             ->withModifiers([new ReverseValues(), new RemoveKeys()]);
 
         // Test immutable
@@ -62,7 +62,7 @@ final class ArrayCollectionTest extends TestCase
         $collection = new ArrayCollection();
 
         $collectionWithModifiers = $collection
-            ->withAddedModifier(new UnsetValue())
+            ->withAddedModifier(new UnsetValue('a'))
             ->withAddedModifier(new ReverseValues(), new RemoveKeys());
 
         // Test immutable
@@ -80,7 +80,7 @@ final class ArrayCollectionTest extends TestCase
         $collection = new ArrayCollection();
 
         $collectionWithModifiers = $collection
-            ->withAddedModifiers([new UnsetValue()])
+            ->withAddedModifiers([new UnsetValue('a')])
             ->withAddedModifiers([new ReverseValues(), new RemoveKeys()]);
 
         // Test immutable

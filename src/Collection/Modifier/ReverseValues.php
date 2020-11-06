@@ -9,7 +9,7 @@ use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
 /**
  * Modifier "Reverse Values".
  *
- * При преобразовании коллекции в массив порядок элементов будет изменён на противоположный.
+ * Reverse order of an array elements.
  */
 final class ReverseValues implements DataModifierInterface
 {

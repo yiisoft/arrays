@@ -29,7 +29,7 @@ final class ArrayCollectionArrayAccessTest extends TestCase
     {
         $collection = new ArrayCollection(
             ['a' => 1, 'b' => 2, 'c' => 3],
-            (new UnsetValue())->forKey('c')
+            new UnsetValue('c')
         );
 
         $this->assertSame(2, $collection->count());
@@ -39,7 +39,7 @@ final class ArrayCollectionArrayAccessTest extends TestCase
     {
         $collection = new ArrayCollection(
             ['a' => 1, 'b' => 2, 'c' => 3],
-            (new UnsetValue())->forKey('c')
+            new UnsetValue('c')
         );
 
         $this->assertTrue($collection->offsetExists('a'));
@@ -50,7 +50,7 @@ final class ArrayCollectionArrayAccessTest extends TestCase
     {
         $collection = new ArrayCollection(
             ['a' => 1, 'b' => 2, 'c' => 3],
-            (new UnsetValue())->forKey('c')
+            new UnsetValue('c')
         );
 
         $this->assertSame(1, $collection->offsetGet('a'));

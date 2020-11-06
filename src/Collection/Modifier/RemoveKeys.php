@@ -9,7 +9,7 @@ use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
 /**
  * Modifier "Remove Keys".
  *
- * При преобразовании коллекции в массив все ключи массива будут удалены.
+ * Indexes an array numerically.
  */
 final class RemoveKeys implements DataModifierInterface
 {

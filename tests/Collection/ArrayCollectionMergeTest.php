@@ -9,51 +9,12 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Collection\ArrayCollection;
 use Yiisoft\Arrays\Collection\Modifier\MergeWithKeysAsReverseMerge;
 use Yiisoft\Arrays\Collection\Modifier\ReplaceValue;
-use Yiisoft\Arrays\Collection\Modifier\ReverseValues;
-use Yiisoft\Arrays\Collection\Modifier\UnsetValue;
 
 final class ArrayCollectionMergeTest extends TestCase
 {
     public function testEmptyMerge(): void
     {
         $this->assertEquals([], (new ArrayCollection())->mergeWith(...[])->toArray());
-    }
-
-
-    public function testMergeWithUnset(): void
-    {
-        $a = [
-            'name' => 'Yii',
-            'version' => '1.0',
-            'options' => [
-                'namespace' => false,
-                'unittest' => false,
-            ],
-            'features' => [
-                'mvc',
-            ],
-        ];
-        $b = (new ArrayCollection([
-            'version' => '1.1',
-            // 'options' => new UnsetValue(),
-            'features' => [
-                'gii',
-            ],
-        ]))->withModifier(
-            (new UnsetValue())->forKey('options')
-        );
-
-        $result = ArrayHelper::merge($a, $b);
-        $expected = [
-            'name' => 'Yii',
-            'version' => '1.1',
-            'features' => [
-                'mvc',
-                'gii',
-            ],
-        ];
-
-        $this->assertEquals($expected, $result);
     }
 
     public function testMergeWithReplace(): void

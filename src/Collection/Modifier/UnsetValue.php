@@ -6,29 +6,40 @@ namespace Yiisoft\Arrays\Collection\Modifier;
 
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
 
+/**
+ * Modifier "Unset Value".
+ *
+ * Удаляет элемент массива с заданым ключом.
+ */
 final class UnsetValue implements DataModifierInterface
 {
     /**
-     * @var int|string|null
+     * @var int|string
      */
-    private $key = null;
+    private $key;
 
-    public function apply(array $data): array
+    /**
+     * @param int|string $key
+     */
+    public function __construct($key)
     {
-        if ($this->key !== null) {
-            unset($data[$this->key]);
-        }
-        return $data;
+        $this->key = $key;
     }
 
     /**
      * @param int|string $key
      * @return self
      */
-    public function forKey($key): self
+    public function withKey($key): self
     {
         $new = clone $this;
         $new->key = $key;
         return $new;
+    }
+
+    public function apply(array $data): array
+    {
+        unset($data[$this->key]);
+        return $data;
     }
 }

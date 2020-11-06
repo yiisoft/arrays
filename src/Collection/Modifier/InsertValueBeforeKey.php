@@ -7,10 +7,9 @@ namespace Yiisoft\Arrays\Collection\Modifier;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
 
 /**
- * Modifier "Insert Value Before Key"
+ * Modifier "Insert Value Before Key".
  *
- * При преобразовании коллекции в массив элемент с ключом "key" будет перемещён
- * на позицию перед элементом с ключом "beforeKey".
+ * Перемещает элемент с ключом "key" на позицию перед элементом с ключом "beforeKey".
  */
 final class InsertValueBeforeKey implements DataModifierInterface
 {
