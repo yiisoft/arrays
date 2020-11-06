@@ -8,7 +8,13 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\AfterMergeModifierInterface;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\BeforeMergeModifierInterface;
 
-final class MergeWithKeysAsReverseMerge implements BeforeMergeModifierInterface, AfterMergeModifierInterface
+/**
+ * Modifier "Save Order"
+ *
+ * Модификатор запоминает порядок элементов в текущей коллекции и пытается его сохранить
+ * при объединении массивов.
+ */
+final class SaveOrder implements BeforeMergeModifierInterface, AfterMergeModifierInterface
 {
     private array $array = [];
 
