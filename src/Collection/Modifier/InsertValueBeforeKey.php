@@ -8,23 +8,31 @@ use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
 
 /**
  * Modifier "Insert Value Before Key"
+ *
+ * При преобразовании коллекции в массив элемент с ключом "key" будет перемещён
+ * на позицию перед элементом с ключом "beforeKey".
  */
 final class InsertValueBeforeKey implements DataModifierInterface
 {
     /**
-     * @var int|string|null
+     * @var int|string
      */
-    private $key = null;
+    private $key;
 
     /**
-     * @var mixed
+     * @var int|string
      */
-    private $value = null;
+    private $beforeKey;
 
     /**
-     * @var int|string|null
+     * @param int|string $key
+     * @param int|string $beforeKey
      */
-    private $beforeKey = null;
+    public function __construct($key, $beforeKey)
+    {
+        $this->key = $key;
+        $this->beforeKey = $beforeKey;
+    }
 
     /**
      * @param int|string $key
@@ -34,17 +42,6 @@ final class InsertValueBeforeKey implements DataModifierInterface
     {
         $new = clone $this;
         $new->key = $key;
-        return $new;
-    }
-
-    /**
-     * @param mixed $value
-     * @return self
-     */
-    public function setValue($value): self
-    {
-        $new = clone $this;
-        $new->value = $value;
         return $new;
     }
 
@@ -61,16 +58,18 @@ final class InsertValueBeforeKey implements DataModifierInterface
 
     public function apply(array $data): array
     {
-        if ($this->key === null || $this->beforeKey === null) {
+        if (!array_key_exists($this->key, $data)) {
             return $data;
         }
 
         $result = [];
         foreach ($data as $k => $v) {
             if ($k === $this->beforeKey) {
-                $result[$this->key] = $this->value;
+                $result[$this->key] = $data[$this->key];
             }
-            $result[$k] = $v;
+            if ($k !== $this->key) {
+                $result[$k] = $v;
+            }
         }
 
         return $result;
