@@ -18,6 +18,22 @@ final class SaveOrder implements BeforeMergeModifierInterface, AfterMergeModifie
 {
     private array $array = [];
 
+    private bool $nested = false;
+
+    public function nested(): self
+    {
+        $new = clone $this;
+        $new->nested = true;
+        return $new;
+    }
+
+    public function notNested(): self
+    {
+        $new = clone $this;
+        $new->nested = false;
+        return $new;
+    }
+
     public function beforeMerge(array $arrays, int $index): array
     {
         $this->array = $arrays[$index];
@@ -48,7 +64,7 @@ final class SaveOrder implements BeforeMergeModifierInterface, AfterMergeModifie
                 }
             }
 
-            if (is_array($value) && is_array($result[$key])) {
+            if ($this->nested && is_array($value) && is_array($result[$key])) {
                 $result[$key] = $this->applyOrder($result[$key], $value);
             }
         }

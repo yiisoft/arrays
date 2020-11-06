@@ -11,7 +11,7 @@ use Yiisoft\Arrays\Collection\Modifier\SaveOrder;
 
 final class SaveOrderTest extends TestCase
 {
-    public function testBase(): void
+    public function testMerge(): void
     {
         $a = [
             'name' => 'Yii',
@@ -38,6 +38,43 @@ final class SaveOrderTest extends TestCase
                 'version' => '3.0',
                 'options' => [
                     'option1' => 'valueB',
+                    'option3' => 'valueAA',
+                    'option2' => 'valueBB',
+                ],
+                'name' => 'Yii',
+                'meta' => ['a' => 1],
+            ],
+            ArrayHelper::merge($a, $b)
+        );
+    }
+
+    public function testMergeNested(): void
+    {
+        $a = [
+            'name' => 'Yii',
+            'options' => [
+                'option1' => 'valueA',
+                'option3' => 'valueAA',
+            ],
+            'version' => '1.1',
+            'meta' => ['a' => 1],
+        ];
+        $b = new ArrayCollection(
+            [
+                'version' => '3.0',
+                'options' => [
+                    'option1' => 'valueB',
+                    'option2' => 'valueBB',
+                ],
+            ],
+            (new SaveOrder())->nested()
+        );
+
+        $this->assertSame(
+            [
+                'version' => '3.0',
+                'options' => [
+                    'option1' => 'valueB',
                     'option2' => 'valueBB',
                     'option3' => 'valueAA',
                 ],
@@ -45,6 +82,37 @@ final class SaveOrderTest extends TestCase
                 'meta' => ['a' => 1],
             ],
             ArrayHelper::merge($a, $b)
+        );
+    }
+
+    public function testNested(): void
+    {
+        $modifier = new SaveOrder();
+        $modifierNested = $modifier->nested();
+        $modifierNotNested = $modifierNested->notNested();
+
+        $a = [
+            'y' => ['c' => 3],
+        ];
+        $b = [
+            'x' => ['a' => 1, 'b' => 2],
+            'y' => ['a' => 1, 'b' => 2,]
+        ];
+
+        $this->assertSame(
+            [
+                'x' => ['a' => 1, 'b' => 2],
+                'y' => ['a' => 1, 'b' => 2, 'c' => 3],
+            ],
+            ArrayHelper::merge($a, new ArrayCollection($b, $modifierNested))
+        );
+
+        $this->assertSame(
+            [
+                'x' => ['a' => 1, 'b' => 2],
+                'y' => ['c' => 3, 'a' => 1, 'b' => 2],
+            ],
+            ArrayHelper::merge($a, new ArrayCollection($b, $modifierNotNested))
         );
     }
 
