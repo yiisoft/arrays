@@ -7,6 +7,22 @@ namespace Yiisoft\Arrays\Collection\Modifier;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\AfterMergeModifierInterface;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\BeforeMergeModifierInterface;
 
+/**
+ * Modifier "Replace Value Whole".
+ *
+ * Работает только при объединении.
+ *
+ * Модификатор позволяет указать элемент массива из текущей коллекции, который
+ * будет особенным образом обработан при объединении.
+ *
+ * - Если в предыдущих массивах есть элементы с таким же ключом, то они будут заменены значением
+ *   из текущего массива без объединения.
+ *
+ * - Если в последующих массивах есть элементы с таким же ключом, то они заменят значение из
+ *   текущего массива без объединения.
+ *
+ * Если в текущем коллекции нет элемента массива с заданным ключом, то модификатор ничего не изменит.
+ */
 final class ReplaceValueWhole implements BeforeMergeModifierInterface, AfterMergeModifierInterface
 {
     /**

@@ -7,7 +7,9 @@ namespace Yiisoft\Arrays\Collection\Modifier;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
 
 /**
- * Removes array keys from array.
+ * Modifier "Remove Keys".
+ *
+ * При преобразовании коллекции в массив все ключи массива будут удалены.
  */
 final class RemoveKeys implements DataModifierInterface
 {

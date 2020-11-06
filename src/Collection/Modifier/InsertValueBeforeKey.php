@@ -6,6 +6,9 @@ namespace Yiisoft\Arrays\Collection\Modifier;
 
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
 
+/**
+ * Modifier "Insert Value Before Key"
+ */
 final class InsertValueBeforeKey implements DataModifierInterface
 {
     /**
