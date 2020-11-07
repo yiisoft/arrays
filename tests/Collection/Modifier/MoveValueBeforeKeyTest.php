@@ -7,9 +7,9 @@ namespace Yiisoft\Arrays\Tests\Collection\Modifier;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Collection\ArrayCollection;
-use Yiisoft\Arrays\Collection\Modifier\InsertValueBeforeKey;
+use Yiisoft\Arrays\Collection\Modifier\MoveValueBeforeKey;
 
-final class InsertValueBeforeKeyTest extends TestCase
+final class MoveValueBeforeKeyTest extends TestCase
 {
     public function testBase(): void
     {
@@ -23,7 +23,7 @@ final class InsertValueBeforeKeyTest extends TestCase
                 'options' => [],
                 'vendor' => 'Yiisoft',
             ],
-            new InsertValueBeforeKey('vendor', 'name')
+            new MoveValueBeforeKey('vendor', 'name')
         );
 
         $this->assertSame(
@@ -39,7 +39,7 @@ final class InsertValueBeforeKeyTest extends TestCase
 
     public function testWithKey(): void
     {
-        $modifierA = new InsertValueBeforeKey('a', 'c');
+        $modifierA = new MoveValueBeforeKey('a', 'c');
         $modifierD = $modifierA->withKey('d');
 
         $array = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4];
@@ -50,7 +50,7 @@ final class InsertValueBeforeKeyTest extends TestCase
 
     public function testBeforeKey(): void
     {
-        $modifierA = new InsertValueBeforeKey('a', 'c');
+        $modifierA = new MoveValueBeforeKey('a', 'c');
         $modifierD = $modifierA->beforeKey('d');
 
         $array = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4];
@@ -61,7 +61,7 @@ final class InsertValueBeforeKeyTest extends TestCase
 
     public function testWithoutKey(): void
     {
-        $modifier = new InsertValueBeforeKey('x', 'c');
+        $modifier = new MoveValueBeforeKey('x', 'c');
 
         $array = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4];
 

@@ -7,9 +7,9 @@ namespace Yiisoft\Arrays\Collection\Modifier;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
 
 /**
- * This modifier inserts a value before the key given.
+ * Move element with key `$key` before key `$beforeKey`.
  */
-final class InsertValueBeforeKey implements DataModifierInterface
+final class MoveValueBeforeKey implements DataModifierInterface
 {
     /**
      * @var int|string

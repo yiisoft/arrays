@@ -9,7 +9,7 @@ use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\AfterMergeModifierInter
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\BeforeMergeModifierInterface;
 
 /**
- * "Save Order" modifier remembers the order of elements in the collection it is applied to
+ * Remembers the order of elements in the collection it is applied to
  * and tried to keep the order while merging.
  */
 final class SaveOrder implements BeforeMergeModifierInterface, AfterMergeModifierInterface
