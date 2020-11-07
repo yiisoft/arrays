@@ -7,9 +7,9 @@ namespace Yiisoft\Arrays\Tests\Collection\Modifier;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Collection\ArrayCollection;
-use Yiisoft\Arrays\Collection\Modifier\RemoveKeys;
+use Yiisoft\Arrays\Collection\Modifier\RemoveAllKeys;
 
-final class RemoveKeysTest extends TestCase
+final class RemoveAllKeysTest extends TestCase
 {
     public function testBase(): void
     {
@@ -22,7 +22,7 @@ final class RemoveKeysTest extends TestCase
                 'version' => '3.0',
                 'options' => [],
             ],
-            new RemoveKeys()
+            new RemoveAllKeys()
         );
 
         $this->assertSame(

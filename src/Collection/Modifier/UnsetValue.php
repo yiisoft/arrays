@@ -7,9 +7,7 @@ namespace Yiisoft\Arrays\Collection\Modifier;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
 
 /**
- * Modifier "Unset Value".
- *
- * Удаляет элемент массива с заданым ключом.
+ * "Unset Value" modifiers removes an array element with a given key.
  */
 final class UnsetValue implements DataModifierInterface
 {

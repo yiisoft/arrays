@@ -8,20 +8,17 @@ use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\AfterMergeModifierInter
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\BeforeMergeModifierInterface;
 
 /**
- * Modifier "Replace Value".
+ * The modifier allows to mark an array element from the collection it is applied to,
+ * as the element to be processed in a special way on merge.
  *
- * Работает только при объединении.
+ * - In case there are elements with the same keys in previous arrays, they will be replaced
+ *   with a value from the current array.
  *
- * Модификатор позволяет указать элемент массива из текущей коллекции, который
- * будет особенным образом обработан при объединении.
+ * - If there are elements with the same keys in next arrays, they will replace current array value.
  *
- * - Если в предыдущих массивах есть элементы с таким же ключом, то они будут заменены значением
- *   из текущего массива без объединения.
+ * If there is no element with the given key in the array, modifier won't change anything.
  *
- * - Если в последующих массивах есть элементы с таким же ключом, то они заменят значение из
- *   текущего массива без объединения.
- *
- * Если в текущем коллекции нет элемента массива с заданным ключом, то модификатор ничего не изменит.
+ * Note that this modifier is applied on merge.
  */
 final class ReplaceValue implements BeforeMergeModifierInterface, AfterMergeModifierInterface
 {

@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Tests\Collection;
 
-use ArrayIterator;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\Collection\ArrayCollection;
 use Yiisoft\Arrays\Collection\ArrayCollectionIsImmutableException;
-use Yiisoft\Arrays\Collection\Modifier\RemoveKeys;
+use Yiisoft\Arrays\Collection\Modifier\RemoveAllKeys;
 use Yiisoft\Arrays\Collection\Modifier\UnsetValue;
 
 final class ArrayCollectionArrayAccessTest extends TestCase
@@ -17,11 +16,10 @@ final class ArrayCollectionArrayAccessTest extends TestCase
     {
         $collection = new ArrayCollection(
             ['a' => 1, 'b' => 2, 'c' => 3],
-            new RemoveKeys()
+            new RemoveAllKeys()
         );
         $iterator = $collection->getIterator();
 
-        $this->assertInstanceOf(ArrayIterator::class, $iterator);
         $this->assertSame([1, 2, 3], $iterator->getArrayCopy());
     }
 

@@ -6,7 +6,7 @@ namespace Yiisoft\Arrays\Tests\Collection;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\Collection\ArrayCollection;
-use Yiisoft\Arrays\Collection\Modifier\RemoveKeys;
+use Yiisoft\Arrays\Collection\Modifier\RemoveAllKeys;
 use Yiisoft\Arrays\Collection\Modifier\ReverseValues;
 use Yiisoft\Arrays\Collection\Modifier\UnsetValue;
 
@@ -30,7 +30,7 @@ final class ArrayCollectionTest extends TestCase
 
         $collectionWithModifiers = $collection
             ->withModifiers(new UnsetValue('a'))
-            ->withModifiers(new ReverseValues(), new RemoveKeys());
+            ->withModifiers(new ReverseValues(), new RemoveAllKeys());
 
         // Test immutable
         $this->assertEmpty($collection->getModifiers());
@@ -39,7 +39,7 @@ final class ArrayCollectionTest extends TestCase
 
         $this->assertCount(2, $modifiers);
         $this->assertInstanceOf(ReverseValues::class, $modifiers[0]);
-        $this->assertInstanceOf(RemoveKeys::class, $modifiers[1]);
+        $this->assertInstanceOf(RemoveAllKeys::class, $modifiers[1]);
     }
 
     public function testWithAddedModifiers(): void
@@ -48,7 +48,7 @@ final class ArrayCollectionTest extends TestCase
 
         $collectionWithModifiers = $collection
             ->withAddedModifiers(new UnsetValue('a'))
-            ->withAddedModifiers(new ReverseValues(), new RemoveKeys());
+            ->withAddedModifiers(new ReverseValues(), new RemoveAllKeys());
 
         // Test immutable
         $this->assertEmpty($collection->getModifiers());
@@ -57,7 +57,7 @@ final class ArrayCollectionTest extends TestCase
 
         $this->assertInstanceOf(UnsetValue::class, $modifiers[0]);
         $this->assertInstanceOf(ReverseValues::class, $modifiers[1]);
-        $this->assertInstanceOf(RemoveKeys::class, $modifiers[2]);
+        $this->assertInstanceOf(RemoveAllKeys::class, $modifiers[2]);
     }
 
     public function testToArray(): void
@@ -99,7 +99,7 @@ final class ArrayCollectionTest extends TestCase
     {
         $collection = (new ArrayCollection())->mergeWith(
             ['x' => ['a' => 1]],
-            ['x' => new ArrayCollection(['b' => 2, 'c' => 3], new RemoveKeys())],
+            ['x' => new ArrayCollection(['b' => 2, 'c' => 3], new RemoveAllKeys())],
             ['x' => ['d' => 4]],
             ['x' => new ArrayCollection(['e' => 5, 'f' => 6])]
         );

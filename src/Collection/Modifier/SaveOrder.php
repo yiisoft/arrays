@@ -9,10 +9,8 @@ use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\AfterMergeModifierInter
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\BeforeMergeModifierInterface;
 
 /**
- * Modifier "Save Order"
- *
- * Модификатор запоминает порядок элементов в текущей коллекции и пытается его сохранить
- * при объединении массивов.
+ * "Save Order" modifier remembers the order of elements in the collection it is applied to
+ * and tried to keep the order while merging.
  */
 final class SaveOrder implements BeforeMergeModifierInterface, AfterMergeModifierInterface
 {

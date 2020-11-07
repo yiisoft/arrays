@@ -11,7 +11,7 @@ use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
  *
  * Indexes an array numerically.
  */
-final class RemoveKeys implements DataModifierInterface
+final class RemoveAllKeys implements DataModifierInterface
 {
     public function apply(array $data): array
     {
