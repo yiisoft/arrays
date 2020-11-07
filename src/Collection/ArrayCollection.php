@@ -27,14 +27,10 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
      */
     private array $modifiers;
 
-    /**
-     * @param array $data
-     * @param ModifierInterface|ModifierInterface[] $modifiers
-     */
-    public function __construct(array $data = [], $modifiers = [])
+    public function __construct(array $data = [], ModifierInterface ...$modifiers)
     {
         $this->data = $data;
-        $this->modifiers = is_array($modifiers) ? $modifiers : [$modifiers];
+        $this->modifiers = $modifiers;
     }
 
     public function withData(array $data): self
