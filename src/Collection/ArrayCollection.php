@@ -257,4 +257,9 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
     {
         throw new ArrayCollectionIsImmutableException();
     }
+
+    public function __clone()
+    {
+        $this->array = null;
+    }
 }

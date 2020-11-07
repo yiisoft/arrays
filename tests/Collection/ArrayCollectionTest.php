@@ -144,4 +144,13 @@ final class ArrayCollectionTest extends TestCase
     {
         $this->assertEquals([], (new ArrayCollection())->mergeWith(...[])->toArray());
     }
+
+    public function testClone(): void
+    {
+        $collectionA = new ArrayCollection(['a' => 1, 'b' => 2], new UnsetValue('a'));
+        $this->assertSame(['b' => 2], $collectionA->toArray());
+
+        $collectionB = $collectionA->withModifier(new UnsetValue('b'));
+        $this->assertSame(['a' => 1], $collectionB->toArray());
+    }
 }
