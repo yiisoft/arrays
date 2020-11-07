@@ -24,6 +24,7 @@ The package provides:
 [\ArrayAccess](https://www.php.net/manual/class.arrayaccess) and
 [\Countable](https://www.php.net/manualn/class.countable.php);
 - `ArrayableInterface` and `ArrayableTrait` for use in classes who want to support customizable representation of their instances.
+- `ArrayCollection` that allow use arrays with modifiers.
 
 ## Requirements
 
@@ -153,6 +154,107 @@ $car = new Car();
 
 $data = $car->toArray(['type', 'color']); // ['type' => 'Crossover', 'color' => 'Red']
 ```
+
+## ArrayCollection usage
+
+`ArrayCollection` is array with modifiers. When you get array value or whole array from collection
+modifiers are applied and get changed data.
+
+When merging collections (use `ArrayHelper::merge` or `$collection->mergeWith()`) separately combines original arrays and modifiers.
+
+Example of use:
+
+```php
+$collection = new ArrayCollection(
+    [
+        'name' => 'Yii',
+        'version' => '2.0',
+        'tag' => 'php',
+    ],
+    new SaveOrder(),
+);
+
+$update = new ArrayCollection(
+    [
+        'description' => 'PHP framework',
+        'version' => '3.0',
+    ],
+    new UnsetValue('tag'),
+    new MoveValueBeforeKey('description', 'version')
+);
+
+$update2 = [
+    'license' => 'BSD',
+];
+
+// [
+//    'name' => 'Yii',
+//    'description' => 'PHP framework',
+//    'version' => '3.0',
+//    'license' => 'BSD',
+// ]
+$result = ArrayHelper::merge($collection, $update, $update2);
+```
+
+### Modifiers
+
+#### MoveValueBeforeKey
+
+```php
+new MoveValueBeforeKey('key', 'beforeKey');
+```
+
+Move element with key `key` before key `beforeKey`.
+
+#### RemoveAllKeys
+
+```php
+new RemoveAllKeys();
+```
+
+Indexes an array numerically.
+
+#### ReplaceValue
+
+```php
+new ReplaceValue('key');
+```
+
+The modifier allows to mark an array element from the collection it is applied to,
+as the element to be processed in a special way on merge.
+ 
+- In case there are elements with the same keys in previous arrays, they will be replaced
+  with a value from the current array.
+
+- If there are elements with the same keys in next arrays, they will replace current array value.
+
+If there is no element with the given key in the array, modifier won't change anything.
+
+Note that this modifier is applied on merge.
+
+#### ReverseValues
+
+```php
+new ReverseValues();
+```
+
+Reverse order of an array elements.
+
+#### SaveOrder
+
+```php
+new SaveOrder();
+```
+
+Remembers the order of elements in the collection it is applied to and tried to keep the order while merging.
+
+#### UnsetValue
+
+```php
+new UnsetValue('key');
+```
+
+Removes an array element with a given key.
 
 ## Testing
 
