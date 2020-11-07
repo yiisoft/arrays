@@ -59,7 +59,7 @@ final class ReplaceValueTest extends TestCase
         $modifierY = $modifierX->withKey('y');
 
         $arrays = [
-            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifier($modifierX),
+            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifiers($modifierX),
             ['x' => [5], 'y' => [6]],
         ];
         $this->assertSame(
@@ -68,7 +68,7 @@ final class ReplaceValueTest extends TestCase
         );
 
         $arrays = [
-            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifier($modifierY),
+            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifiers($modifierY),
             ['x' => [5], 'y' => [6]],
         ];
         $this->assertSame(
@@ -82,7 +82,7 @@ final class ReplaceValueTest extends TestCase
         $modifier = new ReplaceValue('z');
 
         $arrays = [
-            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4], 'z' => [5, 6]]))->withModifier($modifier),
+            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4], 'z' => [5, 6]]))->withModifiers($modifier),
             ['x' => [5], 'y' => [6]],
         ];
 
@@ -98,7 +98,7 @@ final class ReplaceValueTest extends TestCase
 
         $arrays = [
             ['y' => [5]],
-            (new ArrayCollection(['a' => 1, 'x' => [1, 2], 'y' => [3, 4]]))->withModifier($modifier),
+            (new ArrayCollection(['a' => 1, 'x' => [1, 2], 'y' => [3, 4]]))->withModifiers($modifier),
             ['z' => [6]],
         ];
 
@@ -114,7 +114,7 @@ final class ReplaceValueTest extends TestCase
 
         $arrays = [
             ['y' => [5]],
-            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifier($modifier),
+            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifiers($modifier),
             ['z' => [6], 'y' => [7]],
         ];
 
@@ -129,7 +129,7 @@ final class ReplaceValueTest extends TestCase
         $modifier = new ReplaceValue('a');
 
         $arrays = [
-            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifier($modifier),
+            (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifiers($modifier),
             ['z' => [6]],
         ];
 
@@ -143,7 +143,7 @@ final class ReplaceValueTest extends TestCase
     {
         $modifier = new ReplaceValue('y');
 
-        $collection = (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifier($modifier);
+        $collection = (new ArrayCollection(['x' => [1, 2], 'y' => [3, 4]]))->withModifiers($modifier);
 
         $arrays = [
             ['y' => [7]],

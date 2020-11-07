@@ -52,32 +52,14 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
         return $this->modifiers;
     }
 
-    public function withModifier(ModifierInterface ...$modifiers): self
-    {
-        return $this->withModifiers($modifiers);
-    }
-
-    /**
-     * @param ModifierInterface[] $modifiers
-     * @return self
-     */
-    public function withModifiers(array $modifiers): self
+    public function withModifiers(ModifierInterface ...$modifiers): self
     {
         $new = clone $this;
         $new->modifiers = $modifiers;
         return $new;
     }
 
-    public function withAddedModifier(ModifierInterface ...$modifiers): self
-    {
-        return $this->withAddedModifiers($modifiers);
-    }
-
-    /**
-     * @param ModifierInterface[] $modifiers
-     * @return self
-     */
-    public function withAddedModifiers(array $modifiers): self
+    public function withAddedModifiers(ModifierInterface ...$modifiers): self
     {
         $new = clone $this;
         $new->modifiers = array_merge($new->modifiers, $modifiers);

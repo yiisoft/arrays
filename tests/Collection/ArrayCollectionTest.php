@@ -24,28 +24,13 @@ final class ArrayCollectionTest extends TestCase
         $this->assertSame([1, 2], $collectionWithData->toArray());
     }
 
-    public function testWithModifier(): void
-    {
-        $collection = new ArrayCollection();
-
-        $collectionWithModifier = $collection
-            ->withAddedModifier(new UnsetValue('a'));
-
-        // Test immutable
-        $this->assertEmpty($collection->getModifiers());
-
-        $modifiers = $collectionWithModifier->getModifiers();
-
-        $this->assertInstanceOf(UnsetValue::class, $modifiers[0]);
-    }
-
     public function testWithModifiers(): void
     {
         $collection = new ArrayCollection();
 
         $collectionWithModifiers = $collection
-            ->withModifiers([new UnsetValue('a')])
-            ->withModifiers([new ReverseValues(), new RemoveKeys()]);
+            ->withModifiers(new UnsetValue('a'))
+            ->withModifiers(new ReverseValues(), new RemoveKeys());
 
         // Test immutable
         $this->assertEmpty($collection->getModifiers());
@@ -57,31 +42,13 @@ final class ArrayCollectionTest extends TestCase
         $this->assertInstanceOf(RemoveKeys::class, $modifiers[1]);
     }
 
-    public function testWithAddedModifier(): void
-    {
-        $collection = new ArrayCollection();
-
-        $collectionWithModifiers = $collection
-            ->withAddedModifier(new UnsetValue('a'))
-            ->withAddedModifier(new ReverseValues(), new RemoveKeys());
-
-        // Test immutable
-        $this->assertEmpty($collection->getModifiers());
-
-        $modifiers = $collectionWithModifiers->getModifiers();
-
-        $this->assertInstanceOf(UnsetValue::class, $modifiers[0]);
-        $this->assertInstanceOf(ReverseValues::class, $modifiers[1]);
-        $this->assertInstanceOf(RemoveKeys::class, $modifiers[2]);
-    }
-
     public function testWithAddedModifiers(): void
     {
         $collection = new ArrayCollection();
 
         $collectionWithModifiers = $collection
-            ->withAddedModifiers([new UnsetValue('a')])
-            ->withAddedModifiers([new ReverseValues(), new RemoveKeys()]);
+            ->withAddedModifiers(new UnsetValue('a'))
+            ->withAddedModifiers(new ReverseValues(), new RemoveKeys());
 
         // Test immutable
         $this->assertEmpty($collection->getModifiers());
@@ -150,7 +117,7 @@ final class ArrayCollectionTest extends TestCase
         $collectionA = new ArrayCollection(['a' => 1, 'b' => 2], new UnsetValue('a'));
         $this->assertSame(['b' => 2], $collectionA->toArray());
 
-        $collectionB = $collectionA->withModifier(new UnsetValue('b'));
+        $collectionB = $collectionA->withModifiers(new UnsetValue('b'));
         $this->assertSame(['a' => 1], $collectionB->toArray());
     }
 }
