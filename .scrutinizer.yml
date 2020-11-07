@@ -21,9 +21,8 @@ build:
 
             dependencies:
                 override:
-                    -
-                        composer self-update
-                        composer update --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
+                    - composer self-update
+                    - composer update --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
 
             tests:
                 override:
