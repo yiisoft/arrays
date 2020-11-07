@@ -146,9 +146,9 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
                         $collection->data[$k] = $v;
                     }
                 } elseif (
-                    static::isMergable($v) &&
                     isset($collection->data[$k]) &&
-                    static::isMergable($collection->data[$k])
+                    static::isMergeable($v) &&
+                    static::isMergeable($collection->data[$k])
                 ) {
                     $mergedCollection = $this->merge($collection->data[$k], $v);
                     $collection->data[$k] = ($collection->data[$k] instanceof self || $v instanceof self)
@@ -167,7 +167,7 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
      * @param mixed $value
      * @return bool
      */
-    private function isMergable($value): bool
+    private function isMergeable($value): bool
     {
         return is_array($value) || $value instanceof self;
     }
