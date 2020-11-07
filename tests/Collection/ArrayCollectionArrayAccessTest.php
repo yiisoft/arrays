@@ -60,6 +60,7 @@ final class ArrayCollectionArrayAccessTest extends TestCase
     {
         $collection = new ArrayCollection();
 
+        $this->expectExceptionMessage('ArrayCollection is immutable object.');
         $this->expectException(ArrayCollectionIsImmutableException::class);
         $collection->offsetSet(7, 42); // equal $collection[7] = 42;
     }

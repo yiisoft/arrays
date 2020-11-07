@@ -102,6 +102,14 @@ final class SaveOrderTest extends TestCase
         $this->assertSame(
             [
                 'x' => ['a' => 1, 'b' => 2],
+                'y' => ['c' => 3, 'a' => 1, 'b' => 2],
+            ],
+            ArrayHelper::merge($a, new ArrayCollection($b, $modifier))
+        );
+
+        $this->assertSame(
+            [
+                'x' => ['a' => 1, 'b' => 2],
                 'y' => ['a' => 1, 'b' => 2, 'c' => 3],
             ],
             ArrayHelper::merge($a, new ArrayCollection($b, $modifierNested))
