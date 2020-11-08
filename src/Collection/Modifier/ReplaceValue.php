@@ -7,6 +7,8 @@ namespace Yiisoft\Arrays\Collection\Modifier;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\AfterMergeModifierInterface;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\BeforeMergeModifierInterface;
 
+use function array_slice;
+
 /**
  * The modifier allows to mark an array element from the collection it is applied to,
  * as the element to be processed in a special way on merge.

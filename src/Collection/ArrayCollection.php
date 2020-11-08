@@ -13,6 +13,16 @@ use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\BeforeMergeModifierInte
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\ModifierInterface;
 
+use function count;
+use function is_array;
+
+/**
+ * Array wrapper that allows specifying modifiers. When you get array value or whole array
+ * from the collection modifiers are applied first so you get modified data.
+ *
+ * When merging collections using `ArrayHelper::merge()` or `$collection->mergeWith()` original arrays
+ * and modifers are merged separately.
+ */
 final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
 {
     private array $data;

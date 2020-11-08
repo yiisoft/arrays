@@ -8,6 +8,10 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\AfterMergeModifierInterface;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\BeforeMergeModifierInterface;
 
+use function is_array;
+use function is_int;
+use function is_string;
+
 /**
  * Remembers the order of elements in the collection it is applied to
  * and tried to keep the order while merging.
