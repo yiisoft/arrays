@@ -205,6 +205,8 @@ Modifiers are specified as extra constructor elements of `ArrayCollection`:
 $dataSet = new ArrayCollection($data, new RemoveAllKeys(), new ReverseValues());
 ```
 
+The following modifiers are available.
+
 #### MoveValueBeforeKey
 
 ```php
