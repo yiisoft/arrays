@@ -7,7 +7,7 @@ namespace Yiisoft\Arrays\Collection\Modifier;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
 
 /**
- * Move element with key `$key` before key `$beforeKey`.
+ * Move element with a key `key` before an element with `beforeKey` key.
  */
 final class MoveValueBeforeKey implements DataModifierInterface
 {

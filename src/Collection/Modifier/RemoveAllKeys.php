@@ -7,7 +7,7 @@ namespace Yiisoft\Arrays\Collection\Modifier;
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
 
 /**
- * Indexes an array numerically.
+ * Re-indexes an array numerically, i. e. removes all information about array keys.
  */
 final class RemoveAllKeys implements DataModifierInterface
 {

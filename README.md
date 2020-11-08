@@ -24,7 +24,7 @@ The package provides:
 [\ArrayAccess](https://www.php.net/manual/class.arrayaccess) and
 [\Countable](https://www.php.net/manualn/class.countable.php);
 - `ArrayableInterface` and `ArrayableTrait` for use in classes who want to support customizable representation of their instances.
-- `ArrayCollection` that allow use arrays with modifiers.
+- `ArrayCollection` that allow to apply modifiers to arrays.
 
 ## Requirements
 
@@ -157,10 +157,11 @@ $data = $car->toArray(['type', 'color']); // ['type' => 'Crossover', 'color' => 
 
 ## ArrayCollection usage
 
-`ArrayCollection` is array with modifiers. When you get array value or whole array from collection
-modifiers are applied and get changed data.
+`ArrayCollection` is array wrapper that allows specifying modifiers. When you get array value or whole array
+from the collection modifiers are applied first so you get modified data.
 
-When merging collections (use `ArrayHelper::merge` or `$collection->mergeWith()`) separately combines original arrays and modifiers.
+When merging collections using `ArrayHelper::merge()` or `$collection->mergeWith()` original arrays
+and modifers are merged separately.
 
 Example of use:
 
@@ -198,13 +199,19 @@ $result = ArrayHelper::merge($collection, $update, $update2);
 
 ### Modifiers
 
+Modifiers are specified as extra constructor elements of `ArrayCollection`:
+
+```php
+$dataSet = new ArrayCollection($data, new RemoveAllKeys(), new ReverseValues());
+```
+
 #### MoveValueBeforeKey
 
 ```php
 new MoveValueBeforeKey('key', 'beforeKey');
 ```
 
-Move element with key `key` before key `beforeKey`.
+Move element with a key `key` before an element with `beforeKey` key.
 
 #### RemoveAllKeys
 
@@ -212,7 +219,7 @@ Move element with key `key` before key `beforeKey`.
 new RemoveAllKeys();
 ```
 
-Indexes an array numerically.
+Re-indexes an array numerically, i. e. removes all information about array keys.
 
 #### ReplaceValue
 
@@ -225,7 +232,6 @@ as the element to be processed in a special way on merge.
  
 - In case there are elements with the same keys in previous arrays, they will be replaced
   with a value from the current array.
-
 - If there are elements with the same keys in next arrays, they will replace current array value.
 
 If there is no element with the given key in the array, modifier won't change anything.
