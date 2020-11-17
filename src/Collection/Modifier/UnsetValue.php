@@ -8,6 +8,50 @@ use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
 
 /**
  * Removes an array element with a given key.
+ *
+ * Simple usage:
+ *
+ * ```php
+ * $unsetCode = new UnsetValue('code');
+ *
+ * // ['message' => 'Success']
+ * $result = $unsetCode->apply(['code' => 42, 'message' => 'Success']);
+ * ```
+ *
+ * Usage with merge:
+ *
+ * ```php
+ * $a = [
+ *     'name' => 'Yii',
+ *     'version' => '1.1',
+ *     'options' => [
+ *         'namespace' => false,
+ *         'unittest' => false,
+ *     ],
+ *     'features' => [
+ *         'mvc',
+ *     ],
+ * ];
+ * $b = new ArrayCollection(
+ *     [
+ *         'version' => '3.0',
+ *         'features' => [
+ *             'gii',
+ *         ],
+ *     ],
+ *    new UnsetValue('options')
+ * );
+ *
+ * // [
+ * //     'name' => 'Yii',
+ * //     'version' => '3.0',
+ * //     'features' => [
+ * //         'mvc',
+ * //         'gii',
+ * //     ],
+ * // ]
+ * $result = ArrayHelper::merge($a, $b);
+ * ```
  */
 final class UnsetValue implements DataModifierInterface
 {

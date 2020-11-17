@@ -15,6 +15,42 @@ use function is_string;
 /**
  * Remembers the order of elements in the collection it is applied to
  * and tried to keep the order while merging.
+ *
+ * Usage only with merge. For example:
+ *
+ * ```php
+ * $a = [
+ *     'name' => 'Yii',
+ *     'options' => [
+ *         'count' => 42,
+ *         'description' => null,
+ *     ],
+ *     'version' => '1.1',
+ *     'meta' => ['date' => '19.11.2013'],
+ * ];
+ * $b = new ArrayCollection(
+ *     [
+ *         'version' => '3.0',
+ *         'options' => [
+ *             'count' => 97,
+ *             'use' => true,
+ *         ],
+ *     ],
+ *     new SaveOrder()
+ * );
+ *
+ * // [
+ * //     'version' => '3.0',
+ * //     'options' => [
+ * //         'count' => 97,
+ * //         'description' => null,
+ * //         'use' => true,
+ * //     ],
+ * //     'name' => 'Yii',
+ * //     'meta' => ['date' => '19.11.2013'],
+ * // ],
+ * $result = ArrayHelper::merge($a, $b);
+ * ```
  */
 final class SaveOrder implements BeforeMergeModifierInterface, AfterMergeModifierInterface
 {
@@ -22,6 +58,11 @@ final class SaveOrder implements BeforeMergeModifierInterface, AfterMergeModifie
 
     private bool $nested = false;
 
+    /**
+     * Save order for nested arrays and collections.
+     *
+     * @return self
+     */
     public function nested(): self
     {
         $new = clone $this;
@@ -29,6 +70,11 @@ final class SaveOrder implements BeforeMergeModifierInterface, AfterMergeModifie
         return $new;
     }
 
+    /**
+     * Save order only for top level of collection (default).
+     *
+     * @return self
+     */
     public function notNested(): self
     {
         $new = clone $this;

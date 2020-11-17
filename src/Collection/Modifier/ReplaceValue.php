@@ -21,6 +21,30 @@ use function array_slice;
  * If there is no element with the given key in the array, modifier won't change anything.
  *
  * Note that this modifier is applied on merge.
+ *
+ * Usage example:
+ *
+ * ```php
+ * $a = [
+ *     'name' => 'Yii',
+ *     'version' => '1.1',
+ *     'features' => ['mvc'],
+ * ];
+ * $b = new ArrayCollection(
+ *     [
+ *         'version' => '3.0',
+ *         'features' => ['gii'],
+ *     ],
+ *     new ReplaceValue('features')
+ * );
+ *
+ * // [
+ * //     'name' => 'Yii',
+ * //     'version' => '3.0',
+ * //     'features' => ['gii'],
+ * // ],
+ * $result = ArrayHelper::merge($a, $b));
+ * ```
  */
 final class ReplaceValue implements BeforeMergeModifierInterface, AfterMergeModifierInterface
 {

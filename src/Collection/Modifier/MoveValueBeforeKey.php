@@ -8,6 +8,40 @@ use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
 
 /**
  * Move element with a key `key` before an element with `beforeKey` key.
+ *
+ * Simple usage:
+ *
+ * ```php
+ * $modifier = new MoveValueBeforeKey('a', 'c');
+ *
+ * // ['b' => 2, 'a' => 1, 'c' => 3]
+ * $result = $modifier->apply(['a' => 1, 'b' => 2, 'c' => 3])
+ * ```
+ *
+ * Usage with merge:
+ *
+ * ```php
+ * $a = [
+ *     'name' => 'Yii',
+ *     'version' => '1.0',
+ * ];
+ * $b = new ArrayCollection(
+ *     [
+ *         'version' => '3.0',
+ *         'options' => [],
+ *         'vendor' => 'Yiisoft',
+ *     ],
+ *     new MoveValueBeforeKey('vendor', 'name')
+ * );
+ *
+ * // [
+ * //     'vendor' => 'Yiisoft',
+ * //     'name' => 'Yii',
+ * //     'version' => '3.0',
+ * //     'options' => [],
+ * // ],
+ * $result = ArrayHelper::merge($a, $b);
+ * ```
  */
 final class MoveValueBeforeKey implements DataModifierInterface
 {
