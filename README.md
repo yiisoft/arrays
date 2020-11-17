@@ -161,7 +161,7 @@ $data = $car->toArray(['type', 'color']); // ['type' => 'Crossover', 'color' => 
 from the collection modifiers are applied first so you get modified data.
 
 When merging collections using `ArrayHelper::merge()` or `$collection->mergeWith()` original arrays
-and modifers are merged separately.
+and modifiers are merged separately.
 
 Example of use:
 

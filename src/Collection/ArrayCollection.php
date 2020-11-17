@@ -21,7 +21,7 @@ use function is_array;
  * from the collection modifiers are applied first so you get modified data.
  *
  * When merging collections using `ArrayHelper::merge()` or `$collection->mergeWith()` original arrays
- * and modifers are merged separately.
+ * and modifiers are merged separately.
  */
 final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
 {
@@ -135,8 +135,8 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
                     }
                 } elseif (
                     isset($collection->data[$k]) &&
-                    static::isMergeable($v) &&
-                    static::isMergeable($collection->data[$k])
+                    $this->isMergeable($v) &&
+                    $this->isMergeable($collection->data[$k])
                 ) {
                     $mergedCollection = $this->merge($collection->data[$k], $v);
                     $collection->data[$k] = ($collection->data[$k] instanceof self || $v instanceof self)
