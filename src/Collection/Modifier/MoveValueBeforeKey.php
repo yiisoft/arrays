@@ -43,7 +43,7 @@ use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
  * $result = ArrayHelper::merge($a, $b);
  * ```
  */
-final class MoveValueBeforeKey implements DataModifierInterface
+final class MoveValueBeforeKey extends Modifier implements DataModifierInterface
 {
     /**
      * @var int|string

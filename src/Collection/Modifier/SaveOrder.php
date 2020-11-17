@@ -52,7 +52,7 @@ use function is_string;
  * $result = ArrayHelper::merge($a, $b);
  * ```
  */
-final class SaveOrder implements BeforeMergeModifierInterface, AfterMergeModifierInterface
+final class SaveOrder extends Modifier implements BeforeMergeModifierInterface, AfterMergeModifierInterface
 {
     private array $array = [];
 

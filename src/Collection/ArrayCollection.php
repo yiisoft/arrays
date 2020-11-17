@@ -165,7 +165,12 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
         if ($this->array === null) {
             $this->array = $this->performArray($this->data);
 
-            foreach ($this->modifiers as $modifier) {
+            $modifiers = $this->modifiers;
+            usort($modifiers, function (ModifierInterface $a, ModifierInterface $b) {
+                return $b->getPriority() <=> $a->getPriority();
+            });
+
+            foreach ($modifiers as $modifier) {
                 if ($modifier instanceof DataModifierInterface) {
                     $this->array = $modifier->apply($this->array);
                 }

@@ -46,7 +46,7 @@ use function array_slice;
  * $result = ArrayHelper::merge($a, $b));
  * ```
  */
-final class ReplaceValue implements BeforeMergeModifierInterface, AfterMergeModifierInterface
+final class ReplaceValue extends Modifier implements BeforeMergeModifierInterface, AfterMergeModifierInterface
 {
     /**
      * @var int|string

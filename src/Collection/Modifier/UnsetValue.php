@@ -53,7 +53,7 @@ use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
  * $result = ArrayHelper::merge($a, $b);
  * ```
  */
-final class UnsetValue implements DataModifierInterface
+final class UnsetValue extends Modifier implements DataModifierInterface
 {
     /**
      * @var int|string

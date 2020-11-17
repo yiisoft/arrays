@@ -6,6 +6,8 @@ namespace Yiisoft\Arrays\Tests\Collection;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\Collection\ArrayCollection;
+use Yiisoft\Arrays\Collection\Modifier\Modifier;
+use Yiisoft\Arrays\Collection\Modifier\MoveValueBeforeKey;
 use Yiisoft\Arrays\Collection\Modifier\RemoveAllKeys;
 use Yiisoft\Arrays\Collection\Modifier\ReverseValues;
 use Yiisoft\Arrays\Collection\Modifier\UnsetValue;
@@ -110,6 +112,18 @@ final class ArrayCollectionTest extends TestCase
     public function testEmptyMerge(): void
     {
         $this->assertEquals([], (new ArrayCollection())->mergeWith(...[])->toArray());
+    }
+
+    public function testPrioritizedModifiers(): void
+    {
+        $collection = new ArrayCollection(
+            ['a' => 1, 'b' => 2, 'c' => 3],
+            new RemoveAllKeys(),
+            new MoveValueBeforeKey('a', 'c'),
+            (new ReverseValues())->withPriority(Modifier::PRIORITY_HIGH),
+        );
+
+        $this->assertSame([1, 3, 2], $collection->toArray());
     }
 
     public function testClone(): void

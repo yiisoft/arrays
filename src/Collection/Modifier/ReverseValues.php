@@ -41,7 +41,7 @@ use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
  * $result = ArrayHelper::merge($a, $b);
  * ```
  */
-final class ReverseValues implements DataModifierInterface
+final class ReverseValues extends Modifier implements DataModifierInterface
 {
     public function apply(array $data): array
     {
