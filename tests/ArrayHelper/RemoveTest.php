@@ -42,7 +42,7 @@ class RemoveTest extends TestCase
     /**
      * @dataProvider removeData
      *
-     * @param string|array $key
+     * @param array|string $key
      * @param mixed $default
      * @param mixed $expectedValue
      * @param array $expectedArray
@@ -99,7 +99,7 @@ class RemoveTest extends TestCase
                 2.01,
                 'b',
                 [1 => 'a', 3 => 'c'],
-            ]
+            ],
         ];
     }
 
@@ -146,7 +146,7 @@ class RemoveTest extends TestCase
     /**
      * @dataProvider removeByPathData
      *
-     * @param string|array $key
+     * @param array|string $key
      * @param mixed $default
      * @param mixed $expectedValue
      * @param array $expectedArray
@@ -187,7 +187,7 @@ class RemoveTest extends TestCase
     /**
      * @dataProvider removeByPathWithCustomDelimiterData
      *
-     * @param string|array $key
+     * @param array|string $key
      * @param mixed $default
      * @param mixed $expectedValue
      * @param array $expectedArray

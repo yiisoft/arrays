@@ -37,7 +37,7 @@ final class GetValueTest extends TestCase
                 'name' => 'world',
             ],
             '1.0.status' => 'dev',
-            2 => 'two'
+            2 => 'two',
         ],
         '42.7' => 500,
     ];

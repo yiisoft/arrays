@@ -81,6 +81,7 @@ final class SetValueTest extends TestCase
 
     /**
      * Data provider for [[testSetValue()]].
+     *
      * @return array test data
      */
     public function dataProviderSetValue(): array
@@ -112,7 +113,7 @@ final class SetValueTest extends TestCase
      * @dataProvider dataProviderSetValue
      *
      * @param array $arrayInput
-     * @param string|int|float|array|null $key
+     * @param array|float|int|string|null $key
      * @param mixed $value
      * @param mixed $expected
      */
@@ -124,6 +125,7 @@ final class SetValueTest extends TestCase
 
     /**
      * Data provider for [[testSetValueByPath()]].
+     *
      * @return array test data
      */
     public function dataProviderSetValueByPath(): array
@@ -301,7 +303,7 @@ final class SetValueTest extends TestCase
      * @dataProvider dataProviderSetValueByPath
      *
      * @param array $arrayInput
-     * @param string|int|float|array|null $path
+     * @param array|float|int|string|null $path
      * @param mixed $value
      * @param mixed $expected
      */
@@ -357,7 +359,7 @@ final class SetValueTest extends TestCase
      * @dataProvider setValueByPathWithCustomDelimiterData
      *
      * @param array $arrayInput
-     * @param string|int|float|array|null $path
+     * @param array|float|int|string|null $path
      * @param mixed $value
      * @param mixed $expected
      */

@@ -6,6 +6,7 @@ namespace Yiisoft\Arrays\Modifier;
 
 /**
  * Class ReverseValues
+ *
  * @package Yiisoft\Arrays\Modifier
  *
  * This modifier reverses array values after merge.
