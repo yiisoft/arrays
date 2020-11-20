@@ -53,6 +53,7 @@ interface ArrayableInterface
      * ```
      *
      * @return array the list of field names or field definitions.
+     *
      * @see toArray()
      */
     public function fields(): array;
@@ -66,6 +67,7 @@ interface ArrayableInterface
      *
      * @return array the list of expandable field names or field definitions. Please refer
      * to {@see fields()} on the format of the return value.
+     *
      * @see toArray()
      * @see fields()
      */
@@ -80,6 +82,7 @@ interface ArrayableInterface
      * Fields not specified in {@see extraFields()} will be ignored. If this parameter is empty, no extra fields
      * will be returned.
      * @param bool $recursive whether to recursively return array representation of embedded objects.
+     *
      * @return array the array representation of the object
      */
     public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array;
