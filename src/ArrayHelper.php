@@ -261,7 +261,7 @@ class ArrayHelper
     }
 
     /**
-     * @param array|object $array array or object to extract value from
+     * @param mixed $array array or object to extract value from, otherwise method will return $default
      * @param float|int|string $key key name of the array element or property name of the object,
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
