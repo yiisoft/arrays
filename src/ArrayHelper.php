@@ -388,11 +388,13 @@ class ArrayHelper
      * @param array|float|int|string|null $key the path of where do you want to write a value to `$array`
      * the path can be described by an array of keys
      * if the path is null then `$array` will be assigned the `$value`
+     * @psalm-param array<mixed, string|int|float>|float|int|string|null $key
      * @param mixed $value the value to be written
      */
     public static function setValue(array &$array, $key, $value): void
     {
         if ($key === null) {
+            /** @var mixed */
             $array = $value;
             return;
         }
@@ -410,6 +412,7 @@ class ArrayHelper
             $array = &$array[$k];
         }
 
+        /** @var mixed */
         $array[static::normalizeArrayKey(array_shift($keys))] = $value;
     }
 
