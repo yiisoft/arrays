@@ -210,6 +210,7 @@ class ArrayHelper
     public static function applyModifiers(array $data): array
     {
         $modifiers = [];
+        /** @psalm-var mixed $v */
         foreach ($data as $k => $v) {
             if ($v instanceof ModifierInterface) {
                 $modifiers[$k] = $v;
@@ -270,8 +271,10 @@ class ArrayHelper
         }
 
         if (is_array($key)) {
+            /** @psalm-var array<mixed,string|int> $key */
             $lastKey = array_pop($key);
             foreach ($key as $keyPart) {
+                /** @var mixed */
                 $array = static::getRootValue($array, $keyPart, $default);
             }
             return static::getRootValue($array, $lastKey, $default);
