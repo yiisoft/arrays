@@ -173,16 +173,20 @@ class ArrayHelper
     {
         $res = array_pop($args) ?: [];
         while (!empty($args)) {
+            /** @psalm-var mixed $v */
             foreach (array_pop($args) as $k => $v) {
                 if (is_int($k)) {
                     if (array_key_exists($k, $res) && $res[$k] !== $v) {
+                        /** @var mixed */
                         $res[] = $v;
                     } else {
+                        /** @var mixed */
                         $res[$k] = $v;
                     }
                 } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
                     $res[$k] = self::performReverseBlockMerge($v, $res[$k]);
                 } elseif (!isset($res[$k])) {
+                    /** @var mixed */
                     $res[$k] = $v;
                 }
             }
