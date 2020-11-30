@@ -40,6 +40,7 @@ class ArraySorter
      * @param array|int $direction the sorting direction. It can be either `SORT_ASC` or `SORT_DESC`.
      * When sorting by multiple keys with different sorting directions, use an array of sorting directions.
      * @psalm-param array<mixed, int>|int $direction
+     *
      * @param array|int $sortFlag the PHP sort flag. Valid values include
      * @psalm-param array<mixed, int>|int $sortFlag
      * `SORT_REGULAR`, `SORT_NUMERIC`, `SORT_STRING`, `SORT_LOCALE_STRING`, `SORT_NATURAL` and `SORT_FLAG_CASE`.
@@ -112,6 +113,7 @@ class ArraySorter
      * @param array $keys array of keys
      * @param array $direction array of sorting directions
      * @psalm-param array<mixed, int> $direction
+     *
      * @param array $sortFlags array of sort flags
      * @psalm-param array<mixed, int> $sortFlags
      *

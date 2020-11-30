@@ -80,7 +80,7 @@ class ArrayHelper
                 if (!empty($properties[$className])) {
                     $result = [];
                     /**
-                     * @var string|int $key
+                     * @var int|string $key
                      * @var string $name
                      */
                     foreach ($properties[$className] as $key => $name) {
@@ -389,6 +389,7 @@ class ArrayHelper
      * the path can be described by an array of keys
      * if the path is null then `$array` will be assigned the `$value`
      * @psalm-param array<mixed, string|int|float>|float|int|string|null $key
+     *
      * @param mixed $value the value to be written
      */
     public static function setValue(array &$array, $key, $value): void
