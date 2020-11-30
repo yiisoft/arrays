@@ -63,6 +63,7 @@ class ArrayHelper
     {
         if (is_array($object)) {
             if ($recursive) {
+                /** @var mixed $value */
                 foreach ($object as $key => $value) {
                     if (is_array($value) || is_object($value)) {
                         $object[$key] = static::toArray($value, $properties, true);
@@ -78,10 +79,16 @@ class ArrayHelper
                 $className = get_class($object);
                 if (!empty($properties[$className])) {
                     $result = [];
+                    /**
+                     * @var string|int $key
+                     * @var string $name
+                     */
                     foreach ($properties[$className] as $key => $name) {
                         if (is_int($key)) {
+                            /** @var mixed */
                             $result[$name] = $object->$name;
                         } else {
+                            /** @var mixed */
                             $result[$key] = static::getValue($object, $name);
                         }
                     }
@@ -93,7 +100,12 @@ class ArrayHelper
                 $result = $object->toArray([], [], $recursive);
             } else {
                 $result = [];
+                /**
+                 * @var string $key
+                 * @var mixed $value
+                 */
                 foreach ($object as $key => $value) {
+                    /** @var mixed */
                     $result[$key] = $value;
                 }
             }
@@ -135,16 +147,20 @@ class ArrayHelper
     {
         $res = array_shift($args) ?: [];
         while (!empty($args)) {
+            /** @psalm-var mixed $v */
             foreach (array_shift($args) as $k => $v) {
                 if (is_int($k)) {
                     if (array_key_exists($k, $res) && $res[$k] !== $v) {
+                        /** @var mixed */
                         $res[] = $v;
                     } else {
+                        /** @var mixed */
                         $res[$k] = $v;
                     }
                 } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
                     $res[$k] = self::performMerge($res[$k], $v);
                 } else {
+                    /** @var mixed */
                     $res[$k] = $v;
                 }
             }
