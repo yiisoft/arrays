@@ -516,6 +516,7 @@ class ArrayHelper
      *
      * @param array $array the array to extract value from
      * @param array|float|int|string $key key name of the array element or associative array at the key path specified
+     * @psalm-param array<mixed, float|int|string>|float|int|string $key
      * @param mixed $default the default value to be returned if the specified key does not exist
      *
      * @return mixed the value of the element if found, default value otherwise
@@ -534,6 +535,7 @@ class ArrayHelper
 
         $key = static::normalizeArrayKey(array_shift($keys));
         if (array_key_exists($key, $array)) {
+            /** @var mixed */
             $value = $array[$key];
             unset($array[$key]);
             return $value;
@@ -590,8 +592,10 @@ class ArrayHelper
     public static function removeValue(array &$array, $value): array
     {
         $result = [];
+        /** @psalm-var mixed $val */
         foreach ($array as $key => $val) {
             if ($val === $value) {
+                /** @var mixed */
                 $result[$key] = $val;
                 unset($array[$key]);
             }
@@ -693,6 +697,7 @@ class ArrayHelper
      * ```
      *
      * @param array $array the array that needs to be indexed or grouped
+     * @psalm-param array<mixed, array|object> $array
      * @param Closure|string|null $key the column name or anonymous function which result will be used to index the array
      * @param Closure[]|string|string[]|null $groups the array of keys, that will be used to group the input array
      * by one or more keys. If the $key attribute or its value for the particular element is null and $groups is not
@@ -707,6 +712,13 @@ class ArrayHelper
         $groups = (array)$groups;
 
         foreach ($array as $element) {
+            if (!is_array($element) && !is_object($element)) {
+                throw new \InvalidArgumentException(
+                    'index() can not get value from ' . gettype($element)
+                    . '. The $array should be either multidimensional array or an array of objects.'
+                );
+            }
+
             $lastArray = &$result;
 
             foreach ($groups as $group) {
