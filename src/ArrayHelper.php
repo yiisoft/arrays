@@ -712,6 +712,7 @@ class ArrayHelper
         $groups = (array)$groups;
 
         foreach ($array as $element) {
+            /** @psalm-suppress DocblockTypeContradiction */
             if (!is_array($element) && !is_object($element)) {
                 throw new \InvalidArgumentException(
                     'index() can not get value from ' . gettype($element)
@@ -766,6 +767,7 @@ class ArrayHelper
      * ```
      *
      * @param array $array
+     * @psalm-param array<mixed, array|object> $array
      * @param Closure|string $name
      * @param bool $keepKeys whether to maintain the array keys. If false, the resulting array
      * will be re-indexed with integers.
@@ -777,10 +779,12 @@ class ArrayHelper
         $result = [];
         if ($keepKeys) {
             foreach ($array as $k => $element) {
+                /** @var mixed */
                 $result[$k] = static::getValue($element, $name);
             }
         } else {
             foreach ($array as $element) {
+                /** @var mixed */
                 $result[] = static::getValue($element, $name);
             }
         }
@@ -824,6 +828,7 @@ class ArrayHelper
      * ```
      *
      * @param array $array
+     * @psalm-param array<mixed, array|object> $array
      * @param Closure|string $from
      * @param Closure|string $to
      * @param Closure|string|null $group
@@ -839,6 +844,7 @@ class ArrayHelper
         $result = [];
         foreach ($array as $element) {
             $key = static::getValue($element, $from);
+            /** @var mixed */
             $result[static::getValue($element, $group)][$key] = static::getValue($element, $to);
         }
 
@@ -863,7 +869,7 @@ class ArrayHelper
         }
 
         foreach (array_keys($array) as $k) {
-            if (strcasecmp($key, $k) === 0) {
+            if (strcasecmp($key, (string) $k) === 0) {
                 return true;
             }
         }
@@ -878,6 +884,7 @@ class ArrayHelper
      * Only string values will be encoded.
      *
      * @param array $data data to be encoded
+     * @psalm-param array<mixed, mixed> $data
      * @param bool $valuesOnly whether to encode array values only. If false,
      * both the array keys and array values will be encoded.
      * @param string|null $encoding The encoding to use, defaults to `ini_get('default_charset')`.
@@ -889,6 +896,7 @@ class ArrayHelper
     public static function htmlEncode(array $data, bool $valuesOnly = true, string $encoding = null): array
     {
         $d = [];
+        /** @var mixed $value */
         foreach ($data as $key => $value) {
             if (!$valuesOnly && is_string($key)) {
                 /** @psalm-suppress PossiblyNullArgument */
@@ -900,6 +908,7 @@ class ArrayHelper
             } elseif (is_array($value)) {
                 $d[$key] = static::htmlEncode($value, $valuesOnly, $encoding);
             } else {
+                /** @var mixed */
                 $d[$key] = $value;
             }
         }
@@ -914,6 +923,7 @@ class ArrayHelper
      * Only string values will be decoded.
      *
      * @param array $data data to be decoded
+     * @psalm-param array<mixed, mixed> $data
      * @param bool $valuesOnly whether to decode array values only. If false,
      * both the array keys and array values will be decoded.
      *
@@ -924,6 +934,7 @@ class ArrayHelper
     public static function htmlDecode(array $data, bool $valuesOnly = true): array
     {
         $d = [];
+        /** @psalm-var mixed $value */
         foreach ($data as $key => $value) {
             if (!$valuesOnly && is_string($key)) {
                 $key = htmlspecialchars_decode($key, ENT_QUOTES);
@@ -933,6 +944,7 @@ class ArrayHelper
             } elseif (is_array($value)) {
                 $d[$key] = static::htmlDecode($value);
             } else {
+                /** @var mixed */
                 $d[$key] = $value;
             }
         }
@@ -961,6 +973,7 @@ class ArrayHelper
         }
 
         if ($allStrings) {
+            /** @psalm-suppress MixedAssignment */
             foreach ($array as $key => $value) {
                 if (!is_string($key)) {
                     return false;
@@ -970,6 +983,7 @@ class ArrayHelper
             return true;
         }
 
+        /** @psalm-suppress MixedAssignment */
         foreach ($array as $key => $value) {
             if (is_string($key)) {
                 return true;
@@ -1003,6 +1017,7 @@ class ArrayHelper
             return array_keys($array) === range(0, count($array) - 1);
         }
 
+        /** @psalm-var mixed $value */
         foreach ($array as $key => $value) {
             if (!is_int($key)) {
                 return false;
@@ -1034,6 +1049,7 @@ class ArrayHelper
             return in_array($needle, $haystack, $strict);
         }
 
+        /** @psalm-var mixed $value */
         foreach ($haystack as $value) {
             if ($needle == $value && (!$strict || $needle === $value)) {
                 return true;
@@ -1059,6 +1075,7 @@ class ArrayHelper
      */
     public static function isSubset(iterable $needles, iterable $haystack, bool $strict = false): bool
     {
+        /** @psalm-var mixed $needle */
         foreach ($needles as $needle) {
             if (!static::isIn($needle, $haystack, $strict)) {
                 return false;
