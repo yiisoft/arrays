@@ -37,6 +37,7 @@ class ArraySorter
      * elements, a property name of the objects, or an anonymous function returning the values for comparison
      * purpose. The anonymous function signature should be: `function($item)`.
      * To sort by multiple keys, provide an array of keys here.
+     * @psalm-param array<mixed,\Closure|string>|\Closure|string $key
      * @param array|int $direction the sorting direction. It can be either `SORT_ASC` or `SORT_DESC`.
      * When sorting by multiple keys with different sorting directions, use an array of sorting directions.
      * @psalm-param array<mixed, int>|int $direction
@@ -99,6 +100,7 @@ class ArraySorter
             // Check if the array is multidimensional
             if (count($keysTemp) !== count($keysTemp, COUNT_RECURSIVE)) {
                 // If it is multidimensional then get keys
+                /** @var array */
                 $keys = $keysTemp[0];
             }
         }
@@ -111,6 +113,7 @@ class ArraySorter
      *
      * @param array $array the array to be sorted
      * @param array $keys array of keys
+     * @psalm-param array<mixed, string|\Closure> $keys
      * @param array $direction array of sorting directions
      * @psalm-param array<mixed, int> $direction
      *
