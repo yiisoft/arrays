@@ -11,7 +11,7 @@ interface ModifierInterface
 {
     /**
      * @param array $data
-     * @param string|int $key
+     * @param int|string $key
      *
      * @return array
      */

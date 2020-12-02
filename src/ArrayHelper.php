@@ -517,6 +517,7 @@ class ArrayHelper
      * @param array $array the array to extract value from
      * @param array|float|int|string $key key name of the array element or associative array at the key path specified
      * @psalm-param array<mixed, float|int|string>|float|int|string $key
+     *
      * @param mixed $default the default value to be returned if the specified key does not exist
      *
      * @return mixed the value of the element if found, default value otherwise
@@ -698,6 +699,7 @@ class ArrayHelper
      *
      * @param array $array the array that needs to be indexed or grouped
      * @psalm-param array<mixed, array|object> $array
+     *
      * @param Closure|string|null $key the column name or anonymous function which result will be used to index the array
      * @param Closure[]|string|string[]|null $groups the array of keys, that will be used to group the input array
      * by one or more keys. If the $key attribute or its value for the particular element is null and $groups is not
@@ -768,6 +770,7 @@ class ArrayHelper
      *
      * @param array $array
      * @psalm-param array<mixed, array|object> $array
+     *
      * @param Closure|string $name
      * @param bool $keepKeys whether to maintain the array keys. If false, the resulting array
      * will be re-indexed with integers.
@@ -829,6 +832,7 @@ class ArrayHelper
      *
      * @param array $array
      * @psalm-param array<mixed, array|object> $array
+     *
      * @param Closure|string $from
      * @param Closure|string $to
      * @param Closure|string|null $group
@@ -885,6 +889,7 @@ class ArrayHelper
      *
      * @param array $data data to be encoded
      * @psalm-param array<mixed, mixed> $data
+     *
      * @param bool $valuesOnly whether to encode array values only. If false,
      * both the array keys and array values will be encoded.
      * @param string|null $encoding The encoding to use, defaults to `ini_get('default_charset')`.
@@ -924,6 +929,7 @@ class ArrayHelper
      *
      * @param array $data data to be decoded
      * @psalm-param array<mixed, mixed> $data
+     *
      * @param bool $valuesOnly whether to decode array values only. If false,
      * both the array keys and array values will be decoded.
      *

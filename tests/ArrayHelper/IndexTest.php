@@ -72,7 +72,7 @@ final class IndexTest extends TestCase
 
         $expected = [
             123 => ['id' => '123', 'data' => 'abc'],
-            345 => ['id' => '345', 'data' => 'def']
+            345 => ['id' => '345', 'data' => 'def'],
         ];
 
         $result = ArrayHelper::index($array, 'id');
@@ -171,7 +171,8 @@ final class IndexTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testInvalidIndex() {
+    public function testInvalidIndex()
+    {
         $this->expectException(\InvalidArgumentException::class);
         $array = [
             ['id' => '123', 'data' => 'abc'],
@@ -181,7 +182,8 @@ final class IndexTest extends TestCase
         ArrayHelper::index($array, 'id');
     }
 
-    public function testInvalidIndexWithoutKey() {
+    public function testInvalidIndexWithoutKey()
+    {
         $this->expectException(\InvalidArgumentException::class);
         $array = [
             ['id' => '123', 'data' => 'abc'],
@@ -191,12 +193,14 @@ final class IndexTest extends TestCase
         ArrayHelper::index($array, null);
     }
 
-    public function testInvalidIndexGroupBy(): void {
+    public function testInvalidIndexGroupBy(): void
+    {
         $this->expectException(\InvalidArgumentException::class);
         ArrayHelper::index(['id' => '1'], null, ['id']);
     }
 
-    public function testInvalidIndexGroupByWithKey(): void {
+    public function testInvalidIndexGroupByWithKey(): void
+    {
         $this->expectException(\InvalidArgumentException::class);
         ArrayHelper::index(['id' => '1'], 'id', ['id']);
     }
