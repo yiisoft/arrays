@@ -58,10 +58,13 @@ final class InsertValueBeforeKey implements ModifierInterface
     public function apply(array $data, $key): array
     {
         $res = [];
+        /** @psalm-var mixed $v */
         foreach ($data as $k => $v) {
             if ($k === $this->key) {
+                /** @var mixed */
                 $res[$key] = $this->value;
             }
+            /** @var mixed */
             $res[$k] = $v;
         }
 

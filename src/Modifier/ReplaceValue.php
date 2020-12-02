@@ -65,6 +65,7 @@ final class ReplaceValue implements ModifierInterface
 
     public function apply(array $data, $key): array
     {
+        /** @var mixed */
         $data[$key] = $this->value;
 
         return $data;
