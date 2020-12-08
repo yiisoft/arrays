@@ -63,6 +63,7 @@ class ArrayHelper
     {
         if (is_array($object)) {
             if ($recursive) {
+                /** @var mixed $value */
                 foreach ($object as $key => $value) {
                     if (is_array($value) || is_object($value)) {
                         $object[$key] = static::toArray($value, $properties, true);
@@ -78,10 +79,16 @@ class ArrayHelper
                 $className = get_class($object);
                 if (!empty($properties[$className])) {
                     $result = [];
+                    /**
+                     * @var int|string $key
+                     * @var string $name
+                     */
                     foreach ($properties[$className] as $key => $name) {
                         if (is_int($key)) {
+                            /** @var mixed */
                             $result[$name] = $object->$name;
                         } else {
+                            /** @var mixed */
                             $result[$key] = static::getValue($object, $name);
                         }
                     }
@@ -93,7 +100,12 @@ class ArrayHelper
                 $result = $object->toArray([], [], $recursive);
             } else {
                 $result = [];
+                /**
+                 * @var string $key
+                 * @var mixed $value
+                 */
                 foreach ($object as $key => $value) {
+                    /** @var mixed */
                     $result[$key] = $value;
                 }
             }
@@ -135,16 +147,20 @@ class ArrayHelper
     {
         $res = array_shift($args) ?: [];
         while (!empty($args)) {
+            /** @psalm-var mixed $v */
             foreach (array_shift($args) as $k => $v) {
                 if (is_int($k)) {
                     if (array_key_exists($k, $res) && $res[$k] !== $v) {
+                        /** @var mixed */
                         $res[] = $v;
                     } else {
+                        /** @var mixed */
                         $res[$k] = $v;
                     }
                 } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
                     $res[$k] = self::performMerge($res[$k], $v);
                 } else {
+                    /** @var mixed */
                     $res[$k] = $v;
                 }
             }
@@ -157,16 +173,20 @@ class ArrayHelper
     {
         $res = array_pop($args) ?: [];
         while (!empty($args)) {
+            /** @psalm-var mixed $v */
             foreach (array_pop($args) as $k => $v) {
                 if (is_int($k)) {
                     if (array_key_exists($k, $res) && $res[$k] !== $v) {
+                        /** @var mixed */
                         $res[] = $v;
                     } else {
+                        /** @var mixed */
                         $res[$k] = $v;
                     }
                 } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
                     $res[$k] = self::performReverseBlockMerge($v, $res[$k]);
                 } elseif (!isset($res[$k])) {
+                    /** @var mixed */
                     $res[$k] = $v;
                 }
             }
@@ -190,6 +210,7 @@ class ArrayHelper
     public static function applyModifiers(array $data): array
     {
         $modifiers = [];
+        /** @psalm-var mixed $v */
         foreach ($data as $k => $v) {
             if ($v instanceof ModifierInterface) {
                 $modifiers[$k] = $v;
@@ -250,8 +271,10 @@ class ArrayHelper
         }
 
         if (is_array($key)) {
+            /** @psalm-var array<mixed,string|int> $key */
             $lastKey = array_pop($key);
             foreach ($key as $keyPart) {
+                /** @var mixed */
                 $array = static::getRootValue($array, $keyPart, $default);
             }
             return static::getRootValue($array, $lastKey, $default);
@@ -261,7 +284,7 @@ class ArrayHelper
     }
 
     /**
-     * @param array|object $array array or object to extract value from
+     * @param mixed $array array or object to extract value from, otherwise method will return $default
      * @param float|int|string $key key name of the array element or property name of the object,
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
@@ -365,11 +388,14 @@ class ArrayHelper
      * @param array|float|int|string|null $key the path of where do you want to write a value to `$array`
      * the path can be described by an array of keys
      * if the path is null then `$array` will be assigned the `$value`
+     * @psalm-param array<mixed, string|int|float>|float|int|string|null $key
+     *
      * @param mixed $value the value to be written
      */
     public static function setValue(array &$array, $key, $value): void
     {
         if ($key === null) {
+            /** @var mixed */
             $array = $value;
             return;
         }
@@ -387,6 +413,7 @@ class ArrayHelper
             $array = &$array[$k];
         }
 
+        /** @var mixed */
         $array[static::normalizeArrayKey(array_shift($keys))] = $value;
     }
 
@@ -489,6 +516,8 @@ class ArrayHelper
      *
      * @param array $array the array to extract value from
      * @param array|float|int|string $key key name of the array element or associative array at the key path specified
+     * @psalm-param array<mixed, float|int|string>|float|int|string $key
+     *
      * @param mixed $default the default value to be returned if the specified key does not exist
      *
      * @return mixed the value of the element if found, default value otherwise
@@ -507,6 +536,7 @@ class ArrayHelper
 
         $key = static::normalizeArrayKey(array_shift($keys));
         if (array_key_exists($key, $array)) {
+            /** @var mixed */
             $value = $array[$key];
             unset($array[$key]);
             return $value;
@@ -563,8 +593,10 @@ class ArrayHelper
     public static function removeValue(array &$array, $value): array
     {
         $result = [];
+        /** @psalm-var mixed $val */
         foreach ($array as $key => $val) {
             if ($val === $value) {
+                /** @var mixed */
                 $result[$key] = $val;
                 unset($array[$key]);
             }
@@ -666,6 +698,8 @@ class ArrayHelper
      * ```
      *
      * @param array $array the array that needs to be indexed or grouped
+     * @psalm-param array<mixed, array|object> $array
+     *
      * @param Closure|string|null $key the column name or anonymous function which result will be used to index the array
      * @param Closure[]|string|string[]|null $groups the array of keys, that will be used to group the input array
      * by one or more keys. If the $key attribute or its value for the particular element is null and $groups is not
@@ -680,6 +714,14 @@ class ArrayHelper
         $groups = (array)$groups;
 
         foreach ($array as $element) {
+            /** @psalm-suppress DocblockTypeContradiction */
+            if (!is_array($element) && !is_object($element)) {
+                throw new \InvalidArgumentException(
+                    'index() can not get value from ' . gettype($element)
+                    . '. The $array should be either multidimensional array or an array of objects.'
+                );
+            }
+
             $lastArray = &$result;
 
             foreach ($groups as $group) {
@@ -727,6 +769,8 @@ class ArrayHelper
      * ```
      *
      * @param array $array
+     * @psalm-param array<mixed, array|object> $array
+     *
      * @param Closure|string $name
      * @param bool $keepKeys whether to maintain the array keys. If false, the resulting array
      * will be re-indexed with integers.
@@ -738,10 +782,12 @@ class ArrayHelper
         $result = [];
         if ($keepKeys) {
             foreach ($array as $k => $element) {
+                /** @var mixed */
                 $result[$k] = static::getValue($element, $name);
             }
         } else {
             foreach ($array as $element) {
+                /** @var mixed */
                 $result[] = static::getValue($element, $name);
             }
         }
@@ -785,6 +831,8 @@ class ArrayHelper
      * ```
      *
      * @param array $array
+     * @psalm-param array<mixed, array|object> $array
+     *
      * @param Closure|string $from
      * @param Closure|string $to
      * @param Closure|string|null $group
@@ -800,6 +848,7 @@ class ArrayHelper
         $result = [];
         foreach ($array as $element) {
             $key = static::getValue($element, $from);
+            /** @var mixed */
             $result[static::getValue($element, $group)][$key] = static::getValue($element, $to);
         }
 
@@ -824,7 +873,7 @@ class ArrayHelper
         }
 
         foreach (array_keys($array) as $k) {
-            if (strcasecmp($key, $k) === 0) {
+            if (strcasecmp($key, (string) $k) === 0) {
                 return true;
             }
         }
@@ -839,6 +888,8 @@ class ArrayHelper
      * Only string values will be encoded.
      *
      * @param array $data data to be encoded
+     * @psalm-param array<mixed, mixed> $data
+     *
      * @param bool $valuesOnly whether to encode array values only. If false,
      * both the array keys and array values will be encoded.
      * @param string|null $encoding The encoding to use, defaults to `ini_get('default_charset')`.
@@ -850,6 +901,7 @@ class ArrayHelper
     public static function htmlEncode(array $data, bool $valuesOnly = true, string $encoding = null): array
     {
         $d = [];
+        /** @var mixed $value */
         foreach ($data as $key => $value) {
             if (!$valuesOnly && is_string($key)) {
                 /** @psalm-suppress PossiblyNullArgument */
@@ -861,6 +913,7 @@ class ArrayHelper
             } elseif (is_array($value)) {
                 $d[$key] = static::htmlEncode($value, $valuesOnly, $encoding);
             } else {
+                /** @var mixed */
                 $d[$key] = $value;
             }
         }
@@ -875,6 +928,8 @@ class ArrayHelper
      * Only string values will be decoded.
      *
      * @param array $data data to be decoded
+     * @psalm-param array<mixed, mixed> $data
+     *
      * @param bool $valuesOnly whether to decode array values only. If false,
      * both the array keys and array values will be decoded.
      *
@@ -885,6 +940,7 @@ class ArrayHelper
     public static function htmlDecode(array $data, bool $valuesOnly = true): array
     {
         $d = [];
+        /** @psalm-var mixed $value */
         foreach ($data as $key => $value) {
             if (!$valuesOnly && is_string($key)) {
                 $key = htmlspecialchars_decode($key, ENT_QUOTES);
@@ -894,6 +950,7 @@ class ArrayHelper
             } elseif (is_array($value)) {
                 $d[$key] = static::htmlDecode($value);
             } else {
+                /** @var mixed */
                 $d[$key] = $value;
             }
         }
@@ -922,6 +979,7 @@ class ArrayHelper
         }
 
         if ($allStrings) {
+            /** @psalm-suppress MixedAssignment */
             foreach ($array as $key => $value) {
                 if (!is_string($key)) {
                     return false;
@@ -931,6 +989,7 @@ class ArrayHelper
             return true;
         }
 
+        /** @psalm-suppress MixedAssignment */
         foreach ($array as $key => $value) {
             if (is_string($key)) {
                 return true;
@@ -964,6 +1023,7 @@ class ArrayHelper
             return array_keys($array) === range(0, count($array) - 1);
         }
 
+        /** @psalm-var mixed $value */
         foreach ($array as $key => $value) {
             if (!is_int($key)) {
                 return false;
@@ -995,6 +1055,7 @@ class ArrayHelper
             return in_array($needle, $haystack, $strict);
         }
 
+        /** @psalm-var mixed $value */
         foreach ($haystack as $value) {
             if ($needle == $value && (!$strict || $needle === $value)) {
                 return true;
@@ -1020,6 +1081,7 @@ class ArrayHelper
      */
     public static function isSubset(iterable $needles, iterable $haystack, bool $strict = false): bool
     {
+        /** @psalm-var mixed $needle */
         foreach ($needles as $needle) {
             if (!static::isIn($needle, $haystack, $strict)) {
                 return false;

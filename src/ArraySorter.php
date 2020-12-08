@@ -37,9 +37,14 @@ class ArraySorter
      * elements, a property name of the objects, or an anonymous function returning the values for comparison
      * purpose. The anonymous function signature should be: `function($item)`.
      * To sort by multiple keys, provide an array of keys here.
+     * @psalm-param array<mixed,\Closure|string>|\Closure|string $key
+     *
      * @param array|int $direction the sorting direction. It can be either `SORT_ASC` or `SORT_DESC`.
      * When sorting by multiple keys with different sorting directions, use an array of sorting directions.
+     * @psalm-param array<mixed, int>|int $direction
+     *
      * @param array|int $sortFlag the PHP sort flag. Valid values include
+     * @psalm-param array<mixed, int>|int $sortFlag
      * `SORT_REGULAR`, `SORT_NUMERIC`, `SORT_STRING`, `SORT_LOCALE_STRING`, `SORT_NATURAL` and `SORT_FLAG_CASE`.
      * Please refer to [PHP manual](http://php.net/manual/en/function.sort.php)
      * for more details. When sorting by multiple keys with different sort flags, use an array of sort flags.
@@ -96,6 +101,7 @@ class ArraySorter
             // Check if the array is multidimensional
             if (count($keysTemp) !== count($keysTemp, COUNT_RECURSIVE)) {
                 // If it is multidimensional then get keys
+                /** @var array */
                 $keys = $keysTemp[0];
             }
         }
@@ -108,16 +114,21 @@ class ArraySorter
      *
      * @param array $array the array to be sorted
      * @param array $keys array of keys
+     * @psalm-param array<mixed, string|\Closure> $keys
+     *
      * @param array $direction array of sorting directions
-     * @param array $sortFlag array of sort flags
+     * @psalm-param array<mixed, int> $direction
+     *
+     * @param array $sortFlags array of sort flags
+     * @psalm-param array<mixed, int> $sortFlags
      *
      * @return array return the arguments
      */
-    private static function getArguments(array $array, array $keys, array $direction, array $sortFlag): array
+    private static function getArguments(array $array, array $keys, array $direction, array $sortFlags): array
     {
         $args = [];
         foreach ($keys as $i => $iKey) {
-            $flag = $sortFlag[$i];
+            $flag = $sortFlags[$i];
             $args[] = ArrayHelper::getColumn($array, $iKey);
             $args[] = $direction[$i];
             $args[] = $flag;

@@ -20,6 +20,7 @@ final class ApplyModifiersTest extends TestCase
             'a' => 1,
             'b' => new ReplaceValue(2),
             'c' => new UnsetValue(),
+            2 => new UnsetValue(),
         ];
 
         $this->assertSame([
