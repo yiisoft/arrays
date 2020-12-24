@@ -7,11 +7,41 @@ namespace Yiisoft\Arrays\Tests\ArrayHelper;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 
-/**
- * @see MergeTest
- */
 final class MapTest extends TestCase
 {
+    public function testBase(): void
+    {
+        $array = [
+            ['id' => '123', 'name' => 'aaa', 'class' => 'x'],
+            ['id' => '124', 'name' => 'bbb', 'class' => 'x'],
+            ['id' => '345', 'name' => 'ccc', 'class' => 'y'],
+        ];
+
+        $result = ArrayHelper::map($array, 'id', 'name');
+        $this->assertEquals(
+            [
+                '123' => 'aaa',
+                '124' => 'bbb',
+                '345' => 'ccc',
+            ],
+            $result
+        );
+
+        $result = ArrayHelper::map($array, 'id', 'name', 'class');
+        $this->assertEquals(
+            [
+                'x' => [
+                    '123' => 'aaa',
+                    '124' => 'bbb',
+                ],
+                'y' => [
+                    '345' => 'ccc',
+                ],
+            ],
+            $result
+        );
+    }
+
     public function testWithoutGroup(): void
     {
         $array = [
