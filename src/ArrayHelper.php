@@ -842,6 +842,16 @@ class ArrayHelper
     public static function map(array $array, $from, $to, $group = null): array
     {
         if ($group === null) {
+            if ($from instanceof Closure || $to instanceof Closure) {
+                $result = [];
+                foreach ($array as $element) {
+                    /** @var mixed */
+                    $result[static::getValue($element, $from)] = static::getValue($element, $to);
+                }
+
+                return $result;
+            }
+
             return array_column($array, $to, $from);
         }
 
