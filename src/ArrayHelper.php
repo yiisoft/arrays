@@ -842,7 +842,7 @@ class ArrayHelper
     public static function map(array $array, $from, $to, $group = null): array
     {
         if ($group === null) {
-            if($from instanceof Closure || $to instanceof Closure) {
+            if ($from instanceof Closure || $to instanceof Closure) {
                 $result = [];
                 foreach ($array as $element) {
                     /** @var mixed */
