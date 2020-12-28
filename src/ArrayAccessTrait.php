@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays;
 
+use ArrayIterator;
+
 /**
  * ArrayAccessTrait provides the implementation for {@see \IteratorAggregate}, {@see \ArrayAccess} and {@see \Countable}.
  *
@@ -19,11 +21,11 @@ trait ArrayAccessTrait
      * This method is required by the SPL interface {@see \IteratorAggregate}.
      * It will be implicitly called when you use `foreach` to traverse the collection.
      *
-     * @return \ArrayIterator an iterator for traversing the cookies in the collection.
+     * @return ArrayIterator an iterator for traversing the cookies in the collection.
      */
-    public function getIterator(): \ArrayIterator
+    public function getIterator(): ArrayIterator
     {
-        return new \ArrayIterator($this->data);
+        return new ArrayIterator($this->data);
     }
 
     /**

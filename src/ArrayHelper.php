@@ -10,6 +10,14 @@ use Throwable;
 use Yiisoft\Arrays\Modifier\ModifierInterface;
 use Yiisoft\Arrays\Modifier\ReverseBlockMerge;
 use Yiisoft\Strings\NumericHelper;
+use function array_key_exists;
+use function get_class;
+use function in_array;
+use function is_array;
+use function is_float;
+use function is_int;
+use function is_object;
+use function is_string;
 
 /**
  * Yii array helper provides static methods allowing you to deal with arrays more efficiently.
@@ -66,7 +74,7 @@ class ArrayHelper
                 /** @var mixed $value */
                 foreach ($object as $key => $value) {
                     if (is_array($value) || is_object($value)) {
-                        $object[$key] = static::toArray($value, $properties, true);
+                        $object[$key] = static::toArray($value, $properties);
                     }
                 }
             }
@@ -265,7 +273,7 @@ class ArrayHelper
 
         /** @psalm-suppress DocblockTypeContradiction */
         if (!is_array($array) && !is_object($array)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'getValue() can not get value from ' . gettype($array) . '. Only array and object are supported.'
             );
         }
@@ -716,7 +724,7 @@ class ArrayHelper
         foreach ($array as $element) {
             /** @psalm-suppress DocblockTypeContradiction */
             if (!is_array($element) && !is_object($element)) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'index() can not get value from ' . gettype($element)
                     . '. The $array should be either multidimensional array or an array of objects.'
                 );

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays;
 
+use Closure;
 use InvalidArgumentException;
+use function is_array;
 
 class ArraySorter
 {
@@ -33,11 +35,11 @@ class ArraySorter
      * ```
      *
      * @param array $array the array to be sorted. The array will be modified after calling this method.
-     * @param array|\Closure|string $key the key(s) to be sorted by. This refers to a key name of the sub-array
+     * @param array|Closure|string $key the key(s) to be sorted by. This refers to a key name of the sub-array
      * elements, a property name of the objects, or an anonymous function returning the values for comparison
      * purpose. The anonymous function signature should be: `function($item)`.
      * To sort by multiple keys, provide an array of keys here.
-     * @psalm-param array<mixed,\Closure|string>|\Closure|string $key
+     * @psalm-param array<mixed,Closure|string>|Closure|string $key
      *
      * @param array|int $direction the sorting direction. It can be either `SORT_ASC` or `SORT_DESC`.
      * When sorting by multiple keys with different sorting directions, use an array of sorting directions.
@@ -82,7 +84,7 @@ class ArraySorter
      * Get keys for get arguments
      *
      * @param array $array the array to be sorted
-     * @param array|\Closure|string $key the keys to be sorted by. This refers to a key name of the sub-array
+     * @param array|Closure|string $key the keys to be sorted by. This refers to a key name of the sub-array
      * elements, a property name of the objects, or an anonymous function returning the values for comparison
      * purpose. The anonymous function signature should be: `function($item)`.
      * To sort by multiple keys, provide an array of keys here.
@@ -96,7 +98,7 @@ class ArraySorter
             return [];
         }
 
-        if ($key instanceof \Closure) {
+        if ($key instanceof Closure) {
             $keysTemp = ArrayHelper::getColumn($array, $key);
             // Check if the array is multidimensional
             if (count($keysTemp) !== count($keysTemp, COUNT_RECURSIVE)) {
@@ -114,7 +116,7 @@ class ArraySorter
      *
      * @param array $array the array to be sorted
      * @param array $keys array of keys
-     * @psalm-param array<mixed, string|\Closure> $keys
+     * @psalm-param array<mixed, string|Closure> $keys
      *
      * @param array $direction array of sorting directions
      * @psalm-param array<mixed, int> $direction
