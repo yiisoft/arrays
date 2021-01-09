@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Collection\Modifier;
 
 use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\DataModifierInterface;
-use Yiisoft\Arrays\Collection\Modifier\ModifierInterface\PrioritizedModifierInterface;
 
 /**
  * Re-indexes an array numerically, i. e. removes all information about array keys. Based on {@see array_values}.

@@ -67,6 +67,7 @@ final class MoveValueBeforeKey extends Modifier implements DataModifierInterface
 
     /**
      * @param int|string $key
+     *
      * @return self
      */
     public function withKey($key): self
@@ -78,6 +79,7 @@ final class MoveValueBeforeKey extends Modifier implements DataModifierInterface
 
     /**
      * @param int|string $key
+     *
      * @return self
      */
     public function beforeKey($key): self

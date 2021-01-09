@@ -11,6 +11,7 @@ interface DataModifierInterface extends ModifierInterface
 {
     /**
      * @param array $data Collection data.
+     *
      * @return array Resulting array.
      */
     public function apply(array $data): array;

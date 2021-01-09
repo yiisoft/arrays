@@ -11,6 +11,7 @@ interface AfterMergeModifierInterface extends ModifierInterface
 {
     /**
      * @param array $data Merged data to apply modifier to.
+     *
      * @return array Resulting data.
      */
     public function afterMerge(array $data): array;

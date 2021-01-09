@@ -71,7 +71,7 @@ final class ArrayCollectionTest extends TestCase
                 'y' => 16,
             ],
             'nestedCollection' => new ArrayCollection([
-                'name' => 'Donatello'
+                'name' => 'Donatello',
             ]),
         ]);
 
@@ -82,7 +82,7 @@ final class ArrayCollectionTest extends TestCase
                 'y' => 16,
             ],
             'nestedCollection' => [
-                'name' => 'Donatello'
+                'name' => 'Donatello',
             ],
         ];
 

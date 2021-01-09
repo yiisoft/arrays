@@ -113,12 +113,12 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
      */
     private function merge(...$args): self
     {
-        $collection = new ArrayCollection();
+        $collection = new self();
 
         while (!empty($args)) {
             $array = array_shift($args);
 
-            if ($array instanceof ArrayCollection) {
+            if ($array instanceof self) {
                 $collection->modifiers = array_merge($collection->modifiers, $array->modifiers);
                 $collection->data = $this->merge($collection->data, $array->data)->data;
                 continue;
@@ -182,7 +182,7 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
     private function performArray(array $array): array
     {
         foreach ($array as $k => $v) {
-            if ($v instanceof ArrayCollection) {
+            if ($v instanceof self) {
                 $array[$k] = $v->toArray();
             } elseif (is_array($v)) {
                 $array[$k] = $this->performArray($v);
@@ -197,6 +197,7 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
      * Returns an iterator for traversing the data.
      * This method is required by the SPL interface {@see IteratorAggregate}.
      * It will be implicitly called when you use `foreach` to traverse the collection.
+     *
      * @return ArrayIterator an iterator for traversing the cookies in the collection.
      */
     public function getIterator(): ArrayIterator
@@ -207,6 +208,7 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
     /**
      * Returns the number of data items.
      * This method is required by {@see Countable} interface.
+     *
      * @return int number of data elements.
      */
     public function count(): int
@@ -216,7 +218,9 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
 
     /**
      * This method is required by the interface {@see ArrayAccess}.
+     *
      * @param mixed $offset the offset to check on
+     *
      * @return bool
      */
     public function offsetExists($offset): bool
@@ -226,7 +230,9 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
 
     /**
      * This method is required by the interface {@see ArrayAccess}.
+     *
      * @param mixed $offset the offset to retrieve element.
+     *
      * @return mixed the element at the offset, null if no element is found at the offset
      */
     public function offsetGet($offset)

@@ -96,7 +96,7 @@ final class SaveOrderTest extends TestCase
         ];
         $b = [
             'x' => ['a' => 1, 'b' => 2],
-            'y' => ['a' => 1, 'b' => 2,]
+            'y' => ['a' => 1, 'b' => 2],
         ];
 
         $this->assertSame(

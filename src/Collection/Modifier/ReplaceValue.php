@@ -70,6 +70,7 @@ final class ReplaceValue extends Modifier implements BeforeMergeModifierInterfac
 
     /**
      * @param int|string $key
+     *
      * @return self
      */
     public function withKey($key): self

@@ -12,7 +12,7 @@ abstract class Modifier implements ModifierInterface
     public const PRIORITY_NORMAL = 0;
     public const PRIORITY_LOW = -10000;
 
-    protected int $priority = Modifier::PRIORITY_NORMAL;
+    protected int $priority = self::PRIORITY_NORMAL;
 
     public function getPriority(): int
     {
