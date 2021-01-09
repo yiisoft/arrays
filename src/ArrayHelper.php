@@ -933,6 +933,7 @@ class ArrayHelper
      * @param array $array
      * @param float|int|string $key
      * @param bool $caseSensitive
+     *
      * @return array
      */
     private static function getExistsKeys(array $array, $key, bool $caseSensitive): array
