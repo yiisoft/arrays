@@ -944,14 +944,10 @@ class ArrayHelper
             return [$key];
         }
 
-        $keys = [];
-        foreach (array_keys($array) as $k) {
-            if (strcasecmp($key, (string)$k) === 0) {
-                $keys[] = $k;
-            }
-        }
-
-        return $keys;
+        return array_filter(
+            array_keys($array),
+            fn($k) => strcasecmp($key, (string)$k) === 0
+        );
     }
 
     /**
