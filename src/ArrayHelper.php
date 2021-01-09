@@ -955,8 +955,14 @@ class ArrayHelper
     }
 
     /**
+     * Checks if the given array contains the specified key. The key may be specified in a dot format.
+     * In particular, if the key is `x.y.z`, then key would be `$array['x']['y']['z']`.
+     *
+     * This method enhances the `array_key_exists()` function by supporting case-insensitive
+     * key comparison.
+     *
      * @param array $array
-     * @param array|string $path
+     * @param array|float|int|string $path
      * @param bool $caseSensitive
      * @param string $delimiter
      *
