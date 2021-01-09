@@ -74,6 +74,7 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
 
     /**
      * @param array|self ...$args
+     *
      * @return self
      */
     public function mergeWith(...$args): self
@@ -109,6 +110,7 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
 
     /**
      * @param array|self ...$args
+     *
      * @return self
      */
     private function merge(...$args): self
@@ -153,6 +155,7 @@ final class ArrayCollection implements ArrayAccess, IteratorAggregate, Countable
 
     /**
      * @param mixed $value
+     *
      * @return bool
      */
     private function isMergeable($value): bool
