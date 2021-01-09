@@ -938,6 +938,8 @@ class ArrayHelper
      */
     private static function getExistsKeys(array $array, $key, bool $caseSensitive): array
     {
+        $key = (string)$key;
+
         if ($caseSensitive) {
             return [$key];
         }
