@@ -154,7 +154,7 @@ final class ToArrayTest extends TestCase
                 false,
                 [
                     'id' => 1,
-                    'array' => $objectWithNestedSpecificArrayableObject->array
+                    'array' => $objectWithNestedSpecificArrayableObject->array,
                 ],
             ],
             [
@@ -163,7 +163,7 @@ final class ToArrayTest extends TestCase
                 [
                     'id' => 1,
                     'array' => ['a' => 1, 'b' => 2],
-                ]
+                ],
             ],
             [
                 ['x' => $objectWithNestedSpecificArrayableObject],
@@ -177,7 +177,7 @@ final class ToArrayTest extends TestCase
                     'x' => [
                         'id' => 1,
                         'array' => ['a' => 1, 'b' => 2],
-                    ]
+                    ],
                 ],
             ],
         ];

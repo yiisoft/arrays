@@ -37,7 +37,7 @@ final class ArrayableTraitTest extends TestCase
             [
                 'nested' => [
                     'a' => 1,
-                    'b' => 2
+                    'b' => 2,
                 ],
             ],
             $object->toArray(['nested'])
@@ -52,7 +52,7 @@ final class ArrayableTraitTest extends TestCase
         );
         $this->assertSame(
             [
-                'z' => 3
+                'z' => 3,
             ],
             $object->toArray([''], ['z'])
         );

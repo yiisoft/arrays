@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Tests;
 
 use InvalidArgumentException;
-use stdClass;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Yiisoft\Arrays\ArraySorter;
 
 final class ArraySorterTest extends TestCase

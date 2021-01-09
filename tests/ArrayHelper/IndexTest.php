@@ -63,6 +63,21 @@ final class IndexTest extends TestCase
             ],
             $result
         );
+
+        $array = [
+            ['id' => '123', 'data' => 'abc'],
+            ['id' => '345', 'data' => 'def'],
+            ['data' => 'ghi'],
+        ];
+
+        $expected = [
+            123 => ['id' => '123', 'data' => 'abc'],
+            345 => ['id' => '345', 'data' => 'def'],
+        ];
+
+        $result = ArrayHelper::index($array, 'id');
+
+        $this->assertEquals($expected, $result);
     }
 
     public function testIndexGroupBy(): void
@@ -154,6 +169,40 @@ final class IndexTest extends TestCase
             ['id', 'data']
         );
         $this->assertEquals($expected, $result);
+    }
+
+    public function testInvalidIndex()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $array = [
+            ['id' => '123', 'data' => 'abc'],
+            ['id' => '345', 'data' => 'def'],
+            'data',
+        ];
+        ArrayHelper::index($array, 'id');
+    }
+
+    public function testInvalidIndexWithoutKey()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $array = [
+            ['id' => '123', 'data' => 'abc'],
+            ['id' => '345', 'data' => 'def'],
+            'data',
+        ];
+        ArrayHelper::index($array, null);
+    }
+
+    public function testInvalidIndexGroupBy(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        ArrayHelper::index(['id' => '1'], null, ['id']);
+    }
+
+    public function testInvalidIndexGroupByWithKey(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        ArrayHelper::index(['id' => '1'], 'id', ['id']);
     }
 
     /**

@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
+        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px">
     </a>
     <h1 align="center">Yii Arrays</h1>
     <br>
@@ -270,7 +270,7 @@ Removes an array element with a given key.
 
 The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
 
-```
+```shell
 ./vendor/bin/phpunit
 ```
 
@@ -278,7 +278,7 @@ The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
 
 The package tests are checked with [Infection](https://infection.github.io/) mutation framework. To run it:
 
-```
+```shell
 ./vendor/bin/infection
 ```
 
@@ -286,9 +286,21 @@ The package tests are checked with [Infection](https://infection.github.io/) mut
 
 The code is statically analyzed with [Psalm](https://psalm.dev/). To run static analysis:
 
-```
+```shell
 ./vendor/bin/psalm
 ```
+
+### Support the project
+
+[![Open Collective](https://img.shields.io/badge/Open%20Collective-sponsor-7eadf1?logo=open%20collective&logoColor=7eadf1&labelColor=555555)](https://opencollective.com/yiisoft)
+
+### Follow updates
+
+[![Official website](https://img.shields.io/badge/Powered_by-Yii_Framework-green.svg?style=flat)](https://www.yiiframework.com/)
+[![Twitter](https://img.shields.io/badge/twitter-follow-1DA1F2?logo=twitter&logoColor=1DA1F2&labelColor=555555?style=flat)](https://twitter.com/yiiframework)
+[![Telegram](https://img.shields.io/badge/telegram-join-1DA1F2?style=flat&logo=telegram)](https://t.me/yii3en)
+[![Facebook](https://img.shields.io/badge/facebook-join-1DA1F2?style=flat&logo=facebook&logoColor=ffffff)](https://www.facebook.com/groups/yiitalk)
+[![Slack](https://img.shields.io/badge/slack-join-1DA1F2?style=flat&logo=slack)](https://yiiframework.com/go/slack)
 
 ## License
 

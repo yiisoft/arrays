@@ -74,7 +74,7 @@ final class MergeTest extends TestCase
         ];
         $b = [
             'secondValue',
-            'thirdValue'
+            'thirdValue',
         ];
 
         $result = ArrayHelper::merge($a, $b);

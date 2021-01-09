@@ -89,39 +89,6 @@ final class ArrayHelperTest extends TestCase
         $this->assertEquals(['abc', 'def'], $result);
     }
 
-    public function testMap(): void
-    {
-        $array = [
-            ['id' => '123', 'name' => 'aaa', 'class' => 'x'],
-            ['id' => '124', 'name' => 'bbb', 'class' => 'x'],
-            ['id' => '345', 'name' => 'ccc', 'class' => 'y'],
-        ];
-
-        $result = ArrayHelper::map($array, 'id', 'name');
-        $this->assertEquals(
-            [
-                '123' => 'aaa',
-                '124' => 'bbb',
-                '345' => 'ccc',
-            ],
-            $result
-        );
-
-        $result = ArrayHelper::map($array, 'id', 'name', 'class');
-        $this->assertEquals(
-            [
-                'x' => [
-                    '123' => 'aaa',
-                    '124' => 'bbb',
-                ],
-                'y' => [
-                    '345' => 'ccc',
-                ],
-            ],
-            $result
-        );
-    }
-
     public function testKeyExists(): void
     {
         $array = [
@@ -468,7 +435,7 @@ final class ArrayHelperTest extends TestCase
     {
         $this->assertSame([
             'id' => 123,
-            'content' => 'test'
+            'content' => 'test',
         ], ArrayHelper::getObjectVars(new Post2()));
     }
 }
