@@ -90,6 +90,7 @@ Overall the helper has the following method groups.
 ### Other
 
 - keyExists
+- pathExists
 
 ## ArraySorter usage
 

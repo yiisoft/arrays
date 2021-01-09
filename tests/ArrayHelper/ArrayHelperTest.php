@@ -89,23 +89,6 @@ final class ArrayHelperTest extends TestCase
         $this->assertEquals(['abc', 'def'], $result);
     }
 
-    public function testKeyExists(): void
-    {
-        $array = [
-            'a' => 1,
-            'B' => 2,
-        ];
-        $this->assertTrue(ArrayHelper::keyExists($array, 'a'));
-        $this->assertFalse(ArrayHelper::keyExists($array, 'b'));
-        $this->assertTrue(ArrayHelper::keyExists($array, 'B'));
-        $this->assertFalse(ArrayHelper::keyExists($array, 'c'));
-
-        $this->assertTrue(ArrayHelper::keyExists($array, 'a', false));
-        $this->assertTrue(ArrayHelper::keyExists($array, 'b', false));
-        $this->assertTrue(ArrayHelper::keyExists($array, 'B', false));
-        $this->assertFalse(ArrayHelper::keyExists($array, 'c', false));
-    }
-
     public function testIsAssociative(): void
     {
         $this->assertFalse(ArrayHelper::isAssociative([]));
