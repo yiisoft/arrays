@@ -879,24 +879,98 @@ class ArrayHelper
      * key comparison.
      *
      * @param array $array the array with keys to check
-     * @param string $key the key to check
+     * @param array|float|int|string $key the key to check
      * @param bool $caseSensitive whether the key comparison should be case-sensitive
      *
      * @return bool whether the array contains the specified key
      */
-    public static function keyExists(array $array, string $key, bool $caseSensitive = true): bool
+    public static function keyExists(array $array, $key, bool $caseSensitive = true): bool
     {
+        if (is_array($key)) {
+            if (count($key) === 1) {
+                return static::rootKeyExists($array, end($key), $caseSensitive);
+            }
+
+            foreach (self::getExistsKeys($array, array_shift($key), $caseSensitive) as $existKey) {
+                /** @var mixed */
+                $array = static::getRootValue($array, $existKey, null);
+                if (is_array($array) && self::keyExists($array, $key, $caseSensitive)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return static::rootKeyExists($array, $key, $caseSensitive);
+    }
+
+    /**
+     * @param array $array
+     * @param float|int|string $key
+     * @param bool $caseSensitive
+     *
+     * @return bool
+     */
+    private static function rootKeyExists(array $array, $key, bool $caseSensitive): bool
+    {
+        $key = (string)$key;
+
         if ($caseSensitive) {
             return array_key_exists($key, $array);
         }
 
         foreach (array_keys($array) as $k) {
-            if (strcasecmp($key, (string) $k) === 0) {
+            if (strcasecmp($key, (string)$k) === 0) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param array $array
+     * @param float|int|string $key
+     * @param bool $caseSensitive
+     *
+     * @return array
+     */
+    private static function getExistsKeys(array $array, $key, bool $caseSensitive): array
+    {
+        $key = (string)$key;
+
+        if ($caseSensitive) {
+            return [$key];
+        }
+
+        return array_filter(
+            array_keys($array),
+            fn ($k) => strcasecmp($key, (string)$k) === 0
+        );
+    }
+
+    /**
+     * Checks if the given array contains the specified key. The key may be specified in a dot format.
+     * In particular, if the key is `x.y.z`, then key would be `$array['x']['y']['z']`.
+     *
+     * This method enhances the `array_key_exists()` function by supporting case-insensitive
+     * key comparison.
+     *
+     * @param array $array
+     * @param array|float|int|string $path
+     * @param bool $caseSensitive
+     * @param string $delimiter
+     *
+     * @return bool
+     */
+    public static function pathExists(
+        array $array,
+        $path,
+        bool $caseSensitive = true,
+        string $delimiter = '.'
+    ): bool {
+        return static::keyExists($array, static::parsePath($path, $delimiter), $caseSensitive);
     }
 
     /**
