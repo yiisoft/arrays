@@ -249,8 +249,6 @@ class ArrayHelper
      * $fullName = \Yiisoft\Arrays\ArrayHelper::getValue($user, function ($user, $defaultValue) {
      *     return $user->firstName . ' ' . $user->lastName;
      * });
-     * // using dot format to retrieve the property of embedded object
-     * $street = \Yiisoft\Arrays\ArrayHelper::getValue($users, 'address.street');
      * // using an array of keys to retrieve the value
      * $value = \Yiisoft\Arrays\ArrayHelper::getValue($versions, ['1.0', 'date']);
      * ```
@@ -323,7 +321,7 @@ class ArrayHelper
      * Retrieves the value of an array element or object property with the given key or property name.
      * If the key does not exist in the array or object, the default value will be returned instead.
      *
-     * The key may be specified in a dot format to retrieve the value of a sub-array or the property
+     * The key may be specified in a dot-separated format to retrieve the value of a sub-array or the property
      * of an embedded object. In particular, if the key is `x.y.z`, then the returned value would
      * be `$array['x']['y']['z']` or `$array->x->y->z` (if `$array` is an object). If `$array['x']`
      * or `$array->x` is neither an array nor an object, the default value will be returned.
@@ -334,15 +332,7 @@ class ArrayHelper
      * Below are some usage examples,
      *
      * ```php
-     * // working with array
-     * $username = \Yiisoft\Arrays\ArrayHelper::getValue($_POST, 'username');
-     * // working with object
-     * $username = \Yiisoft\Arrays\ArrayHelper::getValue($user, 'username');
-     * // working with anonymous function
-     * $fullName = \Yiisoft\Arrays\ArrayHelper::getValue($user, function ($user, $defaultValue) {
-     *     return $user->firstName . ' ' . $user->lastName;
-     * });
-     * // using dot format to retrieve the property of embedded object
+     * // using separated format to retrieve the property of embedded object
      * $street = \Yiisoft\Arrays\ArrayHelper::getValue($users, 'address.street');
      * // using an array of keys to retrieve the value
      * $value = \Yiisoft\Arrays\ArrayHelper::getValue($versions, ['1.0', 'date']);
@@ -354,7 +344,8 @@ class ArrayHelper
      * `function($array, $defaultValue)`.
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
-     * @param string $delimiter
+     * @param string $delimiter a separator, used to parse string $key for embedded object property retrieving. Defaults
+     * to "." (dot).
      *
      * @return mixed the value of the element if found, default value otherwise
      */
