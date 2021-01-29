@@ -7,10 +7,8 @@ namespace Yiisoft\Arrays;
 use Closure;
 use InvalidArgumentException;
 use Throwable;
-use Yiisoft\Arrays\Modifier\ModifierInterface;
-use Yiisoft\Arrays\Modifier\ReverseBlockMerge;
 use Yiisoft\Strings\NumericHelper;
-use function array_key_exists;
+
 use function get_class;
 use function in_array;
 use function is_array;
@@ -132,106 +130,36 @@ class ArrayHelper
      * type and are having the same key.
      * For integer-keyed elements, the elements from the latter array will
      * be appended to the former array.
-     * You can use modifiers {@see ArrayHelper::applyModifiers()} to change merging result.
      *
-     * @param array ...$args arrays to be merged
+     * @param array ...$arrays arrays to be merged
      *
      * @return array the merged array (the original arrays are not changed)
      */
-    public static function merge(...$args): array
+    public static function merge(...$arrays): array
     {
-        $lastArray = end($args);
-        if (
-            isset($lastArray[ReverseBlockMerge::class]) &&
-            $lastArray[ReverseBlockMerge::class] instanceof ReverseBlockMerge
-        ) {
-            return self::applyModifiers(self::performReverseBlockMerge(...$args));
-        }
-
-        return self::applyModifiers(self::performMerge(...$args));
-    }
-
-    private static function performMerge(array ...$args): array
-    {
-        $res = array_shift($args) ?: [];
-        while (!empty($args)) {
-            /** @psalm-var mixed $v */
-            foreach (array_shift($args) as $k => $v) {
-                if (is_int($k)) {
-                    if (array_key_exists($k, $res) && $res[$k] !== $v) {
-                        /** @var mixed */
-                        $res[] = $v;
+        $result = array_shift($arrays) ?: [];
+        while (!empty($arrays)) {
+            /** @var mixed $value */
+            foreach (array_shift($arrays) as $key => $value) {
+                if (is_int($key)) {
+                    if (array_key_exists($key, $result)) {
+                        if ($result[$key] !== $value) {
+                            /** @var mixed */
+                            $result[] = $value;
+                        }
                     } else {
                         /** @var mixed */
-                        $res[$k] = $v;
+                        $result[$key] = $value;
                     }
-                } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
-                    $res[$k] = self::performMerge($res[$k], $v);
+                } elseif (isset($result[$key]) && is_array($value) && is_array($result[$key])) {
+                    $result[$key] = self::merge($result[$key], $value);
                 } else {
                     /** @var mixed */
-                    $res[$k] = $v;
+                    $result[$key] = $value;
                 }
             }
         }
-
-        return $res;
-    }
-
-    private static function performReverseBlockMerge(array ...$args): array
-    {
-        $res = array_pop($args) ?: [];
-        while (!empty($args)) {
-            /** @psalm-var mixed $v */
-            foreach (array_pop($args) as $k => $v) {
-                if (is_int($k)) {
-                    if (array_key_exists($k, $res) && $res[$k] !== $v) {
-                        /** @var mixed */
-                        $res[] = $v;
-                    } else {
-                        /** @var mixed */
-                        $res[$k] = $v;
-                    }
-                } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
-                    $res[$k] = self::performReverseBlockMerge($v, $res[$k]);
-                } elseif (!isset($res[$k])) {
-                    /** @var mixed */
-                    $res[$k] = $v;
-                }
-            }
-        }
-
-        return $res;
-    }
-
-    /**
-     * Apply modifiers (classes that implement {@link ModifierInterface}) in array.
-     *
-     * For example, {@link \Yiisoft\Arrays\Modifier\UnsetValue} to unset value from previous array or
-     * {@link \Yiisoft\Arrays\ReplaceArrayValue} to force replace former value instead of recursive merging.
-     *
-     * @param array $data
-     *
-     * @return array
-     *
-     * @see ModifierInterface
-     */
-    public static function applyModifiers(array $data): array
-    {
-        $modifiers = [];
-        /** @psalm-var mixed $v */
-        foreach ($data as $k => $v) {
-            if ($v instanceof ModifierInterface) {
-                $modifiers[$k] = $v;
-                unset($data[$k]);
-            } elseif (is_array($v)) {
-                $data[$k] = self::applyModifiers($v);
-            }
-        }
-        ksort($modifiers);
-        foreach ($modifiers as $key => $modifier) {
-            $data = $modifier->apply($data, $key);
-        }
-        return $data;
+        return $result;
     }
 
     /**
