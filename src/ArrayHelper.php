@@ -10,6 +10,7 @@ use Throwable;
 use Yiisoft\Arrays\Modifier\ModifierInterface;
 use Yiisoft\Arrays\Modifier\ReverseBlockMerge;
 use Yiisoft\Strings\NumericHelper;
+
 use function array_key_exists;
 use function get_class;
 use function in_array;
@@ -21,6 +22,9 @@ use function is_string;
 
 /**
  * Yii array helper provides static methods allowing you to deal with arrays more efficiently.
+ *
+ * @psalm-type ArrayKey = float|int|string|list<float|int|string>
+ * @psalm-type ArrayPath = float|int|string|list<float|int|string|list<float|int|string>>
  */
 class ArrayHelper
 {
@@ -57,8 +61,8 @@ class ArrayHelper
      *
      * It is possible to provide default way of converting object to array for a specific class by implementing
      * `Yiisoft\Arrays\ArrayableInterface` interface in that class.
-     * @param array $properties a mapping from object class names to the properties that need to put into the resulting arrays.
-     * The properties specified for each class is an array of the following format:
+     * @param array $properties a mapping from object class names to the properties that need to put into
+     * the resulting arrays. The properties specified for each class is an array of the following format:
      *
      * - A field name to include as is.
      * - A key-value pair of desired array key name and model column name to take value from.
@@ -261,6 +265,8 @@ class ArrayHelper
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
      *
+     * @psalm-param ArrayKey|Closure $key
+     *
      * @return mixed the value of the element if found, default value otherwise
      */
     public static function getValue($array, $key, $default = null)
@@ -347,11 +353,17 @@ class ArrayHelper
      * @param string $delimiter a separator, used to parse string $key for embedded object property retrieving. Defaults
      * to "." (dot).
      *
+     * @psalm-param ArrayPath|Closure $path
+     *
      * @return mixed the value of the element if found, default value otherwise
      */
     public static function getValueByPath($array, $path, $default = null, string $delimiter = '.')
     {
-        return static::getValue($array, static::parsePath($path, $delimiter), $default);
+        return static::getValue(
+            $array,
+            $path instanceof Closure ? $path : static::parsePath($path, $delimiter),
+            $default
+        );
     }
 
     /**
@@ -387,7 +399,8 @@ class ArrayHelper
      * @param array|float|int|string|null $key the path of where do you want to write a value to `$array`
      * the path can be described by an array of keys
      * if the path is null then `$array` will be assigned the `$value`
-     * @psalm-param array<mixed, string|int|float>|float|int|string|null $key
+     *
+     * @psalm-param ArrayKey|null $key
      *
      * @param mixed $value the value to be written
      */
@@ -468,17 +481,22 @@ class ArrayHelper
      * if the path is null then `$array` will be assigned the `$value`
      * @param mixed $value the value to be written
      * @param string $delimiter
+     *
+     * @psalm-param ArrayPath|null $path
      */
     public static function setValueByPath(array &$array, $path, $value, string $delimiter = '.'): void
     {
-        static::setValue($array, static::parsePath($path, $delimiter), $value);
+        static::setValue($array, $path === null ? null : static::parsePath($path, $delimiter), $value);
     }
 
     /**
-     * @param mixed $path
+     * @param array|float|int|string $path
      * @param string $delimiter
      *
-     * @return mixed
+     * @psalm-param ArrayPath $path
+     *
+     * @return array|float|int|string
+     * @psalm-return ArrayKey
      */
     private static function parsePath($path, string $delimiter)
     {
@@ -489,7 +507,9 @@ class ArrayHelper
             $newPath = [];
             foreach ($path as $key) {
                 if (is_string($key) || is_array($key)) {
-                    $newPath = array_merge($newPath, static::parsePath($key, $delimiter));
+                    /** @var list<float|int|string> $parsedPath */
+                    $parsedPath = static::parsePath($key, $delimiter);
+                    $newPath = array_merge($newPath, $parsedPath);
                 } else {
                     $newPath[] = $key;
                 }
@@ -515,9 +535,9 @@ class ArrayHelper
      *
      * @param array $array the array to extract value from
      * @param array|float|int|string $key key name of the array element or associative array at the key path specified
-     * @psalm-param array<mixed, float|int|string>|float|int|string $key
-     *
      * @param mixed $default the default value to be returned if the specified key does not exist
+     *
+     * @psalm-param ArrayKey $key
      *
      * @return mixed the value of the element if found, default value otherwise
      */
@@ -559,10 +579,12 @@ class ArrayHelper
      * ```
      *
      * @param array $array the array to extract value from
-     * @param array|string $path key name of the array element or associative array at the key path specified
+     * @param array|float|int|string $path key name of the array element or associative array at the key path specified
      * the path can be described by a string when each key should be separated by a delimiter (default is dot)
      * @param mixed $default the default value to be returned if the specified key does not exist
      * @param string $delimiter
+     *
+     * @psalm-param ArrayPath $path
      *
      * @return mixed the value of the element if found, default value otherwise
      */
@@ -697,13 +719,14 @@ class ArrayHelper
      * ```
      *
      * @param array $array the array that needs to be indexed or grouped
-     * @psalm-param array<mixed, array|object> $array
-     *
-     * @param Closure|string|null $key the column name or anonymous function which result will be used to index the array
+     * @param Closure|string|null $key the column name or anonymous function which result will be used
+     * to index the array
      * @param Closure[]|string|string[]|null $groups the array of keys, that will be used to group the input array
      * by one or more keys. If the $key attribute or its value for the particular element is null and $groups is not
      * defined, the array element will be discarded. Otherwise, if $groups is specified, array element will be added
      * to the result array without any key.
+     *
+     * @psalm-param array<mixed, array|object> $array
      *
      * @return array the indexed and/or grouped array
      */
@@ -724,7 +747,9 @@ class ArrayHelper
             $lastArray = &$result;
 
             foreach ($groups as $group) {
-                $value = static::getValue($element, $group);
+                $value = static::normalizeArrayKey(
+                    static::getValue($element, $group)
+                );
                 if (!array_key_exists($value, $lastArray)) {
                     $lastArray[$value] = [];
                 }
@@ -736,6 +761,7 @@ class ArrayHelper
                     $lastArray[] = $element;
                 }
             } else {
+                /** @var mixed */
                 $value = static::getValue($element, $key);
                 if ($value !== null) {
                     $lastArray[static::normalizeArrayKey($value)] = $element;
@@ -767,9 +793,7 @@ class ArrayHelper
      * });
      * ```
      *
-     * @param array $array
-     * @psalm-param array<mixed, array|object> $array
-     *
+     * @param array<array-key, array|object> $array
      * @param Closure|string $name
      * @param bool $keepKeys whether to maintain the array keys. If false, the resulting array
      * will be re-indexed with integers.
@@ -830,11 +854,11 @@ class ArrayHelper
      * ```
      *
      * @param array $array
-     * @psalm-param array<mixed, array|object> $array
-     *
      * @param Closure|string $from
      * @param Closure|string $to
      * @param Closure|string|null $group
+     *
+     * @psalm-param array<mixed, array|object> $array
      *
      * @return array
      */
@@ -844,8 +868,9 @@ class ArrayHelper
             if ($from instanceof Closure || $to instanceof Closure) {
                 $result = [];
                 foreach ($array as $element) {
+                    $key = (string)static::getValue($element, $from);
                     /** @var mixed */
-                    $result[static::getValue($element, $from)] = static::getValue($element, $to);
+                    $result[$key] = static::getValue($element, $to);
                 }
 
                 return $result;
@@ -856,9 +881,10 @@ class ArrayHelper
 
         $result = [];
         foreach ($array as $element) {
-            $key = static::getValue($element, $from);
+            $groupKey = (string)static::getValue($element, $group);
+            $key = (string)static::getValue($element, $from);
             /** @var mixed */
-            $result[static::getValue($element, $group)][$key] = static::getValue($element, $to);
+            $result[$groupKey][$key] = static::getValue($element, $to);
         }
 
         return $result;
@@ -872,6 +898,8 @@ class ArrayHelper
      * @param array $array the array with keys to check
      * @param array|float|int|string $key the key to check
      * @param bool $caseSensitive whether the key comparison should be case-sensitive
+     *
+     * @psalm-param ArrayKey $key
      *
      * @return bool whether the array contains the specified key
      */
@@ -925,7 +953,7 @@ class ArrayHelper
      * @param float|int|string $key
      * @param bool $caseSensitive
      *
-     * @return array
+     * @return array<int, array-key>
      */
     private static function getExistsKeys(array $array, $key, bool $caseSensitive): array
     {
@@ -953,6 +981,8 @@ class ArrayHelper
      * @param bool $caseSensitive
      * @param string $delimiter
      *
+     * @psalm-param ArrayPath $path
+     *
      * @return bool
      */
     public static function pathExists(
@@ -971,15 +1001,15 @@ class ArrayHelper
      * Only string values will be encoded.
      *
      * @param array $data data to be encoded
-     * @psalm-param array<mixed, mixed> $data
-     *
      * @param bool $valuesOnly whether to encode array values only. If false,
      * both the array keys and array values will be encoded.
      * @param string|null $encoding The encoding to use, defaults to `ini_get('default_charset')`.
      *
+     * @psalm-param array<mixed, mixed> $data
+     *
      * @return array the encoded data
      *
-     * @see https://www.php.net/manual/en/function.htmlspecialchars.php
+     * @link https://www.php.net/manual/en/function.htmlspecialchars.php
      */
     public static function htmlEncode(array $data, bool $valuesOnly = true, string $encoding = null): array
     {
@@ -1011,14 +1041,14 @@ class ArrayHelper
      * Only string values will be decoded.
      *
      * @param array $data data to be decoded
-     * @psalm-param array<mixed, mixed> $data
-     *
      * @param bool $valuesOnly whether to decode array values only. If false,
      * both the array keys and array values will be decoded.
      *
+     * @psalm-param array<mixed, mixed> $data
+     *
      * @return array the decoded data
      *
-     * @see https://www.php.net/manual/en/function.htmlspecialchars-decode.php
+     * @link https://www.php.net/manual/en/function.htmlspecialchars-decode.php
      */
     public static function htmlDecode(array $data, bool $valuesOnly = true): array
     {
@@ -1293,7 +1323,7 @@ class ArrayHelper
     }
 
     /**
-     * @param float|int|string $key
+     * @param mixed $key
      *
      * @return string
      */

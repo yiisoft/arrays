@@ -6,6 +6,7 @@ namespace Yiisoft\Arrays;
 
 use Closure;
 use InvalidArgumentException;
+
 use function is_array;
 
 class ArraySorter
@@ -34,19 +35,15 @@ class ArraySorter
      * ];
      * ```
      *
-     * @param array $array the array to be sorted. The array will be modified after calling this method.
-     * @param array|Closure|string $key the key(s) to be sorted by. This refers to a key name of the sub-array
-     * elements, a property name of the objects, or an anonymous function returning the values for comparison
-     * purpose. The anonymous function signature should be: `function($item)`.
+     * @param array<array-key, array|object> $array the array to be sorted. The array will be modified after calling
+     * this method.
+     * @param array<array-key, Closure|string>|Closure|string $key the key(s) to be sorted by. This refers to a key
+     * name of the sub-array elements, a property name of the objects, or an anonymous function returning the values
+     * for comparison purpose. The anonymous function signature should be: `function($item)`.
      * To sort by multiple keys, provide an array of keys here.
-     * @psalm-param array<mixed,Closure|string>|Closure|string $key
-     *
-     * @param array|int $direction the sorting direction. It can be either `SORT_ASC` or `SORT_DESC`.
+     * @param array<array-key, int>|int $direction the sorting direction. It can be either `SORT_ASC` or `SORT_DESC`.
      * When sorting by multiple keys with different sorting directions, use an array of sorting directions.
-     * @psalm-param array<mixed, int>|int $direction
-     *
-     * @param array|int $sortFlag the PHP sort flag. Valid values include
-     * @psalm-param array<mixed, int>|int $sortFlag
+     * @param array<array-key, int>|int $sortFlag the PHP sort flag. Valid values include
      * `SORT_REGULAR`, `SORT_NUMERIC`, `SORT_STRING`, `SORT_LOCALE_STRING`, `SORT_NATURAL` and `SORT_FLAG_CASE`.
      * Please refer to [PHP manual](http://php.net/manual/en/function.sort.php)
      * for more details. When sorting by multiple keys with different sort flags, use an array of sort flags.
@@ -83,13 +80,13 @@ class ArraySorter
     /**
      * Get keys for get arguments
      *
-     * @param array $array the array to be sorted
-     * @param array|Closure|string $key the keys to be sorted by. This refers to a key name of the sub-array
-     * elements, a property name of the objects, or an anonymous function returning the values for comparison
-     * purpose. The anonymous function signature should be: `function($item)`.
+     * @param array<array-key, array|object> $array the array to be sorted
+     * @param array<array-key, string|Closure>|Closure|string $key the keys to be sorted by. This refers to a key name
+     * of the sub-array elements, a property name of the objects, or an anonymous function returning the values for
+     * comparison purpose. The anonymous function signature should be: `function($item)`.
      * To sort by multiple keys, provide an array of keys here.
      *
-     * @return array return the keys
+     * @return array<array-key, string|Closure> return the keys
      */
     private static function getKeys(array $array, $key): array
     {
@@ -103,7 +100,7 @@ class ArraySorter
             // Check if the array is multidimensional
             if (count($keysTemp) !== count($keysTemp, COUNT_RECURSIVE)) {
                 // If it is multidimensional then get keys
-                /** @var array */
+                /** @var array<array-key, string|Closure> */
                 $keys = $keysTemp[0];
             }
         }
@@ -114,17 +111,12 @@ class ArraySorter
     /**
      * Get arguments for multisort
      *
-     * @param array $array the array to be sorted
-     * @param array $keys array of keys
-     * @psalm-param array<mixed, string|Closure> $keys
+     * @param array<array-key, array|object> $array the array to be sorted
+     * @param array<array-key, string|Closure> $keys array of keys
+     * @param array<array-key, int> $direction array of sorting directions
+     * @param array<array-key, int> $sortFlags array of sort flags
      *
-     * @param array $direction array of sorting directions
-     * @psalm-param array<mixed, int> $direction
-     *
-     * @param array $sortFlags array of sort flags
-     * @psalm-param array<mixed, int> $sortFlags
-     *
-     * @return array return the arguments
+     * @return array{array, int, int} return the arguments
      */
     private static function getArguments(array $array, array $keys, array $direction, array $sortFlags): array
     {
