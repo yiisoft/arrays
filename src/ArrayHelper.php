@@ -1210,7 +1210,7 @@ class ArrayHelper
      * ```
      *
      * @param array $array Source array
-     * @param array $filters Rules that define array keys which should be left or removed from results.
+     * @param list<string> $filters Rules that define array keys which should be left or removed from results.
      * Each rule is:
      * - `var` - `$array['var']` will be left in result.
      * - `var.key` = only `$array['var']['key']` will be left in result.
