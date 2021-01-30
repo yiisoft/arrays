@@ -59,13 +59,6 @@ final class ArraySorterTest extends TestCase
         $this->assertEquals(['name' => 'a', 'age' => 3], $array[1]);
         $this->assertEquals(['name' => 'b', 'age' => 2], $array[2]);
         $this->assertEquals(['name' => 'B', 'age' => 4], $array[3]);
-
-        ArraySorter::multisort($array, fn ($item) => ['age', 'name'], SORT_DESC);
-
-        $this->assertEquals(['name' => 'B', 'age' => 4], $array[0]);
-        $this->assertEquals(['name' => 'a', 'age' => 3], $array[1]);
-        $this->assertEquals(['name' => 'b', 'age' => 2], $array[2]);
-        $this->assertEquals(['name' => 'A', 'age' => 1], $array[3]);
     }
 
     public function testMultisortNestedObjects(): void
