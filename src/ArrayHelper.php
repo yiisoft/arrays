@@ -767,8 +767,7 @@ class ArrayHelper
      * });
      * ```
      *
-     * @param array $array
-     * @psalm-param array<mixed, array|object> $array
+     * @param array<array-key, array|object> $array
      *
      * @param Closure|string $name
      * @param bool $keepKeys whether to maintain the array keys. If false, the resulting array
