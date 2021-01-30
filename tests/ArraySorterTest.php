@@ -131,17 +131,17 @@ final class ArraySorterTest extends TestCase
     public function testMultisortClosure(): void
     {
         $changelog = [
-            '- Enh #123: test1',
-            '- Bug #125: test2',
-            '- Bug #123: test2',
-            '- Enh: test3',
-            '- Bug: test4',
+            ['id' => 1, 'name' => '- Enh #123: test1'],
+            ['id' => 2, 'name' => '- Bug #125: test2'],
+            ['id' => 3, 'name' => '- Bug #123: test2'],
+            ['id' => 4, 'name' => '- Enh: test3'],
+            ['id' => 5, 'name' => '- Bug: test4'],
         ];
         $i = 0;
         ArraySorter::multisort(
             $changelog,
-            static function ($line) use (&$i) {
-                if (preg_match('/^- (Enh|Bug)( #\d+)?: .+$/', $line, $m)) {
+            static function (array $item) use (&$i) {
+                if (preg_match('/^- (Enh|Bug)( #\d+)?: .+$/', $item['name'], $m)) {
                     $o = ['Bug' => 'C', 'Enh' => 'D'];
                     return $o[$m[1]] . ' ' . (!empty($m[2]) ? $m[2] : 'AAAA' . $i++);
                 }
@@ -151,13 +151,13 @@ final class ArraySorterTest extends TestCase
             SORT_ASC,
             SORT_NATURAL
         );
-        $this->assertEquals(
+        $this->assertSame(
             [
-                '- Bug #123: test2',
-                '- Bug #125: test2',
-                '- Bug: test4',
-                '- Enh #123: test1',
-                '- Enh: test3',
+                ['id' => 3, 'name' => '- Bug #123: test2'],
+                ['id' => 2, 'name' => '- Bug #125: test2'],
+                ['id' => 5, 'name' => '- Bug: test4'],
+                ['id' => 1, 'name' => '- Enh #123: test1'],
+                ['id' => 4, 'name' => '- Enh: test3'],
             ],
             $changelog
         );
