@@ -142,6 +142,21 @@ final class FilterTest extends TestCase
                 [],
                 ['A.X'],
             ],
+            'nonExistsInNotArray' => [
+                [],
+                ['A.B.X'],
+            ],
+            'excludeNonExistsInNotArray' => [
+                [
+                    'A' => [
+                        'D' => [
+                            'E' => 1,
+                            'F' => 2,
+                        ],
+                    ],
+                ],
+                ['A.D', '!A.D.E.X'],
+            ],
         ];
     }
 
