@@ -1210,7 +1210,7 @@ class ArrayHelper
      * ```
      *
      * @param array $array Source array
-     * @param array $filters Rules that define array keys which should be left or removed from results.
+     * @param list<string> $filters Rules that define array keys which should be left or removed from results.
      * Each rule is:
      * - `var` - `$array['var']` will be left in result.
      * - `var.key` = only `$array['var']['key']` will be left in result.
@@ -1229,12 +1229,13 @@ class ArrayHelper
                 continue;
             }
 
-            $nodeValue = $array; //set $array as root node
+            $nodeValue = $array; // set $array as root node
             $keys = explode('.', $filter);
             foreach ($keys as $key) {
-                if (!array_key_exists($key, $nodeValue)) {
-                    continue 2; //Jump to next filter
+                if (!is_array($nodeValue) || !array_key_exists($key, $nodeValue)) {
+                    continue 2; // Jump to next filter
                 }
+                /** @var mixed */
                 $nodeValue = $nodeValue[$key];
             }
 
@@ -1246,23 +1247,25 @@ class ArrayHelper
                 }
                 $resultNode = &$resultNode[$key];
             }
+            /** @var mixed */
             $resultNode = $nodeValue;
         }
+
+        /** @var array $result */
 
         foreach ($excludeFilters as $filter) {
             $excludeNode = &$result;
             $keys = explode('.', $filter);
             $numNestedKeys = count($keys) - 1;
             foreach ($keys as $i => $key) {
-                if (!array_key_exists($key, $excludeNode)) {
-                    continue 2; //Jump to next filter
+                if (!is_array($excludeNode) || !array_key_exists($key, $excludeNode)) {
+                    continue 2; // Jump to next filter
                 }
 
                 if ($i < $numNestedKeys) {
-                    /** @psalm-suppress EmptyArrayAccess */
+                    /** @var mixed */
                     $excludeNode = &$excludeNode[$key];
                 } else {
-                    /** @psalm-suppress EmptyArrayAccess */
                     unset($excludeNode[$key]);
                     break;
                 }
