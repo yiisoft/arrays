@@ -262,10 +262,10 @@ class ArrayHelper
      * an array of keys or property name of the object, or an anonymous function
      * returning the value. The anonymous function signature should be:
      * `function($array, $defaultValue)`.
-     * @psalm-param ArrayKey|Closure $key
-     *
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
+     *
+     * @psalm-param ArrayKey|Closure $key
      *
      * @return mixed the value of the element if found, default value otherwise
      */
@@ -345,16 +345,15 @@ class ArrayHelper
      * ```
      *
      * @param array|object $array array or object to extract value from
-     *
      * @param array|Closure|float|int|string $path key name of the array element, an array of keys or property name
      * of the object, or an anonymous function returning the value. The anonymous function signature should be:
      * `function($array, $defaultValue)`.
-     * @psalm-param ArrayPath|Closure $path
-     *
      * @param mixed $default the default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
      * @param string $delimiter a separator, used to parse string $key for embedded object property retrieving. Defaults
      * to "." (dot).
+     *
+     * @psalm-param ArrayPath|Closure $path
      *
      * @return mixed the value of the element if found, default value otherwise
      */
@@ -400,6 +399,7 @@ class ArrayHelper
      * @param array|float|int|string|null $key the path of where do you want to write a value to `$array`
      * the path can be described by an array of keys
      * if the path is null then `$array` will be assigned the `$value`
+     *
      * @psalm-param ArrayKey|null $key
      *
      * @param mixed $value the value to be written
@@ -479,10 +479,10 @@ class ArrayHelper
      * the path can be described by a string when each key should be separated by a dot
      * you can also describe the path as an array of keys
      * if the path is null then `$array` will be assigned the `$value`
-     * @psalm-param ArrayPath|null $path
-     *
      * @param mixed $value the value to be written
      * @param string $delimiter
+     *
+     * @psalm-param ArrayPath|null $path
      */
     public static function setValueByPath(array &$array, $path, $value, string $delimiter = '.'): void
     {
@@ -491,9 +491,9 @@ class ArrayHelper
 
     /**
      * @param array|float|int|string $path
-     * @psalm-param ArrayPath $path
-     *
      * @param string $delimiter
+     *
+     * @psalm-param ArrayPath $path
      *
      * @return array|float|int|string
      * @psalm-return ArrayKey
@@ -535,9 +535,9 @@ class ArrayHelper
      *
      * @param array $array the array to extract value from
      * @param array|float|int|string $key key name of the array element or associative array at the key path specified
-     * @psalm-param ArrayKey $key
-     *
      * @param mixed $default the default value to be returned if the specified key does not exist
+     *
+     * @psalm-param ArrayKey $key
      *
      * @return mixed the value of the element if found, default value otherwise
      */
@@ -579,13 +579,12 @@ class ArrayHelper
      * ```
      *
      * @param array $array the array to extract value from
-     *
      * @param array|float|int|string $path key name of the array element or associative array at the key path specified
      * the path can be described by a string when each key should be separated by a delimiter (default is dot)
-     * @psalm-param ArrayPath $path
-     *
      * @param mixed $default the default value to be returned if the specified key does not exist
      * @param string $delimiter
+     *
+     * @psalm-param ArrayPath $path
      *
      * @return mixed the value of the element if found, default value otherwise
      */
@@ -720,14 +719,14 @@ class ArrayHelper
      * ```
      *
      * @param array $array the array that needs to be indexed or grouped
-     * @psalm-param array<mixed, array|object> $array
-     *
      * @param Closure|string|null $key the column name or anonymous function which result will be used
      * to index the array
      * @param Closure[]|string|string[]|null $groups the array of keys, that will be used to group the input array
      * by one or more keys. If the $key attribute or its value for the particular element is null and $groups is not
      * defined, the array element will be discarded. Otherwise, if $groups is specified, array element will be added
      * to the result array without any key.
+     *
+     * @psalm-param array<mixed, array|object> $array
      *
      * @return array the indexed and/or grouped array
      */
@@ -795,7 +794,6 @@ class ArrayHelper
      * ```
      *
      * @param array<array-key, array|object> $array
-     *
      * @param Closure|string $name
      * @param bool $keepKeys whether to maintain the array keys. If false, the resulting array
      * will be re-indexed with integers.
@@ -856,11 +854,11 @@ class ArrayHelper
      * ```
      *
      * @param array $array
-     * @psalm-param array<mixed, array|object> $array
-     *
      * @param Closure|string $from
      * @param Closure|string $to
      * @param Closure|string|null $group
+     *
+     * @psalm-param array<mixed, array|object> $array
      *
      * @return array
      */
@@ -898,11 +896,10 @@ class ArrayHelper
      * key comparison.
      *
      * @param array $array the array with keys to check
-     *
      * @param array|float|int|string $key the key to check
-     * @psalm-param ArrayKey $key
-     *
      * @param bool $caseSensitive whether the key comparison should be case-sensitive
+     *
+     * @psalm-param ArrayKey $key
      *
      * @return bool whether the array contains the specified key
      */
@@ -980,12 +977,11 @@ class ArrayHelper
      * key comparison.
      *
      * @param array $array
-     *
      * @param array|float|int|string $path
-     * @psalm-param ArrayPath $path
-     *
      * @param bool $caseSensitive
      * @param string $delimiter
+     *
+     * @psalm-param ArrayPath $path
      *
      * @return bool
      */
@@ -1005,15 +1001,15 @@ class ArrayHelper
      * Only string values will be encoded.
      *
      * @param array $data data to be encoded
-     * @psalm-param array<mixed, mixed> $data
-     *
      * @param bool $valuesOnly whether to encode array values only. If false,
      * both the array keys and array values will be encoded.
      * @param string|null $encoding The encoding to use, defaults to `ini_get('default_charset')`.
      *
+     * @psalm-param array<mixed, mixed> $data
+     *
      * @return array the encoded data
      *
-     * @see https://www.php.net/manual/en/function.htmlspecialchars.php
+     * @link https://www.php.net/manual/en/function.htmlspecialchars.php
      */
     public static function htmlEncode(array $data, bool $valuesOnly = true, string $encoding = null): array
     {
@@ -1045,14 +1041,14 @@ class ArrayHelper
      * Only string values will be decoded.
      *
      * @param array $data data to be decoded
-     * @psalm-param array<mixed, mixed> $data
-     *
      * @param bool $valuesOnly whether to decode array values only. If false,
      * both the array keys and array values will be decoded.
      *
+     * @psalm-param array<mixed, mixed> $data
+     *
      * @return array the decoded data
      *
-     * @see https://www.php.net/manual/en/function.htmlspecialchars-decode.php
+     * @link https://www.php.net/manual/en/function.htmlspecialchars-decode.php
      */
     public static function htmlDecode(array $data, bool $valuesOnly = true): array
     {
