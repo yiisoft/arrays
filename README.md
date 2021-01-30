@@ -85,7 +85,6 @@ Overall the helper has the following method groups.
 - map
 - merge
 - toArray
-- applyModifiers
 
 ### Other
 
