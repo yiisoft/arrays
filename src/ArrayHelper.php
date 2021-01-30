@@ -1160,7 +1160,7 @@ class ArrayHelper
      *
      * @return bool `true` if `$needle` was found in `$haystack`, `false` otherwise.
      *
-     * @see https://php.net/manual/en/function.in-array.php
+     * @link https://php.net/manual/en/function.in-array.php
      */
     public static function isIn($needle, iterable $haystack, bool $strict = false): bool
     {
@@ -1307,15 +1307,16 @@ class ArrayHelper
 
     /**
      * Returns the public member variables of an object.
-     * This method is provided such that we can get the public member variables of an object.
-     * It is different from `get_object_vars()` because the latter will return private
-     * and protected variables if it is called within the object itself.
      *
-     * @param object $object the object to be handled
+     * This method is provided such that we can get the public member variables of an object. It is different
+     * from {@see get_object_vars()} because the latter will return private and protected variables if it
+     * is called within the object itself.
      *
-     * @return array|null the public member variables of the object or null if not object given
+     * @param object $object The object to be handled.
      *
-     * @see https://www.php.net/manual/en/function.get-object-vars.php
+     * @return array|null The public member variables of the object or null if not object given.
+     *
+     * @link https://www.php.net/manual/en/function.get-object-vars.php
      */
     public static function getObjectVars(object $object): ?array
     {
