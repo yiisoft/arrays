@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 
@@ -171,9 +172,9 @@ final class IndexTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testInvalidIndex()
+    public function testInvalidIndex(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $array = [
             ['id' => '123', 'data' => 'abc'],
             ['id' => '345', 'data' => 'def'],
@@ -182,9 +183,9 @@ final class IndexTest extends TestCase
         ArrayHelper::index($array, 'id');
     }
 
-    public function testInvalidIndexWithoutKey()
+    public function testInvalidIndexWithoutKey(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $array = [
             ['id' => '123', 'data' => 'abc'],
             ['id' => '345', 'data' => 'def'],
@@ -195,13 +196,13 @@ final class IndexTest extends TestCase
 
     public function testInvalidIndexGroupBy(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         ArrayHelper::index(['id' => '1'], null, ['id']);
     }
 
     public function testInvalidIndexGroupByWithKey(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         ArrayHelper::index(['id' => '1'], 'id', ['id']);
     }
 

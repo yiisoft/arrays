@@ -33,7 +33,7 @@ final class FilterTest extends TestCase
                 ],
                 ['A.B'],
             ],
-            'nestedlArray' => [
+            'nestedArray' => [
                 [
                     'A' => [
                         'D' => [

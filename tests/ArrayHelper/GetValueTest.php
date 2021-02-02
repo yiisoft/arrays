@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use ArrayObject;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Arrays\ArrayHelper;
@@ -265,7 +266,7 @@ final class GetValueTest extends TestCase
     {
         $magic = new Magic([]);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         ArrayHelper::getValue($magic, 'name');
     }
@@ -282,11 +283,11 @@ final class GetValueTest extends TestCase
         $order = new stdClass();
         $order->magic = new Magic([]);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         ArrayHelper::getValueByPath($order, 'magic.name');
     }
 
-    public function testGetValueFromInvalidArray()
+    public function testGetValueFromInvalidArray(): void
     {
         $this->expectExceptionMessage(
             'getValue() can not get value from integer. Only array and object are supported.'

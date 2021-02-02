@@ -4,41 +4,39 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Tests;
 
-use ArrayIterator;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\Tests\Objects\ArrayAccessObject;
 
 final class ArrayAccessTraitTest extends TestCase
 {
-    public function testIterator()
+    public function testIterator(): void
     {
         $object = new ArrayAccessObject();
         $iterator = $object->getIterator();
-        $this->assertInstanceOf(ArrayIterator::class, $iterator);
         $this->assertSame($object->data, $iterator->getArrayCopy());
     }
 
-    public function testCount()
+    public function testCount(): void
     {
         $object = new ArrayAccessObject();
         $this->assertSame(3, $object->count());
     }
 
-    public function testOffsetExists()
+    public function testOffsetExists(): void
     {
         $object = new ArrayAccessObject();
         $this->assertTrue($object->offsetExists('a'));
         $this->assertFalse($object->offsetExists('x'));
     }
 
-    public function testOffsetGet()
+    public function testOffsetGet(): void
     {
         $object = new ArrayAccessObject();
         $this->assertSame(1, $object->offsetGet('a'));
         $this->assertNull($object->offsetGet('x'));
     }
 
-    public function testOffsetSet()
+    public function testOffsetSet(): void
     {
         $object = new ArrayAccessObject();
         $object->offsetSet('a', 4);
@@ -53,7 +51,7 @@ final class ArrayAccessTraitTest extends TestCase
         ], $object->data);
     }
 
-    public function testOffsetUnset()
+    public function testOffsetUnset(): void
     {
         $object = new ArrayAccessObject();
         $object->offsetUnset('b');
