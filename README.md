@@ -20,9 +20,9 @@ The package provides:
 - `ArrayHelper` that has static methods to work with arrays;
 - `ArraySorter` that has static methods for sort arrays;
 - `ArrayAccessTrait` provides the implementation for
-[\IteratorAggregate](https://www.php.net/manual/class.iteratoraggregate),
-[\ArrayAccess](https://www.php.net/manual/class.arrayaccess) and
-[\Countable](https://www.php.net/manualn/class.countable.php);
+  [\IteratorAggregate](https://www.php.net/manual/class.iteratoraggregate),
+  [\ArrayAccess](https://www.php.net/manual/class.arrayaccess) and
+  [\Countable](https://www.php.net/manualn/class.countable.php);
 - `ArrayableInterface` and `ArrayableTrait` for use in classes who want to support customizable representation of their instances.
 
 ## Requirements
@@ -31,8 +31,8 @@ The package provides:
 
 ## Installation
 
-```
-composer require yiisoft/arrays
+```shell
+composer require yiisoft/arrays --prefer-dist
 ```
 
 ## ArrayHelper usage
@@ -155,6 +155,8 @@ $car = new Car();
 $data = $car->toArray(['type', 'color']); // ['type' => 'Crossover', 'color' => 'Red']
 ```
 
+## Testing
+
 ### Unit testing
 
 The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
@@ -165,10 +167,11 @@ The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
 
 ### Mutation testing
 
-The package tests are checked with [Infection](https://infection.github.io/) mutation framework. To run it:
+The package tests are checked with [Infection](https://infection.github.io/) mutation framework with
+[Infection Static Analysis Plugin](https://github.com/Roave/infection-static-analysis-plugin). To run it:
 
 ```shell
-./vendor/bin/infection
+./vendor/bin/roave-infection-static-analysis-plugin
 ```
 
 ### Static analysis
@@ -179,21 +182,20 @@ The code is statically analyzed with [Psalm](https://psalm.dev/). To run static 
 ./vendor/bin/psalm
 ```
 
-### Support the project
+## License
+
+The Yii Arrays is free software. It is released under the terms of the BSD License. Please see [`LICENSE`](./LICENSE.md) for more information.
+
+Maintained by [Yii Software](https://www.yiiframework.com/).
+
+## Support the project
 
 [![Open Collective](https://img.shields.io/badge/Open%20Collective-sponsor-7eadf1?logo=open%20collective&logoColor=7eadf1&labelColor=555555)](https://opencollective.com/yiisoft)
 
-### Follow updates
+## Follow updates
 
 [![Official website](https://img.shields.io/badge/Powered_by-Yii_Framework-green.svg?style=flat)](https://www.yiiframework.com/)
 [![Twitter](https://img.shields.io/badge/twitter-follow-1DA1F2?logo=twitter&logoColor=1DA1F2&labelColor=555555?style=flat)](https://twitter.com/yiiframework)
 [![Telegram](https://img.shields.io/badge/telegram-join-1DA1F2?style=flat&logo=telegram)](https://t.me/yii3en)
 [![Facebook](https://img.shields.io/badge/facebook-join-1DA1F2?style=flat&logo=facebook&logoColor=ffffff)](https://www.facebook.com/groups/yiitalk)
 [![Slack](https://img.shields.io/badge/slack-join-1DA1F2?style=flat&logo=slack)](https://yiiframework.com/go/slack)
-
-## License
-
-The Yii Arrays is free software. It is released under the terms of the BSD License.
-Please see [`LICENSE`](./LICENSE.md) for more information.
-
-Maintained by [Yii Software](https://www.yiiframework.com/).
