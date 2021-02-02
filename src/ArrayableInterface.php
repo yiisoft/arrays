@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays;
 
 /**
- * ArrayableInterface should be implemented by classes who want to support customizable representation
+ * ArrayableInterface should be implemented by classes that want to support customizable representation
  * of their instances.
  *
  * For example, if a class implements ArrayableInterface, by calling {@see ArrayableInterface::toArray()},
@@ -55,7 +55,7 @@ interface ArrayableInterface
      * ];
      * ```
      *
-     * @return array the list of field names or field definitions.
+     * @return array The list of field names or field definitions.
      *
      * @see toArray()
      */
@@ -69,7 +69,7 @@ interface ArrayableInterface
      * by this method are not returned by default by {@see toArray()}. Only when a field in the list
      * is explicitly requested, will it be included in the result of {@see toArray()}.
      *
-     * @return array the list of expandable field names or field definitions. Please refer
+     * @return array The list of expandable field names or field definitions. Please refer
      * to {@see fields()} on the format of the return value.
      *
      * @see toArray()
@@ -86,9 +86,9 @@ interface ArrayableInterface
      * @param array $expand the additional fields that the output array should contain.
      * Fields not specified in {@see extraFields()} will be ignored. If this parameter is empty, no extra fields
      * will be returned.
-     * @param bool $recursive whether to recursively return array representation of embedded objects.
+     * @param bool $recursive Whether to recursively return array representation of embedded objects.
      *
-     * @return array the array representation of the object
+     * @return array The array representation of the object.
      */
     public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array;
 }

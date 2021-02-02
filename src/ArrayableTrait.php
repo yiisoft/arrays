@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays;
 
+use function array_key_exists;
+use function in_array;
+use function is_array;
+use function is_int;
+use function is_string;
+
 /**
  * ArrayableTrait provides a common implementation of the {@see ArrayableInterface} interface.
  *
@@ -55,7 +61,7 @@ trait ArrayableTrait
      *
      * The default implementation of this method returns the public object member variables indexed by themselves.
      *
-     * @return array the list of field names or field definitions.
+     * @return array The list of field names or field definitions.
      *
      * @see toArray()
      */
@@ -78,7 +84,7 @@ trait ArrayableTrait
      * You may override this method to return a list of expandable fields based on some context information
      * (e.g. the current application user).
      *
-     * @return array the list of expandable field names or field definitions. Please refer
+     * @return array The list of expandable field names or field definitions. Please refer
      * to {@see ArrayableInterface::fields()} on the format of the return value.
      *
      * @see toArray()
@@ -98,19 +104,19 @@ trait ArrayableTrait
      * When embedded objects are {@see ArrayableInterface}, their respective nested fields
      * will be extracted and passed to {@see ArrayableInterface::toArray()}.
      *
-     * @param array $fields the fields being requested.
+     * @param array $fields The fields being requested.
      * If empty or if it contains '*', all fields as specified by {@see ArrayableInterface::fields()} will be returned.
      * Fields can be nested, separated with dots (.). e.g.: item.field.sub-field
      * `$recursive` must be true for nested fields to be extracted. If `$recursive` is false, only the root fields
      * will be extracted.
-     * @param array $expand the additional fields being requested for exporting. Only fields declared
+     * @param array $expand The additional fields being requested for exporting. Only fields declared
      * in {@see ArrayableInterface::extraFields()} will be considered.
      * Expand can also be nested, separated with dots (.). e.g.: item.expand1.expand2
      * `$recursive` must be true for nested expands to be extracted. If `$recursive` is false, only the root expands
      * will be extracted.
-     * @param bool $recursive whether to recursively return array representation of embedded objects.
+     * @param bool $recursive Whether to recursively return array representation of embedded objects.
      *
-     * @return array the array representation of the object
+     * @return array The array representation of the object.
      */
     public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array
     {
@@ -144,7 +150,7 @@ trait ArrayableTrait
                 $nestedFields = $this->extractFieldsFor($fields, $field);
                 $nestedExpand = $this->extractFieldsFor($expand, $field);
                 if ($attribute instanceof ArrayableInterface) {
-                    $attribute = $attribute->toArray($nestedFields, $nestedExpand, true);
+                    $attribute = $attribute->toArray($nestedFields, $nestedExpand);
                 } elseif (is_array($attribute) && ($nestedExpand || $nestedFields)) {
                     $attribute = $this->filterAndExpand($attribute, $nestedFields, $nestedExpand);
                 }
@@ -161,14 +167,14 @@ trait ArrayableTrait
      *
      * @param array $fields The fields requested for extraction
      *
-     * @return array root fields extracted from the given nested fields
+     * @return array root Fields extracted from the given nested fields.
      */
     protected function extractRootFields(array $fields): array
     {
         $result = [];
 
         foreach ($fields as $field) {
-            $result[] = stristr($field . '.', '.', true);
+            $result[] = strstr($field . '.', '.', true);
         }
 
         if (in_array('*', $result, true)) {
@@ -183,10 +189,10 @@ trait ArrayableTrait
      * Nested fields are separated with dots (.). e.g: "item.id"
      * The previous example would extract "id".
      *
-     * @param array $fields The fields requested for extraction
-     * @param string $rootField The root field for which we want to extract the nested fields
+     * @param array $fields The fields requested for extraction.
+     * @param string $rootField The root field for which we want to extract the nested fields.
      *
-     * @return array nested fields extracted for the given field
+     * @return array Nested fields extracted for the given field.
      */
     protected function extractFieldsFor(array $fields, string $rootField): array
     {
@@ -207,10 +213,10 @@ trait ArrayableTrait
      * Then it will check the requested root fields against those declared in {@see ArrayableInterface::fields()}
      * and {@see ArrayableInterface::extraFields()} to determine which fields can be returned.
      *
-     * @param array $fields the fields being requested for exporting
-     * @param array $expand the additional fields being requested for exporting
+     * @param array $fields The fields being requested for exporting.
+     * @param array $expand The additional fields being requested for exporting.
      *
-     * @return array the list of fields to be exported. The array keys are the field names, and the array values
+     * @return array The list of fields to be exported. The array keys are the field names, and the array values
      * are the corresponding object property names or PHP callables returning the field values.
      */
     protected function resolveFields(array $fields, array $expand): array

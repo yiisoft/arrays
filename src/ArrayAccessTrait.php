@@ -22,7 +22,7 @@ trait ArrayAccessTrait
      * This method is required by the SPL interface {@see \IteratorAggregate}.
      * It will be implicitly called when you use `foreach` to traverse the collection.
      *
-     * @return ArrayIterator an iterator for traversing the cookies in the collection.
+     * @return ArrayIterator An iterator for traversing the cookies in the collection.
      */
     public function getIterator(): ArrayIterator
     {
@@ -33,7 +33,7 @@ trait ArrayAccessTrait
      * Returns the number of data items.
      * This method is required by Countable interface.
      *
-     * @return int number of data elements.
+     * @return int Number of data elements.
      */
     public function count(): int
     {
@@ -43,7 +43,7 @@ trait ArrayAccessTrait
     /**
      * This method is required by the interface {@see \ArrayAccess}.
      *
-     * @param mixed $offset the offset to check on
+     * @param mixed $offset The offset to check on.
      *
      * @return bool
      */
@@ -55,9 +55,9 @@ trait ArrayAccessTrait
     /**
      * This method is required by the interface {@see \ArrayAccess}.
      *
-     * @param mixed $offset the offset to retrieve element.
+     * @param mixed $offset The offset to retrieve element.
      *
-     * @return mixed the element at the offset, null if no element is found at the offset
+     * @return mixed The element at the offset, null if no element is found at the offset.
      */
     public function offsetGet($offset)
     {
@@ -67,8 +67,8 @@ trait ArrayAccessTrait
     /**
      * This method is required by the interface {@see \ArrayAccess}.
      *
-     * @param mixed $offset the offset to set element
-     * @param mixed $value the element value
+     * @param mixed $offset The offset to set element.
+     * @param mixed $value The element value.
      */
     public function offsetSet($offset, $value): void
     {
@@ -82,7 +82,7 @@ trait ArrayAccessTrait
     /**
      * This method is required by the interface {@see \ArrayAccess}.
      *
-     * @param mixed $offset the offset to unset element
+     * @param mixed $offset The offset to unset element.
      */
     public function offsetUnset($offset): void
     {
