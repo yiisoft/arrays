@@ -12,6 +12,8 @@ use Yiisoft\Arrays\Tests\Objects\ObjectWithNestedSpecificArrayableObject;
 use Yiisoft\Arrays\Tests\Objects\Post1;
 use Yiisoft\Arrays\Tests\Objects\Post2;
 use Yiisoft\Arrays\Tests\Objects\Post3;
+use function get_class;
+use function strlen;
 
 final class ToArrayTest extends TestCase
 {
