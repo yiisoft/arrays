@@ -16,8 +16,6 @@
         "wiki": "https://www.yiiframework.com/wiki/",
         "irc": "irc://irc.freenode.net/yii"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
         "php": "^7.4|^8.0",
         "yiisoft/strings": "^1.1"
@@ -36,11 +34,6 @@
     "autoload-dev": {
         "psr-4": {
             "Yiisoft\\Arrays\\Tests\\": "tests"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.0.x-dev"
         }
     },
     "config": {
