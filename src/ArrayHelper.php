@@ -905,7 +905,7 @@ class ArrayHelper
 
         return array_filter(
             array_keys($array),
-            fn ($k) => strcasecmp($key, (string)$k) === 0
+            static fn ($k) => strcasecmp($key, (string)$k) === 0
         );
     }
 

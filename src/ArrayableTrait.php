@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays;
 
+use function array_key_exists;
+use function in_array;
+use function is_array;
+use function is_int;
+use function is_string;
+
 /**
  * ArrayableTrait provides a common implementation of the {@see ArrayableInterface} interface.
  *
@@ -144,7 +150,7 @@ trait ArrayableTrait
                 $nestedFields = $this->extractFieldsFor($fields, $field);
                 $nestedExpand = $this->extractFieldsFor($expand, $field);
                 if ($attribute instanceof ArrayableInterface) {
-                    $attribute = $attribute->toArray($nestedFields, $nestedExpand, true);
+                    $attribute = $attribute->toArray($nestedFields, $nestedExpand);
                 } elseif (is_array($attribute) && ($nestedExpand || $nestedFields)) {
                     $attribute = $this->filterAndExpand($attribute, $nestedFields, $nestedExpand);
                 }
@@ -168,7 +174,7 @@ trait ArrayableTrait
         $result = [];
 
         foreach ($fields as $field) {
-            $result[] = stristr($field . '.', '.', true);
+            $result[] = strstr($field . '.', '.', true);
         }
 
         if (in_array('*', $result, true)) {
