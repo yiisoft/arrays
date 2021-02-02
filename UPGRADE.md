@@ -1,4 +1,3 @@
-Upgrading Instructions
-======================
+# Upgrading Instructions
 
 Changes summary:

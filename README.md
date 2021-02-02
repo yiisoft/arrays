@@ -40,7 +40,7 @@ composer require yiisoft/arrays
 Array helper methods are static so usage is like the following:
 
 ```php
-$username = ArrayHelper::getValue($_POST, 'username');
+$username = \Yiisoft\Arrays\ArrayHelper::getValue($_POST, 'username');
 ```
 
 Overall the helper has the following method groups.
@@ -96,7 +96,7 @@ Overall the helper has the following method groups.
 Array sorter has one static method which usage is like the following:
 
 ```php
-ArraySorter::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
+\Yiisoft\Arrays\ArraySorter::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
 ```
 
 ## ArrayAccessTrait usage
@@ -112,6 +112,8 @@ The data will be exposed by ArrayAccessTrait to support accessing the class obje
 Example of use:
 
 ```php
+use \Yiisoft\Arrays\ArrayAccessTrait;
+
 class OfficeClassification implements \IteratorAggregate, \ArrayAccess, \Countable
 {
     use ArrayAccessTrait;
@@ -141,6 +143,9 @@ while ($iterator->valid()) {
 Example of use:
 
 ```php
+use \Yiisoft\Arrays\ArrayableTrait;
+use \Yiisoft\Arrays\ArrayableInterface;
+
 class Car implements ArrayableInterface
 {
     use ArrayableTrait;
