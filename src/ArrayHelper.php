@@ -714,6 +714,21 @@ class ArrayHelper
     }
 
     /**
+     * Groups the array according to a specified key.
+     * This is just an alias for indexing by groups
+     *
+     * @param array $array The array that needs to be grouped.
+     * @param Closure[]|string|string[] $groups The array of keys, that will be used to group the input array
+     * by one or more keys.
+     *
+     * @return array The grouped array.
+     */
+    public static function group(array $array, $groups): array
+    {
+        return static::index($array, null, $groups);
+    }
+
+    /**
      * Returns the values of a specified column in an array.
      * The input array should be multidimensional or an array of objects.
      *
