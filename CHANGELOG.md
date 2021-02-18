@@ -3,7 +3,7 @@
 
 ## 1.0.2 under development
 
-- no changes in this release.
+- Enh #91: Add method `ArrayHelper::group()` that groups the array according to a specified key (sagittaracc)
 
 
 ## 1.0.1 February 10, 2021
