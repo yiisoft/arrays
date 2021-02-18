@@ -20,7 +20,7 @@ final class GroupTest extends TestCase
         self::assertEquals(
             [
                 '123' => [
-                    ['id' => '123', 'data' => 'abc']
+                    ['id' => '123', 'data' => 'abc'],
                 ],
                 '345' => [
                     ['id' => '345', 'data' => 'def'],
