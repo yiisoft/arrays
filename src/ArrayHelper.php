@@ -721,6 +721,8 @@ class ArrayHelper
      * @param Closure[]|string|string[] $groups The array of keys, that will be used to group the input array
      * by one or more keys.
      *
+     * @psalm-param array<mixed, array|object> $array
+     *
      * @return array The grouped array.
      */
     public static function group(array $array, $groups): array
