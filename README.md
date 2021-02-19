@@ -81,6 +81,7 @@ Overall the helper has the following method groups.
 ### Transformation
 
 - index
+- group
 - filter
 - map
 - merge
