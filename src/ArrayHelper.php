@@ -708,7 +708,8 @@ class ArrayHelper
                         'indexAndRemoveKey() can not get value from ' . self::getVariableType($element) .
                         '. The $array should be either multidimensional array.'
                     );
-                } elseif (!is_object($element)) {
+                }
+                if (!is_object($element)) {
                     throw new InvalidArgumentException(
                         'index() can not get value from ' . gettype($element) .
                         '. The $array should be either multidimensional array or an array of objects.'
