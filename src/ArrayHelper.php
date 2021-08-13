@@ -11,6 +11,7 @@ use Yiisoft\Strings\NumericHelper;
 
 use function array_key_exists;
 use function get_class;
+use function gettype;
 use function in_array;
 use function is_array;
 use function is_float;
@@ -672,16 +673,47 @@ class ArrayHelper
      */
     public static function index(array $array, $key, $groups = []): array
     {
+        return self::indexArray($array, $key, $groups, false);
+    }
+
+    /**
+     * @see self::index
+     *
+     * @param array $array
+     * @param string $key
+     * @param Closure[]|string|string[]|null $groups
+     */
+    public static function indexAndRemoveKey(array $array, string $key, $groups = []): array
+    {
+        return self::indexArray($array, $key, $groups, true);
+    }
+
+    /**
+     * @see self::index
+     * @see self::indexAndRemoveKey
+     *
+     * @param Closure|string|null $key
+     * @param Closure[]|string|string[]|null $groups
+     */
+    private static function indexArray(array $array, $key, $groups, bool $removeKey): array
+    {
         $result = [];
         $groups = (array)$groups;
 
+        /** @var mixed $element */
         foreach ($array as $element) {
-            /** @psalm-suppress DocblockTypeContradiction */
-            if (!is_array($element) && !is_object($element)) {
-                throw new InvalidArgumentException(
-                    'index() can not get value from ' . gettype($element)
-                    . '. The $array should be either multidimensional array or an array of objects.'
-                );
+            if (!is_array($element)) {
+                if ($removeKey) {
+                    throw new InvalidArgumentException(
+                        'indexAndRemoveKey() can not get value from ' . self::getVariableType($element) .
+                        '. The $array should be either multidimensional array.'
+                    );
+                } elseif (!is_object($element)) {
+                    throw new InvalidArgumentException(
+                        'index() can not get value from ' . gettype($element) .
+                        '. The $array should be either multidimensional array or an array of objects.'
+                    );
+                }
             }
 
             $lastArray = &$result;
@@ -704,6 +736,10 @@ class ArrayHelper
                 /** @var mixed */
                 $value = static::getValue($element, $key);
                 if ($value !== null) {
+                    if ($removeKey) {
+                        /** @psalm-suppress PossiblyInvalidArrayAccess */
+                        unset($element[$key]);
+                    }
                     $lastArray[static::normalizeArrayKey($value)] = $element;
                 }
             }
@@ -1286,5 +1322,13 @@ class ArrayHelper
     private static function normalizeArrayKey($key): string
     {
         return is_float($key) ? NumericHelper::normalize($key) : (string)$key;
+    }
+
+    /**
+     * @param mixed $variable
+     */
+    private static function getVariableType($variable): string
+    {
+        return is_object($variable) ? get_class($variable) : gettype($variable);
     }
 }
