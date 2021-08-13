@@ -976,11 +976,9 @@ class ArrayHelper
         /** @var mixed $value */
         foreach ($data as $key => $value) {
             if (!$valuesOnly && is_string($key)) {
-                /** @psalm-suppress PossiblyNullArgument */
                 $key = htmlspecialchars($key, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
             }
             if (is_string($value)) {
-                /** @psalm-suppress PossiblyNullArgument */
                 $d[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
             } elseif (is_array($value)) {
                 $d[$key] = static::htmlEncode($value, $valuesOnly, $encoding);
@@ -1051,8 +1049,7 @@ class ArrayHelper
         }
 
         if ($allStrings) {
-            /** @psalm-suppress MixedAssignment */
-            foreach ($array as $key => $value) {
+            foreach ($array as $key => $_value) {
                 if (!is_string($key)) {
                     return false;
                 }
@@ -1061,8 +1058,7 @@ class ArrayHelper
             return true;
         }
 
-        /** @psalm-suppress MixedAssignment */
-        foreach ($array as $key => $value) {
+        foreach ($array as $key => $_value) {
             if (is_string($key)) {
                 return true;
             }
@@ -1096,7 +1092,7 @@ class ArrayHelper
         }
 
         /** @psalm-var mixed $value */
-        foreach ($array as $key => $value) {
+        foreach ($array as $key => $_value) {
             if (!is_int($key)) {
                 return false;
             }
