@@ -22,9 +22,9 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
-        "roave/infection-static-analysis-plugin": "^1.7",
+        "roave/infection-static-analysis-plugin": "^1.9",
         "spatie/phpunit-watcher": "^1.23",
-        "vimeo/psalm": "^4.4"
+        "vimeo/psalm": "^4.9"
     },
     "autoload": {
         "psr-4": {
