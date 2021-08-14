@@ -81,6 +81,7 @@ Overall the helper has the following method groups.
 ### Transformation
 
 - index
+- indexAndRemoveKey
 - group
 - filter
 - map
