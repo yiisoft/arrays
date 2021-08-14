@@ -14,8 +14,19 @@
         "issues": "https://github.com/yiisoft/arrays/issues",
         "forum": "https://forum.yiiframework.com/",
         "wiki": "https://www.yiiframework.com/wiki/",
-        "irc": "irc://irc.freenode.net/yii"
+        "irc": "irc://irc.freenode.net/yii",
+        "chat": "https://t.me/yii3en"
     },
+    "funding": [
+        {
+            "type": "opencollective",
+            "url": "https://opencollective.com/yiisoft"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/yiisoft"
+        }
+    ],
     "require": {
         "php": "^7.4|^8.0",
         "yiisoft/strings": "^2.0"
