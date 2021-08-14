@@ -571,10 +571,10 @@ class ArrayHelper
      * Indexes and/or groups the array according to a specified key.
      * The input should be either multidimensional array or an array of objects.
      *
-     * The $key can be either a key name of the sub-array, a property name of object, or an anonymous
+     * The `$key` can be either a key name of the sub-array, a property name of object, or an anonymous
      * function that must return the value that will be used as a key.
      *
-     * $groups is an array of keys, that will be used to group the input array into one or more sub-arrays based
+     * `$groups` is an array of keys, that will be used to group the input array into one or more sub-arrays based
      * on keys specified.
      *
      * If the `$key` is specified as `null` or a value of an element corresponding to the key is `null` in addition
@@ -659,12 +659,14 @@ class ArrayHelper
      * ]
      * ```
      *
+     * @see self::indexAndRemoveKey
+     *
      * @param array $array The array that needs to be indexed or grouped.
      * @param Closure|string|null $key The column name or anonymous function which result will be used
      * to index the array.
      * @param Closure[]|string|string[]|null $groups The array of keys, that will be used to group the input array
-     * by one or more keys. If the $key attribute or its value for the particular element is null and $groups is not
-     * defined, the array element will be discarded. Otherwise, if $groups is specified, array element will be added
+     * by one or more keys. If the `$key` attribute or its value for the particular element is null and `$groups` is not
+     * defined, the array element will be discarded. Otherwise, if `$groups` is specified, array element will be added
      * to the result array without any key.
      *
      * @psalm-param array<mixed, array|object> $array
@@ -677,11 +679,78 @@ class ArrayHelper
     }
 
     /**
+     * Indexes and/or groups the array according to a specified key and remove this key.
+     * The input should be either multidimensional array.
+     *
+     * `$groups` is an array of keys, that will be used to group the input array into one or more sub-arrays based
+     * on keys specified.
+     *
+     * If a value of an element corresponding to the key is `null` in addition to `$groups` not specified then
+     * the element is discarded.
+     *
+     * For example:
+     *
+     * ```php
+     * $array = [
+     *     ['id' => '123', 'data' => 'abc', 'device' => 'laptop'],
+     *     ['id' => '345', 'data' => 'def', 'device' => 'tablet'],
+     *     ['id' => '345', 'data' => 'hgi', 'device' => 'smartphone'],
+     * ];
+     * $result = ArrayHelper::indexAndRemoveKey($array, 'id');
+     * ```
+     *
+     * The result will be an associative array, where the key is the value of `id` attribute and this attribute
+     * will be removed:
+     *
+     * ```php
+     * [
+     *     '123' => ['data' => 'abc', 'device' => 'laptop'],
+     *     '345' => ['data' => 'hgi', 'device' => 'smartphone']
+     *     // The second element of an original array is overwritten by the last element because of the same id
+     * ]
+     * ```
+     *
+     * The anonymous function can be used in the array of grouping keys as well:
+     *
+     * ```php
+     * $result = ArrayHelper::index($array, 'data', [function ($element) {
+     *     return $element['id'];
+     * }, 'device']);
+     * ```
+     *
+     * The result will be a multidimensional array grouped by `id` on the first level, by the `device` on
+     * the second one, indexed by the `data` on the third level and attribute `data` will be removed:
+     *
+     * ```php
+     * [
+     *     '123' => [
+     *         'laptop' => [
+     *             'abc' => ['id' => '123', 'device' => 'laptop']
+     *         ]
+     *     ],
+     *     '345' => [
+     *         'tablet' => [
+     *             'def' => ['id' => '345', 'device' => 'tablet']
+     *         ],
+     *         'smartphone' => [
+     *             'hgi' => ['id' => '345', 'device' => 'smartphone']
+     *         ]
+     *     ]
+     * ]
+     * ```
+     *
      * @see self::index
      *
-     * @param array $array
-     * @param string $key
-     * @param Closure[]|string|string[]|null $groups
+     * @param array $array The array that needs to be indexed or grouped.
+     * @param string $key The column name will be used to index the array.
+     * @param Closure[]|string|string[]|null $groups The array of keys, that will be used to group the input array
+     * by one or more keys. If value for the particular element is null and `$groups` is not defined, the array element
+     * will be discarded. Otherwise, if `$groups` is specified, array element will be added to the result array without
+     * any key.
+     *
+     * @psalm-param array<mixed, array> $array
+     *
+     * @return array The indexed and/or grouped array.
      */
     public static function indexAndRemoveKey(array $array, string $key, $groups = []): array
     {
