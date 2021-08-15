@@ -659,8 +659,6 @@ class ArrayHelper
      * ]
      * ```
      *
-     * @see self::indexAndRemoveKey
-     *
      * @param array $array The array that needs to be indexed or grouped.
      * @param Closure|string|null $key The column name or anonymous function which result will be used
      * to index the array.
