@@ -71,10 +71,10 @@ class ArraySorter
             throw new InvalidArgumentException('The length of $sortFlag parameter must be the same as that of $keys.');
         }
 
-        $args = static::getArguments($array, $keys, $direction, $sortFlag);
+        $_args = static::getArguments($array, $keys, $direction, $sortFlag);
 
-        $args[] = &$array;
-        array_multisort(...$args);
+        $_args[] = &$array;
+        array_multisort(...$_args);
     }
 
     /**

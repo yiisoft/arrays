@@ -11,6 +11,7 @@ use Yiisoft\Strings\NumericHelper;
 
 use function array_key_exists;
 use function get_class;
+use function gettype;
 use function in_array;
 use function is_array;
 use function is_float;
@@ -570,10 +571,10 @@ class ArrayHelper
      * Indexes and/or groups the array according to a specified key.
      * The input should be either multidimensional array or an array of objects.
      *
-     * The $key can be either a key name of the sub-array, a property name of object, or an anonymous
+     * The `$key` can be either a key name of the sub-array, a property name of object, or an anonymous
      * function that must return the value that will be used as a key.
      *
-     * $groups is an array of keys, that will be used to group the input array into one or more sub-arrays based
+     * `$groups` is an array of keys, that will be used to group the input array into one or more sub-arrays based
      * on keys specified.
      *
      * If the `$key` is specified as `null` or a value of an element corresponding to the key is `null` in addition
@@ -662,8 +663,8 @@ class ArrayHelper
      * @param Closure|string|null $key The column name or anonymous function which result will be used
      * to index the array.
      * @param Closure[]|string|string[]|null $groups The array of keys, that will be used to group the input array
-     * by one or more keys. If the $key attribute or its value for the particular element is null and $groups is not
-     * defined, the array element will be discarded. Otherwise, if $groups is specified, array element will be added
+     * by one or more keys. If the `$key` attribute or its value for the particular element is null and `$groups` is not
+     * defined, the array element will be discarded. Otherwise, if `$groups` is specified, array element will be added
      * to the result array without any key.
      *
      * @psalm-param array<mixed, array|object> $array
@@ -675,12 +676,12 @@ class ArrayHelper
         $result = [];
         $groups = (array)$groups;
 
+        /** @var mixed $element */
         foreach ($array as $element) {
-            /** @psalm-suppress DocblockTypeContradiction */
             if (!is_array($element) && !is_object($element)) {
                 throw new InvalidArgumentException(
-                    'index() can not get value from ' . gettype($element)
-                    . '. The $array should be either multidimensional array or an array of objects.'
+                    'index() can not get value from ' . gettype($element) .
+                    '. The $array should be either multidimensional array or an array of objects.'
                 );
             }
 
@@ -976,11 +977,9 @@ class ArrayHelper
         /** @var mixed $value */
         foreach ($data as $key => $value) {
             if (!$valuesOnly && is_string($key)) {
-                /** @psalm-suppress PossiblyNullArgument */
                 $key = htmlspecialchars($key, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
             }
             if (is_string($value)) {
-                /** @psalm-suppress PossiblyNullArgument */
                 $d[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
             } elseif (is_array($value)) {
                 $d[$key] = static::htmlEncode($value, $valuesOnly, $encoding);
@@ -1051,8 +1050,7 @@ class ArrayHelper
         }
 
         if ($allStrings) {
-            /** @psalm-suppress MixedAssignment */
-            foreach ($array as $key => $value) {
+            foreach ($array as $key => $_value) {
                 if (!is_string($key)) {
                     return false;
                 }
@@ -1061,8 +1059,7 @@ class ArrayHelper
             return true;
         }
 
-        /** @psalm-suppress MixedAssignment */
-        foreach ($array as $key => $value) {
+        foreach ($array as $key => $_value) {
             if (is_string($key)) {
                 return true;
             }
@@ -1096,7 +1093,7 @@ class ArrayHelper
         }
 
         /** @psalm-var mixed $value */
-        foreach ($array as $key => $value) {
+        foreach ($array as $key => $_value) {
             if (!is_int($key)) {
                 return false;
             }

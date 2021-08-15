@@ -1,3 +1,0 @@
-# Upgrading Instructions
-
-Changes summary:

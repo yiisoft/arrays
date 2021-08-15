@@ -1,10 +1,8 @@
 # Yii Arrays Change Log
 
-
 ## 1.0.2 under development
 
-- Enh #91: Add method `ArrayHelper::group()` that groups the array according to a specified key (sagittaracc)
-
+- New #91: Add method `ArrayHelper::group()` that groups the array according to a specified key (sagittaracc)
 
 ## 1.0.1 February 10, 2021
 
@@ -12,3 +10,4 @@
 
 ## 1.0.0 February 02, 2021
 
+- Initial release
