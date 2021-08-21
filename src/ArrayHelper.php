@@ -751,14 +751,16 @@ class ArrayHelper
      * });
      * ```
      *
-     * @param array<array-key, array|object> $array The array to get column from.
+     * @param iterable $array The array or iterable object to get column from.
      * @param Closure|string $name Column name or a closure returning column name.
      * @param bool $keepKeys Whether to maintain the array keys. If false, the resulting array
      * will be re-indexed with integers.
      *
+     * @psalm-param iterable<array-key, array|object> $array
+     *
      * @return array The list of column values.
      */
-    public static function getColumn(array $array, $name, bool $keepKeys = true): array
+    public static function getColumn(iterable $array, $name, bool $keepKeys = true): array
     {
         $result = [];
         if ($keepKeys) {
