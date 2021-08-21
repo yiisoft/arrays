@@ -659,7 +659,7 @@ class ArrayHelper
      * ]
      * ```
      *
-     * @param array $array The array that needs to be indexed or grouped.
+     * @param iterable $array The array or iterable object that needs to be indexed or grouped.
      * @param Closure|string|null $key The column name or anonymous function which result will be used
      * to index the array.
      * @param Closure[]|string|string[]|null $groups The array of keys, that will be used to group the input array
@@ -667,11 +667,11 @@ class ArrayHelper
      * defined, the array element will be discarded. Otherwise, if `$groups` is specified, array element will be added
      * to the result array without any key.
      *
-     * @psalm-param array<mixed, array|object> $array
+     * @psalm-param iterable<mixed, array|object> $array
      *
      * @return array The indexed and/or grouped array.
      */
-    public static function index(array $array, $key, $groups = []): array
+    public static function index(iterable $array, $key, $groups = []): array
     {
         $result = [];
         $groups = (array)$groups;

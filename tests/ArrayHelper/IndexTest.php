@@ -7,64 +7,62 @@ namespace Yiisoft\Arrays\Tests\ArrayHelper;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Arrays\Tests\Objects\IterableObject;
 
 final class IndexTest extends TestCase
 {
-    public function testIndex(): void
+    public function dataBase(): array
+    {
+        return [
+            [
+                [
+                    '123' => ['id' => '123', 'data' => 'abc'],
+                    '345' => ['id' => '345', 'data' => 'ghi'],
+                ],
+                'id',
+            ],
+            [
+                [
+                    'abc' => ['id' => '123', 'data' => 'abc'],
+                    'def' => ['id' => '345', 'data' => 'def'],
+                    'ghi' => ['id' => '345', 'data' => 'ghi'],
+                ],
+                static fn(array $element) => $element['data'],
+            ],
+            [
+                [],
+                null
+            ],
+            [
+                [],
+                static fn() => null,
+            ],
+            [
+                [
+                    '123' => ['id' => '123', 'data' => 'abc'],
+                ],
+                static fn(array $element) => $element['id'] === '345' ? null : $element['id'],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataBase
+     */
+    public function testBase(array $expected, $key): void
     {
         $array = [
             ['id' => '123', 'data' => 'abc'],
             ['id' => '345', 'data' => 'def'],
             ['id' => '345', 'data' => 'ghi'],
         ];
-        $result = ArrayHelper::index($array, 'id');
-        $this->assertEquals(
-            [
-                '123' => ['id' => '123', 'data' => 'abc'],
-                '345' => ['id' => '345', 'data' => 'ghi'],
-            ],
-            $result
-        );
 
-        $result = ArrayHelper::index(
-            $array,
-            static function ($element) {
-                return $element['data'];
-            }
-        );
-        $this->assertEquals(
-            [
-                'abc' => ['id' => '123', 'data' => 'abc'],
-                'def' => ['id' => '345', 'data' => 'def'],
-                'ghi' => ['id' => '345', 'data' => 'ghi'],
-            ],
-            $result
-        );
+        $this->assertSame($expected, ArrayHelper::index($array, $key));
+        $this->assertSame($expected, ArrayHelper::index(new IterableObject($array), $key));
+    }
 
-        $result = ArrayHelper::index($array, null);
-        $this->assertEquals([], $result);
-
-        $result = ArrayHelper::index(
-            $array,
-            static function () {
-                return null;
-            }
-        );
-        $this->assertEquals([], $result);
-
-        $result = ArrayHelper::index(
-            $array,
-            static function ($element) {
-                return $element['id'] === '345' ? null : $element['id'];
-            }
-        );
-        $this->assertEquals(
-            [
-                '123' => ['id' => '123', 'data' => 'abc'],
-            ],
-            $result
-        );
-
+    public function testNonExistsKey(): void
+    {
         $array = [
             ['id' => '123', 'data' => 'abc'],
             ['id' => '345', 'data' => 'def'],
@@ -76,12 +74,142 @@ final class IndexTest extends TestCase
             345 => ['id' => '345', 'data' => 'def'],
         ];
 
-        $result = ArrayHelper::index($array, 'id');
-
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, ArrayHelper::index($array, 'id'));
+        $this->assertSame($expected, ArrayHelper::index(new IterableObject($array), 'id'));
     }
 
-    public function testIndexGroupBy(): void
+    public function dataIndexGroupBy(): array
+    {
+        return [
+            [
+                [
+                    '123' => [
+                        ['id' => '123', 'data' => 'abc'],
+                    ],
+                    '345' => [
+                        ['id' => '345', 'data' => 'def'],
+                        ['id' => '345', 'data' => 'ghi'],
+                    ],
+                ],
+                null,
+                ['id'],
+            ],
+            [
+                [
+                    '123' => [
+                        ['id' => '123', 'data' => 'abc'],
+                    ],
+                    '345' => [
+                        ['id' => '345', 'data' => 'def'],
+                        ['id' => '345', 'data' => 'ghi'],
+                    ],
+                ],
+                null,
+                'id',
+            ],
+            [
+                [
+                    '123' => [
+                        'abc' => [
+                            ['id' => '123', 'data' => 'abc'],
+                        ],
+                    ],
+                    '345' => [
+                        'def' => [
+                            ['id' => '345', 'data' => 'def'],
+                        ],
+                        'ghi' => [
+                            ['id' => '345', 'data' => 'ghi'],
+                        ],
+                    ],
+                ],
+                null,
+                ['id', 'data'],
+            ],
+            [
+                [
+                    '123' => [
+                        'abc' => ['id' => '123', 'data' => 'abc'],
+                    ],
+                    '345' => [
+                        'def' => ['id' => '345', 'data' => 'def'],
+                        'ghi' => ['id' => '345', 'data' => 'ghi'],
+                    ],
+                ],
+                'data',
+                ['id'],
+            ],
+            [
+                [
+                    '123' => [
+                        'abc' => ['id' => '123', 'data' => 'abc'],
+                    ],
+                    '345' => [
+                        'def' => ['id' => '345', 'data' => 'def'],
+                        'ghi' => ['id' => '345', 'data' => 'ghi'],
+                    ],
+                ],
+                'data',
+                'id',
+            ],
+            [
+                [
+                    '123' => [
+                        'abc' => ['id' => '123', 'data' => 'abc'],
+                    ],
+                    '345' => [
+                        'def' => ['id' => '345', 'data' => 'def'],
+                        'ghi' => ['id' => '345', 'data' => 'ghi'],
+                    ],
+                ],
+                static fn(array $element) => $element['data'],
+                'id',
+            ],
+            [
+                [
+                    '123' => [
+                        'abc' => [
+                            'abc' => ['id' => '123', 'data' => 'abc'],
+                        ],
+                    ],
+                    '345' => [
+                        'def' => [
+                            'def' => ['id' => '345', 'data' => 'def'],
+                        ],
+                        'ghi' => [
+                            'ghi' => ['id' => '345', 'data' => 'ghi'],
+                        ],
+                    ],
+                ],
+                'data',
+                ['id', 'data'],
+            ],
+            [
+                [
+                    '123' => [
+                        'abc' => [
+                            'abc' => ['id' => '123', 'data' => 'abc'],
+                        ],
+                    ],
+                    '345' => [
+                        'def' => [
+                            'def' => ['id' => '345', 'data' => 'def'],
+                        ],
+                        'ghi' => [
+                            'ghi' => ['id' => '345', 'data' => 'ghi'],
+                        ],
+                    ],
+                ],
+                static fn(array $element) => $element['data'],
+                ['id', 'data'],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataIndexGroupBy
+     */
+    public function testIndexGroupBy(array $expected, $key, $groups): void
     {
         $array = [
             ['id' => '123', 'data' => 'abc'],
@@ -89,121 +217,88 @@ final class IndexTest extends TestCase
             ['id' => '345', 'data' => 'ghi'],
         ];
 
-        $expected = [
-            '123' => [
-                ['id' => '123', 'data' => 'abc'],
-            ],
-            '345' => [
-                ['id' => '345', 'data' => 'def'],
-                ['id' => '345', 'data' => 'ghi'],
-            ],
-        ];
-        $result = ArrayHelper::index($array, null, ['id']);
-        $this->assertEquals($expected, $result);
-        $result = ArrayHelper::index($array, null, 'id');
-        $this->assertEquals($expected, $result);
-
-        $result = ArrayHelper::index($array, null, ['id', 'data']);
-        $this->assertEquals(
-            [
-                '123' => [
-                    'abc' => [
-                        ['id' => '123', 'data' => 'abc'],
-                    ],
-                ],
-                '345' => [
-                    'def' => [
-                        ['id' => '345', 'data' => 'def'],
-                    ],
-                    'ghi' => [
-                        ['id' => '345', 'data' => 'ghi'],
-                    ],
-                ],
-            ],
-            $result
-        );
-
-        $expected = [
-            '123' => [
-                'abc' => ['id' => '123', 'data' => 'abc'],
-            ],
-            '345' => [
-                'def' => ['id' => '345', 'data' => 'def'],
-                'ghi' => ['id' => '345', 'data' => 'ghi'],
-            ],
-        ];
-        $result = ArrayHelper::index($array, 'data', ['id']);
-        $this->assertEquals($expected, $result);
-        $result = ArrayHelper::index($array, 'data', 'id');
-        $this->assertEquals($expected, $result);
-        $result = ArrayHelper::index(
-            $array,
-            static function ($element) {
-                return $element['data'];
-            },
-            'id'
-        );
-        $this->assertEquals($expected, $result);
-
-        $expected = [
-            '123' => [
-                'abc' => [
-                    'abc' => ['id' => '123', 'data' => 'abc'],
-                ],
-            ],
-            '345' => [
-                'def' => [
-                    'def' => ['id' => '345', 'data' => 'def'],
-                ],
-                'ghi' => [
-                    'ghi' => ['id' => '345', 'data' => 'ghi'],
-                ],
-            ],
-        ];
-        $result = ArrayHelper::index($array, 'data', ['id', 'data']);
-        $this->assertEquals($expected, $result);
-        $result = ArrayHelper::index(
-            $array,
-            static function ($element) {
-                return $element['data'];
-            },
-            ['id', 'data']
-        );
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, ArrayHelper::index($array, $key, $groups));
+        $this->assertSame($expected, ArrayHelper::index(new IterableObject($array), $key, $groups));
     }
 
-    public function testInvalidIndex(): void
+    public function testInvalidIndexInArray(): void
     {
-        $this->expectException(InvalidArgumentException::class);
         $array = [
             ['id' => '123', 'data' => 'abc'],
             ['id' => '345', 'data' => 'def'],
             'data',
         ];
+
+        $this->expectException(InvalidArgumentException::class);
         ArrayHelper::index($array, 'id');
     }
 
-    public function testInvalidIndexWithoutKey(): void
+    public function testInvalidIndexInIterable(): void
     {
+        $iterableObject = new IterableObject([
+            ['id' => '123', 'data' => 'abc'],
+            ['id' => '345', 'data' => 'def'],
+            'data',
+        ]);
+
         $this->expectException(InvalidArgumentException::class);
+        ArrayHelper::index($iterableObject, 'id');
+    }
+
+    public function testInvalidIndexWithoutKeyInArray(): void
+    {
         $array = [
             ['id' => '123', 'data' => 'abc'],
             ['id' => '345', 'data' => 'def'],
             'data',
         ];
+
+        $this->expectException(InvalidArgumentException::class);
         ArrayHelper::index($array, null);
     }
 
-    public function testInvalidIndexGroupBy(): void
+    public function testInvalidIndexWithoutKeyInIterable(): void
     {
+        $iterableObject = new IterableObject([
+            ['id' => '123', 'data' => 'abc'],
+            ['id' => '345', 'data' => 'def'],
+            'data',
+        ]);
+
         $this->expectException(InvalidArgumentException::class);
-        ArrayHelper::index(['id' => '1'], null, ['id']);
+        ArrayHelper::index($iterableObject, null);
     }
 
-    public function testInvalidIndexGroupByWithKey(): void
+    public function testInvalidIndexGroupByInArray(): void
     {
+        $array = ['id' => '1'];
+
         $this->expectException(InvalidArgumentException::class);
-        ArrayHelper::index(['id' => '1'], 'id', ['id']);
+        ArrayHelper::index($array, null, ['id']);
+    }
+
+    public function testInvalidIndexGroupByInIterable(): void
+    {
+        $iterableObject = new IterableObject(['id' => '1']);
+
+        $this->expectException(InvalidArgumentException::class);
+        ArrayHelper::index($iterableObject, null, ['id']);
+    }
+
+    public function testInvalidIndexGroupByWithKeyInArray(): void
+    {
+        $array = ['id' => '1'];
+
+        $this->expectException(InvalidArgumentException::class);
+        ArrayHelper::index($array, 'id', ['id']);
+    }
+
+    public function testInvalidIndexGroupByWithKeyInIterable(): void
+    {
+        $iterableObject = new IterableObject(['id' => '1']);
+
+        $this->expectException(InvalidArgumentException::class);
+        ArrayHelper::index($iterableObject, 'id', ['id']);
     }
 
     /**
@@ -225,8 +320,7 @@ final class IndexTest extends TestCase
             '1465540807.5221' => ['id' => 1465540807.522109],
         ];
 
-        $result = ArrayHelper::index($array, 'id');
-
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, ArrayHelper::index($array, 'id'));
+        $this->assertSame($expected, ArrayHelper::index(new IterableObject($array), 'id'));
     }
 }
