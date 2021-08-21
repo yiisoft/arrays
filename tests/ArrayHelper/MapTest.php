@@ -30,7 +30,7 @@ final class MapTest extends TestCase
                         '345' => 'ccc',
                     ],
                 ],
-                'class'
+                'class',
             ],
         ];
     }

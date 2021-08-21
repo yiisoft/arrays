@@ -27,21 +27,21 @@ final class IndexTest extends TestCase
                     'def' => ['id' => '345', 'data' => 'def'],
                     'ghi' => ['id' => '345', 'data' => 'ghi'],
                 ],
-                static fn(array $element) => $element['data'],
+                static fn (array $element) => $element['data'],
             ],
             [
                 [],
-                null
+                null,
             ],
             [
                 [],
-                static fn() => null,
+                static fn () => null,
             ],
             [
                 [
                     '123' => ['id' => '123', 'data' => 'abc'],
                 ],
-                static fn(array $element) => $element['id'] === '345' ? null : $element['id'],
+                static fn (array $element) => $element['id'] === '345' ? null : $element['id'],
             ],
         ];
     }
@@ -162,7 +162,7 @@ final class IndexTest extends TestCase
                         'ghi' => ['id' => '345', 'data' => 'ghi'],
                     ],
                 ],
-                static fn(array $element) => $element['data'],
+                static fn (array $element) => $element['data'],
                 'id',
             ],
             [
@@ -200,7 +200,7 @@ final class IndexTest extends TestCase
                         ],
                     ],
                 ],
-                static fn(array $element) => $element['data'],
+                static fn (array $element) => $element['data'],
                 ['id', 'data'],
             ],
         ];
