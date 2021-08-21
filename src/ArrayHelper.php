@@ -811,19 +811,19 @@ class ArrayHelper
      * // ]
      * ```
      *
-     * @param array $array Array to build map from.
+     * @param iterable $array Array or iterable object to build map from.
      * @param Closure|string $from Key or property name to map from.
      * @param Closure|string $to Key or property name to map to.
      * @param Closure|string|null $group Key or property to group the map.
      *
-     * @psalm-param array<mixed, array|object> $array
+     * @psalm-param iterable<mixed, array|object> $array
      *
      * @return array Resulting map.
      */
-    public static function map(array $array, $from, $to, $group = null): array
+    public static function map(iterable $array, $from, $to, $group = null): array
     {
         if ($group === null) {
-            if ($from instanceof Closure || $to instanceof Closure) {
+            if ($from instanceof Closure || $to instanceof Closure || !is_array($array)) {
                 $result = [];
                 foreach ($array as $element) {
                     $key = (string)static::getValue($element, $from);
