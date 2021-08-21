@@ -977,13 +977,19 @@ class ArrayHelper
     public static function htmlEncode(iterable $data, bool $valuesOnly = true, string $encoding = null): array
     {
         $d = [];
-        /** @var mixed $value */
+        /**
+         * @var mixed $key
+         * @var mixed $value
+         */
         foreach ($data as $key => $value) {
+            if (!is_int($key)) {
+                $key = (string)$key;
+            }
             if (!$valuesOnly && is_string($key)) {
-                $key = htmlspecialchars($key, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
+                $key = htmlspecialchars($key, ENT_QUOTES|ENT_SUBSTITUTE, $encoding, true);
             }
             if (is_string($value)) {
-                $d[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
+                $d[$key] = htmlspecialchars($value, ENT_QUOTES|ENT_SUBSTITUTE, $encoding, true);
             } elseif (is_array($value)) {
                 $d[$key] = static::htmlEncode($value, $valuesOnly, $encoding);
             } else {
@@ -1014,8 +1020,14 @@ class ArrayHelper
     public static function htmlDecode(iterable $data, bool $valuesOnly = true): array
     {
         $decoded = [];
-        /** @psalm-var mixed $value */
+        /**
+         * @var mixed $key
+         * @var mixed $value
+         */
         foreach ($data as $key => $value) {
+            if (!is_int($key)) {
+                $key = (string)$key;
+            }
             if (!$valuesOnly && is_string($key)) {
                 $key = htmlspecialchars_decode($key, ENT_QUOTES);
             }
