@@ -963,18 +963,18 @@ class ArrayHelper
      * If a value is an array, this method will also encode it recursively.
      * Only string values will be encoded.
      *
-     * @param array $data Data to be encoded.
+     * @param iterable $data Data to be encoded.
      * @param bool $valuesOnly Whether to encode array values only. If false,
      * both the array keys and array values will be encoded.
      * @param string|null $encoding The encoding to use, defaults to `ini_get('default_charset')`.
      *
-     * @psalm-param array<mixed, mixed> $data
+     * @psalm-param iterable<mixed, mixed> $data
      *
      * @return array The encoded data.
      *
      * @link https://www.php.net/manual/en/function.htmlspecialchars.php
      */
-    public static function htmlEncode(array $data, bool $valuesOnly = true, string $encoding = null): array
+    public static function htmlEncode(iterable $data, bool $valuesOnly = true, string $encoding = null): array
     {
         $d = [];
         /** @var mixed $value */
@@ -1001,17 +1001,17 @@ class ArrayHelper
      * If a value is an array, this method will also decode it recursively.
      * Only string values will be decoded.
      *
-     * @param array $data Data to be decoded.
+     * @param iterable $data Data to be decoded.
      * @param bool $valuesOnly Whether to decode array values only. If false,
      * both the array keys and array values will be decoded.
      *
-     * @psalm-param array<mixed, mixed> $data
+     * @psalm-param iterable<mixed, mixed> $data
      *
      * @return array The decoded data.
      *
      * @link https://www.php.net/manual/en/function.htmlspecialchars-decode.php
      */
-    public static function htmlDecode(array $data, bool $valuesOnly = true): array
+    public static function htmlDecode(iterable $data, bool $valuesOnly = true): array
     {
         $decoded = [];
         /** @psalm-var mixed $value */
