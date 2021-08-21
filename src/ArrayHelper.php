@@ -10,6 +10,7 @@ use Throwable;
 use Yiisoft\Strings\NumericHelper;
 
 use function array_key_exists;
+use function count;
 use function get_class;
 use function gettype;
 use function in_array;
