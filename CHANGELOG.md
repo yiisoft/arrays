@@ -1,8 +1,9 @@
 # Yii Arrays Change Log
 
-## 1.0.2 under development
+## 2.0.0 under development
 
 - New #91: Add method `ArrayHelper::group()` that groups the array according to a specified key (sagittaracc)
+- Chg #99: Finalize classes `ArrayHelper` and `ArraySorter` (vjik)
 
 ## 1.0.1 February 10, 2021
 

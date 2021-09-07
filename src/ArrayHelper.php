@@ -25,7 +25,7 @@ use function is_string;
  * @psalm-type ArrayKey = float|int|string|list<float|int|string>
  * @psalm-type ArrayPath = float|int|string|list<float|int|string|list<float|int|string>>
  */
-class ArrayHelper
+final class ArrayHelper
 {
     /**
      * Converts an object or an array of objects into an array.
@@ -77,7 +77,7 @@ class ArrayHelper
                 /** @var mixed $value */
                 foreach ($object as $key => $value) {
                     if (is_array($value) || is_object($value)) {
-                        $object[$key] = static::toArray($value, $properties);
+                        $object[$key] = self::toArray($value, $properties);
                     }
                 }
             }
@@ -100,11 +100,11 @@ class ArrayHelper
                             $result[$name] = $object->$name;
                         } else {
                             /** @var mixed */
-                            $result[$key] = static::getValue($object, $name);
+                            $result[$key] = self::getValue($object, $name);
                         }
                     }
 
-                    return $recursive ? static::toArray($result, $properties) : $result;
+                    return $recursive ? self::toArray($result, $properties) : $result;
                 }
             }
             if ($object instanceof ArrayableInterface) {
@@ -121,7 +121,7 @@ class ArrayHelper
                 }
             }
 
-            return $recursive ? static::toArray($result, $properties) : $result;
+            return $recursive ? self::toArray($result, $properties) : $result;
         }
 
         return [$object];
@@ -219,12 +219,12 @@ class ArrayHelper
             $lastKey = array_pop($key);
             foreach ($key as $keyPart) {
                 /** @var mixed */
-                $array = static::getRootValue($array, $keyPart, $default);
+                $array = self::getRootValue($array, $keyPart, $default);
             }
-            return static::getRootValue($array, $lastKey, $default);
+            return self::getRootValue($array, $lastKey, $default);
         }
 
-        return static::getRootValue($array, $key, $default);
+        return self::getRootValue($array, $key, $default);
     }
 
     /**
@@ -238,7 +238,7 @@ class ArrayHelper
     private static function getRootValue($array, $key, $default)
     {
         if (is_array($array)) {
-            $key = static::normalizeArrayKey($key);
+            $key = self::normalizeArrayKey($key);
             return array_key_exists($key, $array) ? $array[$key] : $default;
         }
 
@@ -292,9 +292,9 @@ class ArrayHelper
      */
     public static function getValueByPath($array, $path, $default = null, string $delimiter = '.')
     {
-        return static::getValue(
+        return self::getValue(
             $array,
-            $path instanceof Closure ? $path : static::parsePath($path, $delimiter),
+            $path instanceof Closure ? $path : self::parsePath($path, $delimiter),
             $default
         );
     }
@@ -347,7 +347,7 @@ class ArrayHelper
         $keys = is_array($key) ? $key : [$key];
 
         while (count($keys) > 1) {
-            $k = static::normalizeArrayKey(array_shift($keys));
+            $k = self::normalizeArrayKey(array_shift($keys));
             if (!isset($array[$k])) {
                 $array[$k] = [];
             }
@@ -358,7 +358,7 @@ class ArrayHelper
         }
 
         /** @var mixed */
-        $array[static::normalizeArrayKey(array_shift($keys))] = $value;
+        $array[self::normalizeArrayKey(array_shift($keys))] = $value;
     }
 
     /**
@@ -419,7 +419,7 @@ class ArrayHelper
      */
     public static function setValueByPath(array &$array, $path, $value, string $delimiter = '.'): void
     {
-        static::setValue($array, $path === null ? null : static::parsePath($path, $delimiter), $value);
+        self::setValue($array, $path === null ? null : self::parsePath($path, $delimiter), $value);
     }
 
     /**
@@ -444,7 +444,7 @@ class ArrayHelper
             foreach ($path as $key) {
                 if (is_string($key) || is_array($key)) {
                     /** @var list<float|int|string> $parsedPath */
-                    $parsedPath = static::parsePath($key, $delimiter);
+                    $parsedPath = self::parsePath($key, $delimiter);
                     $newPath = array_merge($newPath, $parsedPath);
                 } else {
                     $newPath[] = $key;
@@ -484,14 +484,14 @@ class ArrayHelper
         $keys = is_array($key) ? $key : [$key];
 
         while (count($keys) > 1) {
-            $key = static::normalizeArrayKey(array_shift($keys));
+            $key = self::normalizeArrayKey(array_shift($keys));
             if (!isset($array[$key]) || !is_array($array[$key])) {
                 return $default;
             }
             $array = &$array[$key];
         }
 
-        $key = static::normalizeArrayKey(array_shift($keys));
+        $key = self::normalizeArrayKey(array_shift($keys));
         if (array_key_exists($key, $array)) {
             /** @var mixed */
             $value = $array[$key];
@@ -531,7 +531,7 @@ class ArrayHelper
      */
     public static function removeByPath(array &$array, $path, $default = null, string $delimiter = '.')
     {
-        return static::remove($array, static::parsePath($path, $delimiter), $default);
+        return self::remove($array, self::parsePath($path, $delimiter), $default);
     }
 
     /**
@@ -688,8 +688,8 @@ class ArrayHelper
             $lastArray = &$result;
 
             foreach ($groups as $group) {
-                $value = static::normalizeArrayKey(
-                    static::getValue($element, $group)
+                $value = self::normalizeArrayKey(
+                    self::getValue($element, $group)
                 );
                 if (!array_key_exists($value, $lastArray)) {
                     $lastArray[$value] = [];
@@ -703,9 +703,9 @@ class ArrayHelper
                 }
             } else {
                 /** @var mixed */
-                $value = static::getValue($element, $key);
+                $value = self::getValue($element, $key);
                 if ($value !== null) {
-                    $lastArray[static::normalizeArrayKey($value)] = $element;
+                    $lastArray[self::normalizeArrayKey($value)] = $element;
                 }
             }
             unset($lastArray);
@@ -728,7 +728,7 @@ class ArrayHelper
      */
     public static function group(array $array, $groups): array
     {
-        return static::index($array, null, $groups);
+        return self::index($array, null, $groups);
     }
 
     /**
@@ -764,12 +764,12 @@ class ArrayHelper
         if ($keepKeys) {
             foreach ($array as $k => $element) {
                 /** @var mixed */
-                $result[$k] = static::getValue($element, $name);
+                $result[$k] = self::getValue($element, $name);
             }
         } else {
             foreach ($array as $element) {
                 /** @var mixed */
-                $result[] = static::getValue($element, $name);
+                $result[] = self::getValue($element, $name);
             }
         }
 
@@ -826,9 +826,9 @@ class ArrayHelper
             if ($from instanceof Closure || $to instanceof Closure) {
                 $result = [];
                 foreach ($array as $element) {
-                    $key = (string)static::getValue($element, $from);
+                    $key = (string)self::getValue($element, $from);
                     /** @var mixed */
-                    $result[$key] = static::getValue($element, $to);
+                    $result[$key] = self::getValue($element, $to);
                 }
 
                 return $result;
@@ -839,10 +839,10 @@ class ArrayHelper
 
         $result = [];
         foreach ($array as $element) {
-            $groupKey = (string)static::getValue($element, $group);
-            $key = (string)static::getValue($element, $from);
+            $groupKey = (string)self::getValue($element, $group);
+            $key = (string)self::getValue($element, $from);
             /** @var mixed */
-            $result[$groupKey][$key] = static::getValue($element, $to);
+            $result[$groupKey][$key] = self::getValue($element, $to);
         }
 
         return $result;
@@ -865,12 +865,12 @@ class ArrayHelper
     {
         if (is_array($key)) {
             if (count($key) === 1) {
-                return static::rootKeyExists($array, end($key), $caseSensitive);
+                return self::rootKeyExists($array, end($key), $caseSensitive);
             }
 
             foreach (self::getExistsKeys($array, array_shift($key), $caseSensitive) as $existKey) {
                 /** @var mixed */
-                $array = static::getRootValue($array, $existKey, null);
+                $array = self::getRootValue($array, $existKey, null);
                 if (is_array($array) && self::keyExists($array, $key, $caseSensitive)) {
                     return true;
                 }
@@ -879,7 +879,7 @@ class ArrayHelper
             return false;
         }
 
-        return static::rootKeyExists($array, $key, $caseSensitive);
+        return self::rootKeyExists($array, $key, $caseSensitive);
     }
 
     /**
@@ -951,7 +951,7 @@ class ArrayHelper
         bool $caseSensitive = true,
         string $delimiter = '.'
     ): bool {
-        return static::keyExists($array, static::parsePath($path, $delimiter), $caseSensitive);
+        return self::keyExists($array, self::parsePath($path, $delimiter), $caseSensitive);
     }
 
     /**
@@ -982,7 +982,7 @@ class ArrayHelper
             if (is_string($value)) {
                 $d[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
             } elseif (is_array($value)) {
-                $d[$key] = static::htmlEncode($value, $valuesOnly, $encoding);
+                $d[$key] = self::htmlEncode($value, $valuesOnly, $encoding);
             } else {
                 /** @var mixed */
                 $d[$key] = $value;
@@ -1019,7 +1019,7 @@ class ArrayHelper
             if (is_string($value)) {
                 $decoded[$key] = htmlspecialchars_decode($value, ENT_QUOTES);
             } elseif (is_array($value)) {
-                $decoded[$key] = static::htmlDecode($value);
+                $decoded[$key] = self::htmlDecode($value);
             } else {
                 /** @var mixed */
                 $decoded[$key] = $value;
@@ -1152,7 +1152,7 @@ class ArrayHelper
     {
         /** @psalm-var mixed $needle */
         foreach ($needles as $needle) {
-            if (!static::isIn($needle, $haystack, $strict)) {
+            if (!self::isIn($needle, $haystack, $strict)) {
                 return false;
             }
         }

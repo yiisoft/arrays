@@ -9,7 +9,7 @@ use Countable;
 use IteratorAggregate;
 use Yiisoft\Arrays\ArrayAccessTrait;
 
-class ArrayAccessObject implements IteratorAggregate, ArrayAccess, Countable
+final class ArrayAccessObject implements IteratorAggregate, ArrayAccess, Countable
 {
     use ArrayAccessTrait;
 

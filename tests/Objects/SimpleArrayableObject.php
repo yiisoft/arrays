@@ -7,7 +7,7 @@ namespace Yiisoft\Arrays\Tests\Objects;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayableTrait;
 
-class SimpleArrayableObject implements ArrayableInterface
+final class SimpleArrayableObject implements ArrayableInterface
 {
     use ArrayableTrait;
 
