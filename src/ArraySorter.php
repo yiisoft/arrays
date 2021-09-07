@@ -9,7 +9,7 @@ use InvalidArgumentException;
 
 use function is_array;
 
-class ArraySorter
+final class ArraySorter
 {
     /**
      * Sorts an array of objects or arrays (with the same structure) by one or several keys.

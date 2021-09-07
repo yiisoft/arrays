@@ -25,7 +25,7 @@ use function is_string;
  * @psalm-type ArrayKey = float|int|string|list<float|int|string>
  * @psalm-type ArrayPath = float|int|string|list<float|int|string|list<float|int|string>>
  */
-class ArrayHelper
+final class ArrayHelper
 {
     /**
      * Converts an object or an array of objects into an array.
