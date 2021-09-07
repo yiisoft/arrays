@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Tests\Objects;
 
-class StaticObject
+final class StaticObject
 {
     public static int $a = 1;
     public NestedStaticObject $nested;

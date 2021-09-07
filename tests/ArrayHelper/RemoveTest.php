@@ -7,7 +7,7 @@ namespace Yiisoft\Arrays\Tests\ArrayHelper;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 
-class RemoveTest extends TestCase
+final class RemoveTest extends TestCase
 {
     public function removeData(): array
     {
