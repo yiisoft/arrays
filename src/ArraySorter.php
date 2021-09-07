@@ -53,7 +53,7 @@ final class ArraySorter
      */
     public static function multisort(array &$array, $key, $direction = SORT_ASC, $sortFlag = SORT_REGULAR): void
     {
-        $keys = static::getKeys($array, $key);
+        $keys = self::getKeys($array, $key);
         if (empty($keys)) {
             return;
         }
@@ -71,7 +71,7 @@ final class ArraySorter
             throw new InvalidArgumentException('The length of $sortFlag parameter must be the same as that of $keys.');
         }
 
-        $_args = static::getArguments($array, $keys, $direction, $sortFlag);
+        $_args = self::getArguments($array, $keys, $direction, $sortFlag);
 
         $_args[] = &$array;
         array_multisort(...$_args);
