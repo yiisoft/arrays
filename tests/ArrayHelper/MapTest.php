@@ -6,10 +6,39 @@ namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Arrays\Tests\Objects\IterableObject;
 
 final class MapTest extends TestCase
 {
-    public function testBase(): void
+    public function dataBase(): array
+    {
+        return [
+            [
+                [
+                    '123' => 'aaa',
+                    '124' => 'bbb',
+                    '345' => 'ccc',
+                ],
+            ],
+            [
+                [
+                    'x' => [
+                        '123' => 'aaa',
+                        '124' => 'bbb',
+                    ],
+                    'y' => [
+                        '345' => 'ccc',
+                    ],
+                ],
+                'class',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataBase
+     */
+    public function testBase(array $expected, ?string $group = null): void
     {
         $array = [
             ['id' => '123', 'name' => 'aaa', 'class' => 'x'],
@@ -17,32 +46,54 @@ final class MapTest extends TestCase
             ['id' => '345', 'name' => 'ccc', 'class' => 'y'],
         ];
 
-        $result = ArrayHelper::map($array, 'id', 'name');
         $this->assertEquals(
-            [
-                '123' => 'aaa',
-                '124' => 'bbb',
-                '345' => 'ccc',
-            ],
-            $result
+            $expected,
+            ArrayHelper::map($array, 'id', 'name', $group)
         );
-
-        $result = ArrayHelper::map($array, 'id', 'name', 'class');
         $this->assertEquals(
-            [
-                'x' => [
-                    '123' => 'aaa',
-                    '124' => 'bbb',
-                ],
-                'y' => [
-                    '345' => 'ccc',
-                ],
-            ],
-            $result
+            $expected,
+            ArrayHelper::map(new IterableObject($array), 'id', 'name', $group)
         );
     }
 
-    public function testWithoutGroup(): void
+    public function dataWithoutGroup(): array
+    {
+        return [
+            [
+                [
+                    '1' => '1',
+                    '2' => '2-last',
+                ],
+                'from',
+                'to',
+            ],
+            [
+                [
+                    'key-1' => '1',
+                    'key-2' => '2-last',
+                ],
+                static function (array $row) {
+                    return "key-{$row['from']}";
+                },
+                'to',
+            ],
+            [
+                [
+                    '1' => 'value-1',
+                    '2' => 'value-2-last',
+                ],
+                'from',
+                static function (array $row) {
+                    return "value-{$row['to']}";
+                },
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataWithoutGroup
+     */
+    public function testWithoutGroup(array $expected, $from, $to): void
     {
         $array = [
             ['from' => '1', 'to' => '1'],
@@ -50,44 +101,86 @@ final class MapTest extends TestCase
             ['from' => '2', 'to' => '2-last'],
         ];
 
-        $this->assertSame(
-            [
-                '1' => '1',
-                '2' => '2-last',
-            ],
-            ArrayHelper::map($array, 'from', 'to')
-        );
-
-        $this->assertSame(
-            [
-                'key-1' => '1',
-                'key-2' => '2-last',
-            ],
-            ArrayHelper::map(
-                $array,
-                function ($row) {
-                    return "key-{$row['from']}";
-                },
-                'to'
-            )
-        );
-
-        $this->assertSame(
-            [
-                '1' => 'value-1',
-                '2' => 'value-2-last',
-            ],
-            ArrayHelper::map(
-                $array,
-                'from',
-                function ($row) {
-                    return "value-{$row['to']}";
-                }
-            )
-        );
+        $this->assertSame($expected, ArrayHelper::map($array, $from, $to));
+        $this->assertSame($expected, ArrayHelper::map(new IterableObject($array), $from, $to));
     }
 
-    public function testWithGroup(): void
+    public function dataWithGroup(): array
+    {
+        return [
+            [
+                [
+                    '1' => [
+                        '1' => '1.1',
+                        '2' => '1.2',
+                    ],
+                    '2' => [
+                        '1' => '2.1',
+                        '2' => '2.2-last',
+                    ],
+                ],
+                'from',
+                'to',
+                'group',
+            ],
+            [
+                [
+                    '1' => [
+                        'key-1' => '1.1',
+                        'key-2' => '1.2',
+                    ],
+                    '2' => [
+                        'key-1' => '2.1',
+                        'key-2' => '2.2-last',
+                    ],
+                ],
+                static function (array $row) {
+                    return "key-{$row['from']}";
+                },
+                'to',
+                'group',
+            ],
+            [
+                [
+                    '1' => [
+                        '1' => 'value-1.1',
+                        '2' => 'value-1.2',
+                    ],
+                    '2' => [
+                        '1' => 'value-2.1',
+                        '2' => 'value-2.2-last',
+                    ],
+                ],
+                'from',
+                static function (array $row) {
+                    return "value-{$row['to']}";
+                },
+                'group',
+            ],
+            [
+                [
+                    'group-1' => [
+                        '1' => '1.1',
+                        '2' => '1.2',
+                    ],
+                    'group-2' => [
+                        '1' => '2.1',
+                        '2' => '2.2-last',
+                    ],
+                ],
+                'from',
+                'to',
+                static function (array $row) {
+                    return "group-{$row['group']}";
+                },
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataWithGroup
+     */
+    public function testWithGroup(array $expected, $from, $to, $group): void
     {
         $array = [
             ['group' => '1', 'from' => '1', 'to' => '1.1'],
@@ -97,81 +190,7 @@ final class MapTest extends TestCase
             ['group' => '2', 'from' => '2', 'to' => '2.2-last'],
         ];
 
-        $this->assertSame(
-            [
-                '1' => [
-                    '1' => '1.1',
-                    '2' => '1.2',
-                ],
-                '2' => [
-                    '1' => '2.1',
-                    '2' => '2.2-last',
-                ],
-            ],
-            ArrayHelper::map($array, 'from', 'to', 'group')
-        );
-
-        $this->assertSame(
-            [
-                '1' => [
-                    'key-1' => '1.1',
-                    'key-2' => '1.2',
-                ],
-                '2' => [
-                    'key-1' => '2.1',
-                    'key-2' => '2.2-last',
-                ],
-            ],
-            ArrayHelper::map(
-                $array,
-                function ($row) {
-                    return "key-{$row['from']}";
-                },
-                'to',
-                'group'
-            )
-        );
-
-        $this->assertSame(
-            [
-                '1' => [
-                    '1' => 'value-1.1',
-                    '2' => 'value-1.2',
-                ],
-                '2' => [
-                    '1' => 'value-2.1',
-                    '2' => 'value-2.2-last',
-                ],
-            ],
-            ArrayHelper::map(
-                $array,
-                'from',
-                function ($row) {
-                    return "value-{$row['to']}";
-                },
-                'group'
-            )
-        );
-
-        $this->assertSame(
-            [
-                'group-1' => [
-                    '1' => '1.1',
-                    '2' => '1.2',
-                ],
-                'group-2' => [
-                    '1' => '2.1',
-                    '2' => '2.2-last',
-                ],
-            ],
-            ArrayHelper::map(
-                $array,
-                'from',
-                'to',
-                function ($row) {
-                    return "group-{$row['group']}";
-                }
-            )
-        );
+        $this->assertSame($expected, ArrayHelper::map($array, $from, $to, $group));
+        $this->assertSame($expected, ArrayHelper::map(new IterableObject($array), $from, $to, $group));
     }
 }

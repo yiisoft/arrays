@@ -61,34 +61,6 @@ final class ArrayHelperTest extends TestCase
         $this->assertEquals([], $removed);
     }
 
-    public function testGetColumn(): void
-    {
-        $array = [
-            'a' => ['id' => '123', 'data' => 'abc'],
-            'b' => ['id' => '345', 'data' => 'def'],
-        ];
-        $result = ArrayHelper::getColumn($array, 'id');
-        $this->assertEquals(['a' => '123', 'b' => '345'], $result);
-        $result = ArrayHelper::getColumn($array, 'id', false);
-        $this->assertEquals(['123', '345'], $result);
-
-        $result = ArrayHelper::getColumn(
-            $array,
-            static function ($element) {
-                return $element['data'];
-            }
-        );
-        $this->assertEquals(['a' => 'abc', 'b' => 'def'], $result);
-        $result = ArrayHelper::getColumn(
-            $array,
-            static function ($element) {
-                return $element['data'];
-            },
-            false
-        );
-        $this->assertEquals(['abc', 'def'], $result);
-    }
-
     public function testIsAssociative(): void
     {
         $this->assertFalse(ArrayHelper::isAssociative([]));
@@ -107,92 +79,6 @@ final class ArrayHelperTest extends TestCase
         $this->assertFalse(ArrayHelper::isIndexed([2 => 'a', 3 => 'b'], true));
         $this->assertTrue(ArrayHelper::isIndexed([0 => 'a', 1 => 'b'], true));
         $this->assertFalse(ArrayHelper::isIndexed(['a' => 'b'], false));
-    }
-
-    public function testHtmlEncode(): void
-    {
-        $array = [
-            'abc' => '123',
-            '<' => '>',
-            'cde' => false,
-            3 => 'blank',
-            [
-                '<>' => 'a<>b',
-                '23' => true,
-            ],
-            'invalid' => "a\x80b",
-            'quotes \'"' => '\'"',
-        ];
-        $this->assertEquals(
-            [
-                'abc' => '123',
-                '<' => '&gt;',
-                'cde' => false,
-                3 => 'blank',
-                [
-                    '<>' => 'a&lt;&gt;b',
-                    '23' => true,
-                ],
-                'invalid' => 'a�b',
-                'quotes \'"' => '&#039;&quot;',
-            ],
-            ArrayHelper::htmlEncode($array)
-        );
-        $this->assertEquals(
-            [
-                'abc' => '123',
-                '&lt;' => '&gt;',
-                'cde' => false,
-                3 => 'blank',
-                [
-                    '&lt;&gt;' => 'a&lt;&gt;b',
-                    '23' => true,
-                ],
-                'invalid' => 'a�b',
-                'quotes &#039;&quot;' => '&#039;&quot;',
-            ],
-            ArrayHelper::htmlEncode($array, false)
-        );
-    }
-
-    public function testHtmlDecode(): void
-    {
-        $array = [
-            'abc' => '123',
-            '&lt;' => '&gt;',
-            'cde' => false,
-            3 => 'blank',
-            [
-                '<>' => 'a&lt;&gt;b',
-                '23' => true,
-            ],
-        ];
-        $this->assertEquals(
-            [
-                'abc' => '123',
-                '&lt;' => '>',
-                'cde' => false,
-                3 => 'blank',
-                [
-                    '<>' => 'a<>b',
-                    '23' => true,
-                ],
-            ],
-            ArrayHelper::htmlDecode($array)
-        );
-        $this->assertEquals(
-            [
-                'abc' => '123',
-                '<' => '>',
-                'cde' => false,
-                3 => 'blank',
-                [
-                    '<>' => 'a<>b',
-                    '23' => true,
-                ],
-            ],
-            ArrayHelper::htmlDecode($array, false)
-        );
     }
 
     public function testIsIn(): void

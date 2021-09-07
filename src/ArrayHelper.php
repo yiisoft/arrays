@@ -10,6 +10,7 @@ use Throwable;
 use Yiisoft\Strings\NumericHelper;
 
 use function array_key_exists;
+use function count;
 use function get_class;
 use function gettype;
 use function in_array;
@@ -659,7 +660,7 @@ final class ArrayHelper
      * ]
      * ```
      *
-     * @param array $array The array that needs to be indexed or grouped.
+     * @param iterable $array The array or iterable object that needs to be indexed or grouped.
      * @param Closure|string|null $key The column name or anonymous function which result will be used
      * to index the array.
      * @param Closure[]|string|string[]|null $groups The array of keys, that will be used to group the input array
@@ -667,11 +668,11 @@ final class ArrayHelper
      * defined, the array element will be discarded. Otherwise, if `$groups` is specified, array element will be added
      * to the result array without any key.
      *
-     * @psalm-param array<mixed, array|object> $array
+     * @psalm-param iterable<mixed, array|object> $array
      *
      * @return array The indexed and/or grouped array.
      */
-    public static function index(array $array, $key, $groups = []): array
+    public static function index(iterable $array, $key, $groups = []): array
     {
         $result = [];
         $groups = (array)$groups;
@@ -718,15 +719,15 @@ final class ArrayHelper
      * Groups the array according to a specified key.
      * This is just an alias for indexing by groups
      *
-     * @param array $array The array that needs to be grouped.
+     * @param iterable $array The array or iterable object that needs to be grouped.
      * @param Closure[]|string|string[] $groups The array of keys, that will be used to group the input array
      * by one or more keys.
      *
-     * @psalm-param array<mixed, array|object> $array
+     * @psalm-param iterable<mixed, array|object> $array
      *
      * @return array The grouped array.
      */
-    public static function group(array $array, $groups): array
+    public static function group(iterable $array, $groups): array
     {
         return self::index($array, null, $groups);
     }
@@ -751,14 +752,16 @@ final class ArrayHelper
      * });
      * ```
      *
-     * @param array<array-key, array|object> $array The array to get column from.
+     * @param iterable $array The array or iterable object to get column from.
      * @param Closure|string $name Column name or a closure returning column name.
      * @param bool $keepKeys Whether to maintain the array keys. If false, the resulting array
      * will be re-indexed with integers.
      *
+     * @psalm-param iterable<array-key, array|object> $array
+     *
      * @return array The list of column values.
      */
-    public static function getColumn(array $array, $name, bool $keepKeys = true): array
+    public static function getColumn(iterable $array, $name, bool $keepKeys = true): array
     {
         $result = [];
         if ($keepKeys) {
@@ -811,19 +814,19 @@ final class ArrayHelper
      * // ]
      * ```
      *
-     * @param array $array Array to build map from.
+     * @param iterable $array Array or iterable object to build map from.
      * @param Closure|string $from Key or property name to map from.
      * @param Closure|string $to Key or property name to map to.
      * @param Closure|string|null $group Key or property to group the map.
      *
-     * @psalm-param array<mixed, array|object> $array
+     * @psalm-param iterable<mixed, array|object> $array
      *
      * @return array Resulting map.
      */
-    public static function map(array $array, $from, $to, $group = null): array
+    public static function map(iterable $array, $from, $to, $group = null): array
     {
         if ($group === null) {
-            if ($from instanceof Closure || $to instanceof Closure) {
+            if ($from instanceof Closure || $to instanceof Closure || !is_array($array)) {
                 $result = [];
                 foreach ($array as $element) {
                     $key = (string)self::getValue($element, $from);
@@ -960,27 +963,33 @@ final class ArrayHelper
      * If a value is an array, this method will also encode it recursively.
      * Only string values will be encoded.
      *
-     * @param array $data Data to be encoded.
+     * @param iterable $data Data to be encoded.
      * @param bool $valuesOnly Whether to encode array values only. If false,
      * both the array keys and array values will be encoded.
      * @param string|null $encoding The encoding to use, defaults to `ini_get('default_charset')`.
      *
-     * @psalm-param array<mixed, mixed> $data
+     * @psalm-param iterable<mixed, mixed> $data
      *
      * @return array The encoded data.
      *
      * @link https://www.php.net/manual/en/function.htmlspecialchars.php
      */
-    public static function htmlEncode(array $data, bool $valuesOnly = true, string $encoding = null): array
+    public static function htmlEncode(iterable $data, bool $valuesOnly = true, string $encoding = null): array
     {
         $d = [];
-        /** @var mixed $value */
+        /**
+         * @var mixed $key
+         * @var mixed $value
+         */
         foreach ($data as $key => $value) {
+            if (!is_int($key)) {
+                $key = (string)$key;
+            }
             if (!$valuesOnly && is_string($key)) {
-                $key = htmlspecialchars($key, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
+                $key = htmlspecialchars($key, ENT_QUOTES|ENT_SUBSTITUTE, $encoding, true);
             }
             if (is_string($value)) {
-                $d[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
+                $d[$key] = htmlspecialchars($value, ENT_QUOTES|ENT_SUBSTITUTE, $encoding, true);
             } elseif (is_array($value)) {
                 $d[$key] = self::htmlEncode($value, $valuesOnly, $encoding);
             } else {
@@ -998,21 +1007,27 @@ final class ArrayHelper
      * If a value is an array, this method will also decode it recursively.
      * Only string values will be decoded.
      *
-     * @param array $data Data to be decoded.
+     * @param iterable $data Data to be decoded.
      * @param bool $valuesOnly Whether to decode array values only. If false,
      * both the array keys and array values will be decoded.
      *
-     * @psalm-param array<mixed, mixed> $data
+     * @psalm-param iterable<mixed, mixed> $data
      *
      * @return array The decoded data.
      *
      * @link https://www.php.net/manual/en/function.htmlspecialchars-decode.php
      */
-    public static function htmlDecode(array $data, bool $valuesOnly = true): array
+    public static function htmlDecode(iterable $data, bool $valuesOnly = true): array
     {
         $decoded = [];
-        /** @psalm-var mixed $value */
+        /**
+         * @var mixed $key
+         * @var mixed $value
+         */
         foreach ($data as $key => $value) {
+            if (!is_int($key)) {
+                $key = (string)$key;
+            }
             if (!$valuesOnly && is_string($key)) {
                 $key = htmlspecialchars_decode($key, ENT_QUOTES);
             }
