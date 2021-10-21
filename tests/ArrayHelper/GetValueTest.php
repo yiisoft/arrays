@@ -294,4 +294,18 @@ final class GetValueTest extends TestCase
         );
         ArrayHelper::getValue(42, 'key');
     }
+
+    public function testDefaultArrayValue(): void
+    {
+        $array = [
+            'a' => 1,
+        ];
+        $key = ['a', 'b', 'c'];
+        $default = [
+            'c' => 'value',
+        ];
+        $result = ArrayHelper::getValue($array, $key, $default);
+
+        $this->assertSame(['c' => 'value'], $result);
+    }
 }

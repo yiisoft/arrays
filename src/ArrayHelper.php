@@ -220,7 +220,10 @@ final class ArrayHelper
             $lastKey = array_pop($key);
             foreach ($key as $keyPart) {
                 /** @var mixed */
-                $array = self::getRootValue($array, $keyPart, $default);
+                $array = self::getRootValue($array, $keyPart, null);
+                if (!is_array($array) && !is_object($array)) {
+                    return $default;
+                }
             }
             return self::getRootValue($array, $lastKey, $default);
         }

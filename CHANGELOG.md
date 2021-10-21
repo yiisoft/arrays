@@ -6,6 +6,8 @@
 - New #96: Add support for iterable objects to `ArrayHelper::map()`, `ArrayHelper::index()`, `ArrayHelper::group()`,
   `ArrayHelper::htmlEncode()` and `ArrayHelper::htmlDecode` (vjik)
 - Chg #99: Finalize `ArrayHelper` and `ArraySorter` (vjik)
+- Bug #101: Fix incorrect default value returned from `ArrayHelper::getValue()` when key does not exist and
+  default is array (vjik)
 
 ## 1.0.1 February 10, 2021
 
