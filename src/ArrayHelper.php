@@ -23,8 +23,8 @@ use function is_string;
 /**
  * Yii array helper provides static methods allowing you to deal with arrays more efficiently.
  *
- * @psalm-type ArrayKey = float|int|string|list<float|int|string>
- * @psalm-type ArrayPath = float|int|string|list<float|int|string|list<float|int|string>>
+ * @psalm-type ArrayKey = float|int|string|array<array-key,float|int|string>
+ * @psalm-type ArrayPath = float|int|string|array<array-key,float|int|string|array<array-key,float|int|string>>
  */
 final class ArrayHelper
 {
