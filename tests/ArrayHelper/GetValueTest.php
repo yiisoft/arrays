@@ -298,11 +298,11 @@ final class GetValueTest extends TestCase
     public function testDefaultArrayValue(): void
     {
         $array = [
-            'a' => 1
+            'a' => 1,
         ];
         $key = ['a', 'b', 'c'];
         $default = [
-            'c' => 'value'
+            'c' => 'value',
         ];
         $result = ArrayHelper::getValue($array, $key, $default);
 
