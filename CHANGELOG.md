@@ -1,6 +1,6 @@
 # Yii Arrays Change Log
 
-## 2.0.0 under development
+## 2.0.0 October 23, 2021
 
 - New #91: Add `ArrayHelper::group()` that groups the array according to a specified key (sagittaracc)
 - New #96: Add support for iterable objects to `ArrayHelper::map()`, `ArrayHelper::index()`, `ArrayHelper::group()`,
