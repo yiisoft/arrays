@@ -114,7 +114,10 @@ final class ArrayableTraitTest extends TestCase
             [
                 'nested2' => [
                     'Y' => [
-                        'a' => [],
+                        'a' => [
+                            'x' => 1,
+                            'y' => 2,
+                        ],
                     ],
                 ],
             ],

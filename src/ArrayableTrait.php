@@ -129,7 +129,7 @@ trait ArrayableTrait
                 $nestedExpand = $this->extractFieldsFor($expand, $field);
                 if ($attribute instanceof ArrayableInterface) {
                     $attribute = $attribute->toArray($nestedFields, $nestedExpand);
-                } elseif (is_array($attribute)) {
+                } elseif (is_array($attribute) && ($nestedExpand || $nestedFields)) {
                     $attribute = $this->filterAndExpand($attribute, $nestedFields, $nestedExpand);
                 }
             }
