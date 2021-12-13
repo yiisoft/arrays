@@ -248,11 +248,16 @@ final class ArrayHelper
 
         if (is_object($array)) {
             try {
-                return $array::$$key;
+                try {
+                    return $array::$$key;
+                } catch (Throwable $e) {
+                    // This is expected to fail if the property does not exist, or __get() is not implemented.
+                    // It is not reliably possible to check whether a property is accessible beforehand.
+                    return $array->$key;
+                }
             } catch (Throwable $e) {
-                // This is expected to fail if the property does not exist, or __get() is not implemented.
-                // It is not reliably possible to check whether a property is accessible beforehand.
-                return $array->$key;
+                $getter = 'get' . ucfirst($key);
+                return $array->$getter();
             }
         }
 
