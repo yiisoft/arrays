@@ -1282,9 +1282,8 @@ final class ArrayHelper
     /**
      * Returns the public member variables of an object.
      *
-     * This method is provided such that we can get the public member variables of an object. It is different
-     * from {@see get_object_vars()} because the latter will return private and protected variables if it
-     * is called within the object itself.
+     * This method is provided such that we can get the public member variables of an object, because a direct call of
+     * {@see get_object_vars()} (within the object itself) will return only private and protected variables.
      *
      * @param object $object The object to be handled.
      *
