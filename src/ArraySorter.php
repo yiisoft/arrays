@@ -81,12 +81,12 @@ final class ArraySorter
      * Get keys for get arguments.
      *
      * @param array<array-key, array|object> $array The array to be sorted.
-     * @param array<array-key, string|Closure>|Closure|string $key The keys to be sorted by. This refers to a key name
+     * @param array<array-key, Closure|string>|Closure|string $key The keys to be sorted by. This refers to a key name
      * of the sub-array elements, a property name of the objects, or an anonymous function returning the values for
      * comparison purpose. The anonymous function signature should be: `function($item)`.
      * To sort by multiple keys, provide an array of keys here.
      *
-     * @return array<array-key, string|Closure> The keys.
+     * @return array<array-key, Closure|string> The keys.
      */
     private static function getKeys(array $array, $key): array
     {
@@ -102,7 +102,7 @@ final class ArraySorter
      * Get arguments for multisort.
      *
      * @param array<array-key, array|object> $array The array to be sorted.
-     * @param array<array-key, string|Closure> $keys Array of keys.
+     * @param array<array-key, Closure|string> $keys Array of keys.
      * @param array<array-key, int> $direction Array of sorting directions.
      * @param array<array-key, int> $sortFlags Array of sort flags.
      *
