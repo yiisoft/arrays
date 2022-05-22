@@ -19,7 +19,8 @@ final class ToArrayTest extends TestCase
 {
     public function testBase(): void
     {
-        $data = $this->getMockBuilder(ArrayableInterface::class)
+        $data = $this
+            ->getMockBuilder(ArrayableInterface::class)
             ->getMock()
             ->method('toArray')
             ->willReturn([]);
