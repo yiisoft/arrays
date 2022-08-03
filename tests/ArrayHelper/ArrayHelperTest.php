@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use ArrayObject;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Tests\Objects\Post2;
@@ -119,11 +120,56 @@ final class ArrayHelperTest extends TestCase
         $this->assertFalse(ArrayHelper::isSubset(new ArrayObject([1]), ['1', 'b'], true));
     }
 
-    public function testGetObjectVars()
+    public function testGetObjectVars(): void
     {
         $this->assertSame([
             'id' => 123,
             'content' => 'test',
         ], ArrayHelper::getObjectVars(new Post2()));
+    }
+
+    public function parsePathDataProvider(): array
+    {
+        return [
+            ['key1.key2.key3', '.', ['key1', 'key2', 'key3']],
+            ['key1\.key2.key3', '.', ['key1\.key2', 'key3']],
+            ['key1\:key2:key3', ':', ['key1\:key2', 'key3']],
+        ];
+    }
+
+    /**
+     * @dataProvider parsePathDataProvider
+     */
+    public function testParsePath(string $path, string $delimiter, mixed $expectedPath): void
+    {
+        $this->assertSame($expectedPath, ArrayHelper::parsePath($path, $delimiter));
+    }
+
+    public function getValueByPathDataProvider(): array
+    {
+        return [
+            [['key1' => ['key2' => ['key3' => 'value']]], 'key1.key2.key3', '.', 'value'],
+            [['key1\.key2' => ['key3' => 'value']], 'key1.key2.key3', '.', null],
+            [['key1\.key2' => ['key3' => 'value']], 'key1\.key2.key3', '.', 'value'],
+            [['key1\:key2' => ['key3' => 'value']], 'key1\:key2:key3', ':', 'value'],
+        ];
+    }
+
+    /**
+     * @dataProvider getValueByPathDataProvider
+     */
+    public function testGetValueByPath(array $array, string $path, string $delimiter, mixed $expectedValue): void
+    {
+        $this->assertSame($expectedValue, ArrayHelper::getValueByPath($array, $path, null, $delimiter));
+    }
+
+    public function testGetValueByPathWithInvalidDelimiter(): void
+    {
+        $array = ['key1\.\.key2' => ['key3' => 'value']];
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Only 1 character is allowed for delimiter.');
+
+        ArrayHelper::getValueByPath($array, 'key1\.\.key2.key3', null, '..');
     }
 }

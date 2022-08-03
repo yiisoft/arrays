@@ -19,6 +19,9 @@ use function is_float;
 use function is_int;
 use function is_object;
 use function is_string;
+use function preg_split;
+use function sprintf;
+use function strlen;
 
 /**
  * Yii array helper provides static methods allowing you to deal with arrays more efficiently.
@@ -438,10 +441,16 @@ final class ArrayHelper
      * @return array|float|int|string
      * @psalm-return ArrayKey
      */
-    private static function parsePath($path, string $delimiter)
+    public static function parsePath($path, string $delimiter = '.')
     {
         if (is_string($path)) {
-            return explode($delimiter, $path);
+            if (strlen($delimiter) !== 1) {
+                throw new InvalidArgumentException('Only 1 character is allowed for delimiter.');
+            }
+
+            $pattern = sprintf('/(?<!\\\\)\%s/', $delimiter);
+
+            return preg_split($pattern, $path);
         }
         if (is_array($path)) {
             $newPath = [];
