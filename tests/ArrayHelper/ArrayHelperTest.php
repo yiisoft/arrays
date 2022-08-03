@@ -140,7 +140,7 @@ final class ArrayHelperTest extends TestCase
     /**
      * @dataProvider parsePathDataProvider
      */
-    public function testParsePath(string $path, string $delimiter, mixed $expectedPath): void
+    public function testParsePath(string $path, string $delimiter, $expectedPath): void
     {
         $this->assertSame($expectedPath, ArrayHelper::parsePath($path, $delimiter));
     }
@@ -158,7 +158,7 @@ final class ArrayHelperTest extends TestCase
     /**
      * @dataProvider getValueByPathDataProvider
      */
-    public function testGetValueByPath(array $array, string $path, string $delimiter, mixed $expectedValue): void
+    public function testGetValueByPath(array $array, string $path, string $delimiter, $expectedValue): void
     {
         $this->assertSame($expectedValue, ArrayHelper::getValueByPath($array, $path, null, $delimiter));
     }
