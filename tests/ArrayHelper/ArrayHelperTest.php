@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use ArrayObject;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Tests\Objects\Post2;
