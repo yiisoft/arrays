@@ -127,49 +127,4 @@ final class ArrayHelperTest extends TestCase
             'content' => 'test',
         ], ArrayHelper::getObjectVars(new Post2()));
     }
-
-    public function parsePathDataProvider(): array
-    {
-        return [
-            ['key1.key2.key3', '.', ['key1', 'key2', 'key3']],
-            ['key1\.key2.key3', '.', ['key1.key2', 'key3']],
-            ['key1\:key2:key3', ':', ['key1:key2', 'key3']],
-        ];
-    }
-
-    /**
-     * @dataProvider parsePathDataProvider
-     */
-    public function testParsePath(string $path, string $delimiter, array $expectedPath): void
-    {
-        $this->assertSame($expectedPath, ArrayHelper::parsePath($path, $delimiter));
-    }
-
-    public function getValueByPathDataProvider(): array
-    {
-        return [
-            [['key1' => ['key2' => ['key3' => 'value']]], 'key1.key2.key3', '.', 'value'],
-            [['key1.key2' => ['key3' => 'value']], 'key1.key2.key3', '.', null],
-            [['key1.key2' => ['key3' => 'value']], 'key1\.key2.key3', '.', 'value'],
-            [['key1:key2' => ['key3' => 'value']], 'key1\:key2:key3', ':', 'value'],
-        ];
-    }
-
-    /**
-     * @dataProvider getValueByPathDataProvider
-     */
-    public function testGetValueByPath(array $array, string $path, string $delimiter, ?string $expectedValue): void
-    {
-        $this->assertSame($expectedValue, ArrayHelper::getValueByPath($array, $path, null, $delimiter));
-    }
-
-    public function testGetValueByPathWithInvalidDelimiter(): void
-    {
-        $array = ['key1\.\.key2' => ['key3' => 'value']];
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Only 1 character is allowed for delimiter.');
-
-        ArrayHelper::getValueByPath($array, 'key1\.\.key2.key3', null, '..');
-    }
 }

@@ -449,6 +449,14 @@ final class ArrayHelper
                 throw new InvalidArgumentException('Only 1 character is allowed for delimiter.');
             }
 
+            if (($path[0] ?? '') === $delimiter) {
+                throw new InvalidArgumentException('Delimiter can\'t be at the very beginning.');
+            }
+
+            if (substr($path, -1) === $delimiter && substr($path, -2) !== '\\' . $delimiter) {
+                throw new InvalidArgumentException('Delimiter can\'t be at the very end.');
+            }
+
             $pattern = sprintf('/(?:[^\%s\\\\]|\\\\.)+/', $delimiter);
             preg_match_all($pattern, $path, $matches);
 
