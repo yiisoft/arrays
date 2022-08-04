@@ -19,8 +19,9 @@ use function is_float;
 use function is_int;
 use function is_object;
 use function is_string;
-use function preg_split;
+use function preg_match_all;
 use function sprintf;
+use function str_replace;
 use function strlen;
 
 /**
@@ -448,9 +449,12 @@ final class ArrayHelper
                 throw new InvalidArgumentException('Only 1 character is allowed for delimiter.');
             }
 
-            $pattern = sprintf('/(?<!\\\\)\%s/', $delimiter);
+            $pattern = sprintf('/(?:[^\%s\\\\]|\\\\.)+/', $delimiter);
+            preg_match_all($pattern, $path, $matches);
 
-            return preg_split($pattern, $path);
+            return array_map(static function (string $key) use ($delimiter): string {
+                return str_replace('\\' . $delimiter, $delimiter, $key);
+            }, $matches[0]);
         }
         if (is_array($path)) {
             $newPath = [];

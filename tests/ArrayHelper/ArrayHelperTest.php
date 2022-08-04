@@ -132,15 +132,15 @@ final class ArrayHelperTest extends TestCase
     {
         return [
             ['key1.key2.key3', '.', ['key1', 'key2', 'key3']],
-            ['key1\.key2.key3', '.', ['key1\.key2', 'key3']],
-            ['key1\:key2:key3', ':', ['key1\:key2', 'key3']],
+            ['key1\.key2.key3', '.', ['key1.key2', 'key3']],
+            ['key1\:key2:key3', ':', ['key1:key2', 'key3']],
         ];
     }
 
     /**
      * @dataProvider parsePathDataProvider
      */
-    public function testParsePath(string $path, string $delimiter, $expectedPath): void
+    public function testParsePath(string $path, string $delimiter, array $expectedPath): void
     {
         $this->assertSame($expectedPath, ArrayHelper::parsePath($path, $delimiter));
     }
@@ -149,16 +149,16 @@ final class ArrayHelperTest extends TestCase
     {
         return [
             [['key1' => ['key2' => ['key3' => 'value']]], 'key1.key2.key3', '.', 'value'],
-            [['key1\.key2' => ['key3' => 'value']], 'key1.key2.key3', '.', null],
-            [['key1\.key2' => ['key3' => 'value']], 'key1\.key2.key3', '.', 'value'],
-            [['key1\:key2' => ['key3' => 'value']], 'key1\:key2:key3', ':', 'value'],
+            [['key1.key2' => ['key3' => 'value']], 'key1.key2.key3', '.', null],
+            [['key1.key2' => ['key3' => 'value']], 'key1\.key2.key3', '.', 'value'],
+            [['key1:key2' => ['key3' => 'value']], 'key1\:key2:key3', ':', 'value'],
         ];
     }
 
     /**
      * @dataProvider getValueByPathDataProvider
      */
-    public function testGetValueByPath(array $array, string $path, string $delimiter, $expectedValue): void
+    public function testGetValueByPath(array $array, string $path, string $delimiter, ?string $expectedValue): void
     {
         $this->assertSame($expectedValue, ArrayHelper::getValueByPath($array, $path, null, $delimiter));
     }
