@@ -432,17 +432,20 @@ final class ArrayHelper
 
     /**
      * @param array|float|int|string $path The path of where do you want to write a value to `$array`.
-     * The path can be described by a string when each key should be separated by delimiter.
+     * The path can be described by a string when each key should be separated by delimiter. If a path item contains
+     * delimiter, it can be escaped with "\" (backslash) or a custom delimiter can be used.
      * You can also describe the path as an array of keys.
-     * @param string $delimiter A separator, used to parse string $key for embedded object property retrieving. Defaults
+     * @param string $delimiter A separator, used to parse string key for embedded object property retrieving. Defaults
      * to "." (dot).
+     * @param bool $unescapeDelimiter Whether to unescape delimiter in the items of final array (in case pf using string
+     * as an input) Defaults to `true`, meaning "\" (backslashes) are removed - "\." will become "." for "." delimiter.
      *
      * @psalm-param ArrayPath $path
      *
      * @return array|float|int|string
      * @psalm-return ArrayKey
      */
-    public static function parsePath($path, string $delimiter = '.')
+    public static function parsePath($path, string $delimiter = '.', bool $unescapeDelimiter = true)
     {
         if (is_string($path)) {
             if (strlen($delimiter) !== 1) {
@@ -459,6 +462,10 @@ final class ArrayHelper
 
             $pattern = sprintf('/(?:[^\%s\\\\]|\\\\.)+/', $delimiter);
             preg_match_all($pattern, $path, $matches);
+
+            if ($unescapeDelimiter === false) {
+                return $matches[0];
+            }
 
             return array_map(static function (string $key) use ($delimiter): string {
                 return str_replace('\\' . $delimiter, $delimiter, $key);
