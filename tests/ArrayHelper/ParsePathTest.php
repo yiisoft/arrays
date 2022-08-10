@@ -13,21 +13,21 @@ final class ParsePathTest extends TestCase
     public function parsePathDataProvider(): array
     {
         return [
-            ['key1.key2.key3', '.', true, ['key1', 'key2', 'key3']],
-            ['key1\.key2.key3', '.', true, ['key1.key2', 'key3']],
-            ['key1\.key2.key3', '.', false, ['key1\.key2', 'key3']],
-            ['key1\:key2:key3', ':', true, ['key1:key2', 'key3']],
-            ['\.key1.key2', '.', true, ['.key1', 'key2']],
-            ['key1.key2\.', '.', true, ['key1', 'key2.']],
+            ['key1.key2.key3', '.', false, ['key1', 'key2', 'key3']],
+            ['key1\.key2.key3', '.', false, ['key1.key2', 'key3']],
+            ['key1\.key2.key3', '.', true, ['key1\.key2', 'key3']],
+            ['key1\:key2:key3', ':', false, ['key1:key2', 'key3']],
+            ['\.key1.key2', '.', false, ['.key1', 'key2']],
+            ['key1.key2\.', '.', false, ['key1', 'key2.']],
         ];
     }
 
     /**
      * @dataProvider parsePathDataProvider
      */
-    public function testParsePath(string $path, string $delimiter, bool $unescapeDelimiter, array $expectedPath): void
+    public function testParsePath(string $path, string $delimiter, bool $escapeDelimiter, array $expectedPath): void
     {
-        $this->assertSame($expectedPath, ArrayHelper::parsePath($path, $delimiter, $unescapeDelimiter));
+        $this->assertSame($expectedPath, ArrayHelper::parsePath($path, $delimiter, $escapeDelimiter));
     }
 
     public function testParsePathWithDelimiterAtBeginning(): void

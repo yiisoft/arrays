@@ -437,15 +437,16 @@ final class ArrayHelper
      * You can also describe the path as an array of keys.
      * @param string $delimiter A separator, used to parse string key for embedded object property retrieving. Defaults
      * to "." (dot).
-     * @param bool $unescapeDelimiter Whether to unescape delimiter in the items of final array (in case of using string
-     * as an input) Defaults to `true`, meaning "\" (backslashes) are removed - "\." will become "." for "." delimiter.
+     * @param bool $escapeDelimiter Whether to escape delimiter in the items of final array (in case of using string as
+     * an input) When `true`, "\" (backslashes) are removed - "\." will become "." for "." delimiter. Defaults to
+     * `false meaning backslashes will persist.
      *
      * @psalm-param ArrayPath $path
      *
      * @return array|float|int|string
      * @psalm-return ArrayKey
      */
-    public static function parsePath($path, string $delimiter = '.', bool $unescapeDelimiter = true)
+    public static function parsePath($path, string $delimiter = '.', bool $escapeDelimiter = false)
     {
         if (is_string($path)) {
             if (strlen($delimiter) !== 1) {
@@ -463,7 +464,7 @@ final class ArrayHelper
             $pattern = sprintf('/(?:[^\%s\\\\]|\\\\.)+/', $delimiter);
             preg_match_all($pattern, $path, $matches);
 
-            if ($unescapeDelimiter === false) {
+            if ($escapeDelimiter === true) {
                 return $matches[0];
             }
 
