@@ -437,7 +437,7 @@ final class ArrayHelper
      * You can also describe the path as an array of keys.
      * @param string $delimiter A separator, used to parse string key for embedded object property retrieving. Defaults
      * to "." (dot).
-     * @param bool $unescapeDelimiter Whether to unescape delimiter in the items of final array (in case pf using string
+     * @param bool $unescapeDelimiter Whether to unescape delimiter in the items of final array (in case of using string
      * as an input) Defaults to `true`, meaning "\" (backslashes) are removed - "\." will become "." for "." delimiter.
      *
      * @psalm-param ArrayPath $path
