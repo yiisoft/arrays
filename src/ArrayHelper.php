@@ -438,7 +438,7 @@ final class ArrayHelper
      * @param string $delimiter A separator, used to parse string key for embedded object property retrieving. Defaults
      * to "." (dot).
      * @param bool $escapeDelimiter Whether to escape delimiter in the items of final array (in case of using string as
-     * an input). When `false`, "\" (backslashes) are removed. For a "." as delimiter, "\." becomes ".". Defaults to
+     * an input). When `false`, "\" (backslashes) are removed. For a "." as delimiter, "." becomes "\.". Defaults to
      * `false`.
      *
      * @psalm-param ArrayPath $path
