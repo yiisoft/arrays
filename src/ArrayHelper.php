@@ -451,8 +451,7 @@ final class ArrayHelper
         string $delimiter = '.',
         string $escapeChar = '\\',
         bool $doEscapeDelimiter = false
-    )
-    {
+    ) {
         if (is_array($path)) {
             $newPath = [];
             foreach ($path as $key) {
@@ -492,7 +491,7 @@ final class ArrayHelper
         }
 
         $pattern = sprintf('/(?<!\\%s)\%s/', $escapeChar, $delimiter);
-        $matches =  preg_split($pattern, $path);
+        $matches = preg_split($pattern, $path);
 
         if ($doEscapeDelimiter === true) {
             return $matches;

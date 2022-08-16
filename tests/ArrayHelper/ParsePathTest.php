@@ -40,8 +40,7 @@ final class ParsePathTest extends TestCase
         string $escapeChar,
         bool $escapeDelimiter,
         array $expectedPath
-    ): void
-    {
+    ): void {
         $this->assertSame($expectedPath, ArrayHelper::parsePath($path, $delimiter, $escapeChar, $escapeDelimiter));
     }
 
