@@ -19,7 +19,6 @@ use function is_float;
 use function is_int;
 use function is_object;
 use function is_string;
-use function preg_match_all;
 use function sprintf;
 use function str_replace;
 use function strlen;
