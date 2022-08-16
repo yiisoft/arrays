@@ -461,18 +461,16 @@ final class ArrayHelper
                 throw new InvalidArgumentException('Delimiter can\'t be at the very end.');
             }
 
-            $pattern = ($delimiter !== '\\')
-                ? sprintf('/(?:[^\%s\\\\]|\\\\.)+/', $delimiter)
-                : '/(?:[^\\\\]|[\\\\]{2,}.)+/';
-            preg_match_all($pattern, $path, $matches);
+            $pattern = sprintf('/(?<!\\\\)\%s/', $delimiter);
+            $matches =  preg_split($pattern, $path);
 
             if ($escapeDelimiter === true) {
-                return $matches[0];
+                return $matches;
             }
 
             return array_map(static function (string $key) use ($delimiter): string {
                 return str_replace('\\' . $delimiter, $delimiter, $key);
-            }, $matches[0]);
+            }, $matches);
         }
         if (is_array($path)) {
             $newPath = [];
