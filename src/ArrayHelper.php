@@ -437,7 +437,8 @@ final class ArrayHelper
      * You can also describe the path as an array of keys.
      * @param string $delimiter A separator, used to parse string key for embedded object property retrieving. Defaults
      * to "." (dot).
-     * @param bool $escapeDelimiter Whether to escape delimiter in the items of final array (in case of using string as
+     * @param string $escapeChar An escape char, used to escape delimiter. Defaults to "\" (backslash).
+     * @param bool $doEscapeDelimiter Whether to escape delimiter in the items of final array (in case of using string as
      * an input). When `false`, "\" (backslashes) are removed. For a "." as delimiter, "." becomes "\.". Defaults to
      * `false`.
      *
@@ -446,32 +447,13 @@ final class ArrayHelper
      * @return array|float|int|string
      * @psalm-return ArrayKey
      */
-    public static function parsePath($path, string $delimiter = '.', bool $escapeDelimiter = false)
+    public static function parsePath(
+        $path,
+        string $delimiter = '.',
+        string $escapeChar = '\\',
+        bool $doEscapeDelimiter = false
+    )
     {
-        if (is_string($path)) {
-            if (strlen($delimiter) !== 1) {
-                throw new InvalidArgumentException('Only 1 character is allowed for delimiter.');
-            }
-
-            if (($path[0] ?? '') === $delimiter) {
-                throw new InvalidArgumentException('Delimiter can\'t be at the very beginning.');
-            }
-
-            if (substr($path, -1) === $delimiter && substr($path, -2) !== '\\' . $delimiter) {
-                throw new InvalidArgumentException('Delimiter can\'t be at the very end.');
-            }
-
-            $pattern = sprintf('/(?<!\\\\)\%s/', $delimiter);
-            $matches =  preg_split($pattern, $path);
-
-            if ($escapeDelimiter === true) {
-                return $matches;
-            }
-
-            return array_map(static function (string $key) use ($delimiter): string {
-                return str_replace('\\' . $delimiter, $delimiter, $key);
-            }, $matches);
-        }
         if (is_array($path)) {
             $newPath = [];
             foreach ($path as $key) {
@@ -485,7 +467,41 @@ final class ArrayHelper
             }
             return $newPath;
         }
-        return $path;
+
+        if (!is_string($path)) {
+            return $path;
+        }
+
+        if (strlen($delimiter) !== 1) {
+            throw new InvalidArgumentException('Only 1 character is allowed for delimiter.');
+        }
+
+        if (strlen($escapeChar) !== 1) {
+            throw new InvalidArgumentException('Only 1 character is allowed for escape char.');
+        }
+
+        if ($delimiter === $escapeChar) {
+            throw new InvalidArgumentException('Delimiter and escape char must be different.');
+        }
+
+        if (($path[0] ?? '') === $delimiter) {
+            throw new InvalidArgumentException('Delimiter can\'t be at the very beginning.');
+        }
+
+        if (substr($path, -1) === $delimiter && substr($path, -2) !== '\\' . $delimiter) {
+            throw new InvalidArgumentException('Delimiter can\'t be at the very end.');
+        }
+
+        $pattern = sprintf('/(?<!\\%s)\%s/', $escapeChar, $delimiter);
+        $matches =  preg_split($pattern, $path);
+
+        if ($doEscapeDelimiter === true) {
+            return $matches;
+        }
+
+        return array_map(static function (string $key) use ($delimiter, $escapeChar): string {
+            return str_replace($escapeChar . $delimiter, $delimiter, $key);
+        }, $matches);
     }
 
     /**
