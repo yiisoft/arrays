@@ -38,11 +38,12 @@ final class ParsePathTest extends TestCase
         string $path,
         string $delimiter,
         string $escapeChar,
-        bool $escapeDelimiter,
+        bool $preserveDelimiterEscaping,
         array $expectedPath
     ): void
     {
-        $this->assertSame($expectedPath, ArrayHelper::parsePath($path, $delimiter, $escapeChar, $escapeDelimiter));
+        $actualPath = ArrayHelper::parsePath($path, $delimiter, $escapeChar, $preserveDelimiterEscaping);
+        $this->assertSame($expectedPath, $actualPath);
     }
 
     public function testParsePathWithLongDelimiter(): void

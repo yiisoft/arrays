@@ -437,9 +437,9 @@ final class ArrayHelper
      * @param string $delimiter A separator, used to parse string key for embedded object property retrieving. Defaults
      * to "." (dot).
      * @param string $escapeChar An escape char, used to escape delimiter. Defaults to "\" (backslash).
-     * @param bool $doEscapeDelimiter Whether to escape delimiter in the items of final array (in case of using string as
-     * an input). When `false`, "\" (backslashes) are removed. For a "." as delimiter, "." becomes "\.". Defaults to
-     * `false`.
+     * @param bool $preserveDelimiterEscaping Whether to preserve delimiter escaping in the items of final array (in
+     * case of using string as an input). When `false`, "\" (backslashes) are removed. For a "." as delimiter, "."
+     * becomes "\.". Defaults to `false`.
      *
      * @psalm-param ArrayPath $path
      *
@@ -450,7 +450,7 @@ final class ArrayHelper
         $path,
         string $delimiter = '.',
         string $escapeChar = '\\',
-        bool $doEscapeDelimiter = false
+        bool $preserveDelimiterEscaping = false
     )
     {
         if (is_array($path)) {
@@ -494,7 +494,7 @@ final class ArrayHelper
         $pattern = sprintf('/(?<!\\%s)\%s/', $escapeChar, $delimiter);
         $matches =  preg_split($pattern, $path);
 
-        if ($doEscapeDelimiter === true) {
+        if ($preserveDelimiterEscaping === true) {
             return $matches;
         }
 
