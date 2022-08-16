@@ -461,7 +461,9 @@ final class ArrayHelper
                 throw new InvalidArgumentException('Delimiter can\'t be at the very end.');
             }
 
-            $pattern = sprintf('/(?:[^\%s\\\\]|\\\\.)+/', $delimiter);
+            $pattern = ($delimiter !== '\\')
+                ? sprintf('/(?:[^\%s\\\\]|\\\\.)+/', $delimiter)
+                : '/(?:[^\\\\]|[\\\\]{2,}.)+/';
             preg_match_all($pattern, $path, $matches);
 
             if ($escapeDelimiter === true) {
