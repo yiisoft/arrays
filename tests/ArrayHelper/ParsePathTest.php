@@ -16,13 +16,12 @@ final class ParsePathTest extends TestCase
             ['key1.key2.key3', '.', '\\', false, ['key1', 'key2', 'key3']],
             ['key1..key2..key3', '.', '\\', false, ['key1', '', 'key2', '', 'key3']],
             ['key1...key2...key3', '.', '\\', false, ['key1', '', '', 'key2', '', '', 'key3']],
-            ['key1\..\.key2\..\.key3', '.', '\\', false, ['key1.', '.key2.', '.key3']],
-
             ['key1\.key2.key3', '.', '\\', false, ['key1.key2', 'key3']],
-            ['key1\.key2.key3', '.', '\\', true, ['key1\.key2', 'key3']],
             ['key1\:key2:key3', ':', '\\', false, ['key1:key2', 'key3']],
+            ['key1\.key2.key3', '.', '\\', true, ['key1\.key2', 'key3']],
             ['\.key1.key2', '.', '\\', false, ['.key1', 'key2']],
             ['key1.key2\.', '.', '\\', false, ['key1', 'key2.']],
+            ['key1\..\.key2\..\.key3', '.', '\\', false, ['key1.', '.key2.', '.key3']],
 
             ['key1\\key2\\key3', '\\', '/', false, ['key1', 'key2', 'key3']],
             ['key1\\\\key2\\\\key3', '\\', '/', false, ['key1', '', 'key2', '', 'key3']],
