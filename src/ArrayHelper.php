@@ -436,7 +436,7 @@ final class ArrayHelper
      * You can also describe the path as an array of keys.
      * @param string $delimiter A separator, used to parse string key for embedded object property retrieving. Defaults
      * to "." (dot).
-     * @param string $escapeChar An escape char, used to escape delimiter. Defaults to "\" (backslash).
+     * @param string $escapeCharacter An escape character, used to escape delimiter. Defaults to "\" (backslash).
      * @param bool $preserveDelimiterEscaping Whether to preserve delimiter escaping in the items of final array (in
      * case of using string as an input). When `false`, "\" (backslashes) are removed. For a "." as delimiter, "."
      * becomes "\.". Defaults to `false`.
@@ -449,7 +449,7 @@ final class ArrayHelper
     public static function parsePath(
         $path,
         string $delimiter = '.',
-        string $escapeChar = '\\',
+        string $escapeCharacter = '\\',
         bool $preserveDelimiterEscaping = false
     ) {
         if (is_array($path)) {
@@ -474,12 +474,12 @@ final class ArrayHelper
             throw new InvalidArgumentException('Only 1 character is allowed for delimiter.');
         }
 
-        if (strlen($escapeChar) !== 1) {
-            throw new InvalidArgumentException('Only 1 character is allowed for escape char.');
+        if (strlen($escapeCharacter) !== 1) {
+            throw new InvalidArgumentException('Only 1 escape character is allowed.');
         }
 
-        if ($delimiter === $escapeChar) {
-            throw new InvalidArgumentException('Delimiter and escape char must be different.');
+        if ($delimiter === $escapeCharacter) {
+            throw new InvalidArgumentException('Delimiter and escape character must be different.');
         }
 
         if (($path[0] ?? '') === $delimiter) {
@@ -490,15 +490,15 @@ final class ArrayHelper
             throw new InvalidArgumentException('Delimiter can\'t be at the very end.');
         }
 
-        $pattern = sprintf('/(?<!\\%s)\%s/', $escapeChar, $delimiter);
+        $pattern = sprintf('/(?<!\\%s)\%s/', $escapeCharacter, $delimiter);
         $matches = preg_split($pattern, $path);
 
         if ($preserveDelimiterEscaping === true) {
             return $matches;
         }
 
-        return array_map(static function (string $key) use ($delimiter, $escapeChar): string {
-            return str_replace($escapeChar . $delimiter, $delimiter, $key);
+        return array_map(static function (string $key) use ($delimiter, $escapeCharacter): string {
+            return str_replace($escapeCharacter . $delimiter, $delimiter, $key);
         }, $matches);
     }
 

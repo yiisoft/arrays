@@ -37,11 +37,11 @@ final class ParsePathTest extends TestCase
     public function testParsePath(
         string $path,
         string $delimiter,
-        string $escapeChar,
+        string $escapeCharacter,
         bool $preserveDelimiterEscaping,
         array $expectedPath
     ): void {
-        $actualPath = ArrayHelper::parsePath($path, $delimiter, $escapeChar, $preserveDelimiterEscaping);
+        $actualPath = ArrayHelper::parsePath($path, $delimiter, $escapeCharacter, $preserveDelimiterEscaping);
         $this->assertSame($expectedPath, $actualPath);
     }
 
@@ -53,18 +53,18 @@ final class ParsePathTest extends TestCase
         ArrayHelper::parsePath('key1..key2.key3', '..');
     }
 
-    public function testParsePathWithLongEscapeChar(): void
+    public function testParsePathWithLongEscapeCharacter(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Only 1 character is allowed for escape char.');
+        $this->expectExceptionMessage('Only 1 escape character is allowed.');
 
         ArrayHelper::parsePath('key1.key2.key3', '.', '//');
     }
 
-    public function testParsePathWithDelimiterEqualsEscapeChar(): void
+    public function testParsePathWithDelimiterEqualsEscapeCharacter(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Delimiter and escape char must be different.');
+        $this->expectExceptionMessage('Delimiter and escape character must be different.');
 
         ArrayHelper::parsePath('key1.key2.key3', '.', '.');
     }
