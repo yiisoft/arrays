@@ -481,6 +481,10 @@ final class ArrayHelper
             return $path;
         }
 
+        if ($path === '') {
+            return [];
+        }
+
         $matches = preg_split(
             sprintf(
                 '/(?<!%1$s)((?>%1$s%1$s)*)%2$s/',
