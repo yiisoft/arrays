@@ -486,7 +486,7 @@ final class ArrayHelper
             throw new InvalidArgumentException('Delimiter can\'t be at the very beginning.');
         }
 
-        if (substr($path, -1) === $delimiter && substr($path, -2) !== '\\' . $delimiter) {
+        if (substr($path, -1) === $delimiter && substr($path, -2) !== $escapeCharacter . $delimiter) {
             throw new InvalidArgumentException('Delimiter can\'t be at the very end.');
         }
 
