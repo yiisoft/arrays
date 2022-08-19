@@ -8,7 +8,6 @@ use Closure;
 use InvalidArgumentException;
 use Throwable;
 use Yiisoft\Strings\NumericHelper;
-
 use Yiisoft\Strings\StringHelper;
 
 use function array_key_exists;
@@ -21,7 +20,6 @@ use function is_float;
 use function is_int;
 use function is_object;
 use function is_string;
-use function strlen;
 
 /**
  * Yii array helper provides static methods allowing you to deal with arrays more efficiently.
