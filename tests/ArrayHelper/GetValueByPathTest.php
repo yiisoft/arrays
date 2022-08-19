@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ArrayHelper;
+namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;

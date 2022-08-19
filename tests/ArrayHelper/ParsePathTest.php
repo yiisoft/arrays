@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ArrayHelper;
+namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
