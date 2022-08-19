@@ -20,7 +20,6 @@ use function is_int;
 use function is_object;
 use function is_string;
 use function sprintf;
-use function str_replace;
 use function strlen;
 
 /**
@@ -482,24 +481,44 @@ final class ArrayHelper
             return $path;
         }
 
-        if (($path[0] ?? '') === $delimiter) {
-            throw new InvalidArgumentException('Delimiter can\'t be at the very beginning.');
+        $matches = preg_split(
+            sprintf(
+                '/(?<!%1$s)((?>%1$s%1$s)*)%2$s/',
+                preg_quote($escapeCharacter, '/'),
+                preg_quote($delimiter, '/')
+            ),
+            $path,
+            -1,
+            PREG_SPLIT_OFFSET_CAPTURE
+        );
+        $result = [];
+        $countResults = count($matches);
+        for ($i = 1; $i < $countResults; $i++) {
+            $l = $matches[$i][1] - $matches[$i - 1][1] - strlen($matches[$i - 1][0]) - 1;
+            $result[] = $matches[$i - 1][0] . ($l > 0 ? str_repeat($escapeCharacter, $l) : '');
         }
-
-        if (substr($path, -1) === $delimiter && substr($path, -2) !== $escapeCharacter . $delimiter) {
-            throw new InvalidArgumentException('Delimiter can\'t be at the very end.');
-        }
-
-        $pattern = sprintf('/(?<!\\%s)\%s/', $escapeCharacter, $delimiter);
-        $matches = preg_split($pattern, $path);
+        $result[] = $matches[$countResults - 1][0];
 
         if ($preserveDelimiterEscaping === true) {
-            return $matches;
+            return $result;
         }
 
-        return array_map(static function (string $key) use ($delimiter, $escapeCharacter): string {
-            return str_replace($escapeCharacter . $delimiter, $delimiter, $key);
-        }, $matches);
+        return array_map(
+            static function (string $key) use ($delimiter, $escapeCharacter): string {
+                return str_replace(
+                    [
+                        $escapeCharacter . $escapeCharacter,
+                        $escapeCharacter . $delimiter,
+                    ],
+                    [
+                        $escapeCharacter,
+                        $delimiter,
+                    ],
+                    $key
+                );
+            },
+            $result
+        );
     }
 
     /**

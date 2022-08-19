@@ -20,7 +20,7 @@ final class ParsePathTest extends TestCase
             ['\.key1.key2', '.', '\\', false, ['.key1', 'key2']],
             ['key1.key2\.', '.', '\\', false, ['key1', 'key2.']],
             ['key1\..\.key2\..\.key3', '.', '\\', false, ['key1.', '.key2.', '.key3']],
-            ['key1\\\.', '.', '\\', false, ['key1\.']],
+            ['key1\\\.', '.', '\\', false, ['key1\\', '']],
 
             ['key1\:key2:key3', ':', '\\', false, ['key1:key2', 'key3']],
 
@@ -33,7 +33,22 @@ final class ParsePathTest extends TestCase
 
             ['key1\.', '.', '\\', false, ['key1.']],
             ['key1~.', '.', '~', false, ['key1.']],
-            ['key1~~.', '.', '~', false, ['key1~.']],
+            ['key1~~', '.', '~', false, ['key1~']],
+            ['key1\\\\', '.', '\\', false, ['key1\\']],
+            ['key1~~.key2', '.', '~', false, ['key1~', 'key2']],
+            ['key1\\\\.key2', '.', '\\', false, ['key1\\', 'key2']],
+            ['key1~~~~.ke~~y2~.ke~y3~~~.', '.', '~', false, ['key1~~', 'ke~y2.ke~y3~.']],
+
+            ['1r2', 'r', '\\', false, ['1', '2']],
+            ['1R2', 'R', '\\', false, ['1', '2']],
+            ['1/2', '/', '\\', false, ['1', '2']],
+
+            ['key1.key2.', '.', '\\', false, ['key1', 'key2', '']],
+            ['key1\\\.', '.', '\\', false, ['key1\\', '']],
+            ['key1~~.', '.', '~', false, ['key1~', '']],
+
+            ['.key1.key2', '.', '\\', false, ['', 'key1', 'key2']],
+            ['~key1~key2', '~', '\\', false, ['', 'key1', 'key2']],
         ];
     }
 
@@ -73,19 +88,5 @@ final class ParsePathTest extends TestCase
         $this->expectExceptionMessage('Delimiter and escape character must be different.');
 
         ArrayHelper::parsePath('key1.key2.key3', '.', '.');
-    }
-
-    public function testParsePathWithDelimiterAtBeginning(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Delimiter can\'t be at the very beginning.');
-        ArrayHelper::parsePath('.key1.key2');
-    }
-
-    public function testParsePathWithDelimiterAtEnd(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Delimiter can\'t be at the very end.');
-        ArrayHelper::parsePath('key1.key2.');
     }
 }
