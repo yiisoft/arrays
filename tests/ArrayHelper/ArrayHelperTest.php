@@ -119,7 +119,7 @@ final class ArrayHelperTest extends TestCase
         $this->assertFalse(ArrayHelper::isSubset(new ArrayObject([1]), ['1', 'b'], true));
     }
 
-    public function testGetObjectVars()
+    public function testGetObjectVars(): void
     {
         $this->assertSame([
             'id' => 123,
