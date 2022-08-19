@@ -452,6 +452,18 @@ final class ArrayHelper
         string $escapeCharacter = '\\',
         bool $preserveDelimiterEscaping = false
     ) {
+        if (strlen($delimiter) !== 1) {
+            throw new InvalidArgumentException('Only 1 character is allowed for delimiter.');
+        }
+
+        if (strlen($escapeCharacter) !== 1) {
+            throw new InvalidArgumentException('Only 1 escape character is allowed.');
+        }
+
+        if ($delimiter === $escapeCharacter) {
+            throw new InvalidArgumentException('Delimiter and escape character must be different.');
+        }
+
         if (is_array($path)) {
             $newPath = [];
             foreach ($path as $key) {
@@ -468,18 +480,6 @@ final class ArrayHelper
 
         if (!is_string($path)) {
             return $path;
-        }
-
-        if (strlen($delimiter) !== 1) {
-            throw new InvalidArgumentException('Only 1 character is allowed for delimiter.');
-        }
-
-        if (strlen($escapeCharacter) !== 1) {
-            throw new InvalidArgumentException('Only 1 escape character is allowed.');
-        }
-
-        if ($delimiter === $escapeCharacter) {
-            throw new InvalidArgumentException('Delimiter and escape character must be different.');
         }
 
         if (($path[0] ?? '') === $delimiter) {
