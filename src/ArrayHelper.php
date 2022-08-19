@@ -9,6 +9,8 @@ use InvalidArgumentException;
 use Throwable;
 use Yiisoft\Strings\NumericHelper;
 
+use Yiisoft\Strings\StringHelper;
+
 use function array_key_exists;
 use function count;
 use function get_class;
@@ -426,81 +428,6 @@ final class ArrayHelper
     public static function setValueByPath(array &$array, $path, $value, string $delimiter = '.'): void
     {
         self::setValue($array, $path === null ? null : self::parseMixedPath($path, $delimiter), $value);
-    }
-
-    /**
-     * @param string $path The path of where do you want to write a value to `$array`. The path can be described by
-     * a string when each key should be separated by delimiter. If a path item contains delimiter, it can be escaped
-     * with "\" (backslash) or a custom delimiter can be used.
-     * @param string $delimiter A separator, used to parse string key for embedded object property retrieving. Defaults
-     * to "." (dot).
-     * @param string $escapeCharacter An escape character, used to escape delimiter. Defaults to "\" (backslash).
-     * @param bool $preserveDelimiterEscaping Whether to preserve delimiter escaping in the items of final array (in
-     * case of using string as an input). When `false`, "\" (backslashes) are removed. For a "." as delimiter, "."
-     * becomes "\.". Defaults to `false`.
-     *
-     * @return string[]
-     */
-    public static function parsePath(
-        string $path,
-        string $delimiter = '.',
-        string $escapeCharacter = '\\',
-        bool $preserveDelimiterEscaping = false
-    ): array {
-        if (strlen($delimiter) !== 1) {
-            throw new InvalidArgumentException('Only 1 character is allowed for delimiter.');
-        }
-
-        if (strlen($escapeCharacter) !== 1) {
-            throw new InvalidArgumentException('Only 1 escape character is allowed.');
-        }
-
-        if ($delimiter === $escapeCharacter) {
-            throw new InvalidArgumentException('Delimiter and escape character must be different.');
-        }
-
-        if ($path === '') {
-            return [];
-        }
-
-        $matches = preg_split(
-            sprintf(
-                '/(?<!%1$s)((?>%1$s%1$s)*)%2$s/',
-                preg_quote($escapeCharacter, '/'),
-                preg_quote($delimiter, '/')
-            ),
-            $path,
-            -1,
-            PREG_SPLIT_OFFSET_CAPTURE
-        );
-        $result = [];
-        $countResults = count($matches);
-        for ($i = 1; $i < $countResults; $i++) {
-            $l = $matches[$i][1] - $matches[$i - 1][1] - strlen($matches[$i - 1][0]) - 1;
-            $result[] = $matches[$i - 1][0] . ($l > 0 ? str_repeat($escapeCharacter, $l) : '');
-        }
-        $result[] = $matches[$countResults - 1][0];
-
-        if ($preserveDelimiterEscaping === true) {
-            return $result;
-        }
-
-        return array_map(
-            static function (string $key) use ($delimiter, $escapeCharacter): string {
-                return str_replace(
-                    [
-                        $escapeCharacter . $escapeCharacter,
-                        $escapeCharacter . $delimiter,
-                    ],
-                    [
-                        $escapeCharacter,
-                        $delimiter,
-                    ],
-                    $key
-                );
-            },
-            $result
-        );
     }
 
     /**
@@ -1365,7 +1292,7 @@ final class ArrayHelper
             $newPath = [];
             foreach ($path as $key) {
                 if (is_string($key)) {
-                    $parsedPath = self::parsePath($key, $delimiter);
+                    $parsedPath = StringHelper::parsePath($key, $delimiter);
                     $newPath = array_merge($newPath, $parsedPath);
                     continue;
                 }
@@ -1382,6 +1309,6 @@ final class ArrayHelper
             return $newPath;
         }
 
-        return is_string($path) ? self::parsePath($path, $delimiter) : $path;
+        return is_string($path) ? StringHelper::parsePath($path, $delimiter) : $path;
     }
 }

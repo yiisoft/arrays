@@ -3,7 +3,6 @@
 ## 2.0.1 under development
 
 - Enh #111: Add support for escaping delimiter while parsing path (@arogachev, @vjik)
-- New #111, #114: Add `ArrayHelper::parsePath()` method (@arogachev, @vjik)
 
 ## 2.0.0 October 23, 2021
 
