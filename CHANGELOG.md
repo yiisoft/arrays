@@ -1,6 +1,6 @@
 # Yii Arrays Change Log
 
-## 2.0.1 under development
+## 2.1.0 August 20, 2022
 
 - Enh #111: Add support for escaping delimiter while parsing path (@arogachev, @vjik)
 
