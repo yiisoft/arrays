@@ -8,6 +8,7 @@ use Closure;
 use InvalidArgumentException;
 use Throwable;
 use Yiisoft\Strings\NumericHelper;
+use Yiisoft\Strings\StringHelper;
 
 use function array_key_exists;
 use function count;
@@ -19,8 +20,6 @@ use function is_float;
 use function is_int;
 use function is_object;
 use function is_string;
-use function sprintf;
-use function strlen;
 
 /**
  * Yii array helper provides static methods allowing you to deal with arrays more efficiently.
@@ -300,7 +299,7 @@ final class ArrayHelper
     {
         return self::getValue(
             $array,
-            $path instanceof Closure ? $path : self::parsePath($path, $delimiter),
+            $path instanceof Closure ? $path : self::parseMixedPath($path, $delimiter),
             $default
         );
     }
@@ -425,104 +424,7 @@ final class ArrayHelper
      */
     public static function setValueByPath(array &$array, $path, $value, string $delimiter = '.'): void
     {
-        self::setValue($array, $path === null ? null : self::parsePath($path, $delimiter), $value);
-    }
-
-    /**
-     * @param array|float|int|string $path The path of where do you want to write a value to `$array`.
-     * The path can be described by a string when each key should be separated by delimiter. If a path item contains
-     * delimiter, it can be escaped with "\" (backslash) or a custom delimiter can be used.
-     * You can also describe the path as an array of keys.
-     * @param string $delimiter A separator, used to parse string key for embedded object property retrieving. Defaults
-     * to "." (dot).
-     * @param string $escapeCharacter An escape character, used to escape delimiter. Defaults to "\" (backslash).
-     * @param bool $preserveDelimiterEscaping Whether to preserve delimiter escaping in the items of final array (in
-     * case of using string as an input). When `false`, "\" (backslashes) are removed. For a "." as delimiter, "."
-     * becomes "\.". Defaults to `false`.
-     *
-     * @psalm-param ArrayPath $path
-     *
-     * @return array|float|int|string
-     * @psalm-return ArrayKey
-     */
-    public static function parsePath(
-        $path,
-        string $delimiter = '.',
-        string $escapeCharacter = '\\',
-        bool $preserveDelimiterEscaping = false
-    ) {
-        if (strlen($delimiter) !== 1) {
-            throw new InvalidArgumentException('Only 1 character is allowed for delimiter.');
-        }
-
-        if (strlen($escapeCharacter) !== 1) {
-            throw new InvalidArgumentException('Only 1 escape character is allowed.');
-        }
-
-        if ($delimiter === $escapeCharacter) {
-            throw new InvalidArgumentException('Delimiter and escape character must be different.');
-        }
-
-        if (is_array($path)) {
-            $newPath = [];
-            foreach ($path as $key) {
-                if (is_string($key) || is_array($key)) {
-                    /** @var list<float|int|string> $parsedPath */
-                    $parsedPath = self::parsePath($key, $delimiter);
-                    $newPath = array_merge($newPath, $parsedPath);
-                } else {
-                    $newPath[] = $key;
-                }
-            }
-            return $newPath;
-        }
-
-        if (!is_string($path)) {
-            return $path;
-        }
-
-        if ($path === '') {
-            return [];
-        }
-
-        $matches = preg_split(
-            sprintf(
-                '/(?<!%1$s)((?>%1$s%1$s)*)%2$s/',
-                preg_quote($escapeCharacter, '/'),
-                preg_quote($delimiter, '/')
-            ),
-            $path,
-            -1,
-            PREG_SPLIT_OFFSET_CAPTURE
-        );
-        $result = [];
-        $countResults = count($matches);
-        for ($i = 1; $i < $countResults; $i++) {
-            $l = $matches[$i][1] - $matches[$i - 1][1] - strlen($matches[$i - 1][0]) - 1;
-            $result[] = $matches[$i - 1][0] . ($l > 0 ? str_repeat($escapeCharacter, $l) : '');
-        }
-        $result[] = $matches[$countResults - 1][0];
-
-        if ($preserveDelimiterEscaping === true) {
-            return $result;
-        }
-
-        return array_map(
-            static function (string $key) use ($delimiter, $escapeCharacter): string {
-                return str_replace(
-                    [
-                        $escapeCharacter . $escapeCharacter,
-                        $escapeCharacter . $delimiter,
-                    ],
-                    [
-                        $escapeCharacter,
-                        $delimiter,
-                    ],
-                    $key
-                );
-            },
-            $result
-        );
+        self::setValue($array, $path === null ? null : self::parseMixedPath($path, $delimiter), $value);
     }
 
     /**
@@ -601,7 +503,7 @@ final class ArrayHelper
      */
     public static function removeByPath(array &$array, $path, $default = null, string $delimiter = '.')
     {
-        return self::remove($array, self::parsePath($path, $delimiter), $default);
+        return self::remove($array, self::parseMixedPath($path, $delimiter), $default);
     }
 
     /**
@@ -1023,7 +925,7 @@ final class ArrayHelper
         bool $caseSensitive = true,
         string $delimiter = '.'
     ): bool {
-        return self::keyExists($array, self::parsePath($path, $delimiter), $caseSensitive);
+        return self::keyExists($array, self::parseMixedPath($path, $delimiter), $caseSensitive);
     }
 
     /**
@@ -1370,5 +1272,40 @@ final class ArrayHelper
     private static function normalizeArrayKey($key): string
     {
         return is_float($key) ? NumericHelper::normalize($key) : (string)$key;
+    }
+
+    /**
+     * @param array|float|int|string $path
+     * @param string $delimiter
+     *
+     * @psalm-param ArrayPath $path
+     *
+     * @return array|float|int|string
+     * @psalm-return ArrayKey
+     */
+    private static function parseMixedPath($path, string $delimiter)
+    {
+        if (is_array($path)) {
+            $newPath = [];
+            foreach ($path as $key) {
+                if (is_string($key)) {
+                    $parsedPath = StringHelper::parsePath($key, $delimiter);
+                    $newPath = array_merge($newPath, $parsedPath);
+                    continue;
+                }
+
+                if (is_array($key)) {
+                    /** @var list<float|int|string> $parsedPath */
+                    $parsedPath = self::parseMixedPath($key, $delimiter);
+                    $newPath = array_merge($newPath, $parsedPath);
+                    continue;
+                }
+
+                $newPath[] = $key;
+            }
+            return $newPath;
+        }
+
+        return is_string($path) ? StringHelper::parsePath($path, $delimiter) : $path;
     }
 }
