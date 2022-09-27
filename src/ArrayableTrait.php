@@ -199,7 +199,7 @@ trait ArrayableTrait
         $result = [];
 
         foreach ($fields as $field) {
-            if (0 === strpos($field, "{$rootField}.")) {
+            if (str_starts_with($field, "{$rootField}.")) {
                 $result[] = preg_replace('/^' . preg_quote($rootField, '/') . '\./i', '', $field);
             }
         }

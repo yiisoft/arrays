@@ -12,7 +12,6 @@ use Yiisoft\Strings\StringHelper;
 
 use function array_key_exists;
 use function count;
-use function get_class;
 use function gettype;
 use function in_array;
 use function is_array;
@@ -89,7 +88,7 @@ final class ArrayHelper
 
         if (is_object($object)) {
             if (!empty($properties)) {
-                $className = get_class($object);
+                $className = $object::class;
                 if (!empty($properties[$className])) {
                     $result = [];
                     /**
@@ -203,7 +202,7 @@ final class ArrayHelper
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
-    public static function getValue($array, $key, $default = null)
+    public static function getValue($array, array|Closure|float|int|string $key, mixed $default = null)
     {
         if ($key instanceof Closure) {
             return $key($array, $default);
@@ -240,7 +239,7 @@ final class ArrayHelper
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
-    private static function getRootValue($array, $key, $default)
+    private static function getRootValue(mixed $array, float|int|string $key, mixed $default)
     {
         if (is_array($array)) {
             $key = self::normalizeArrayKey($key);
@@ -250,7 +249,7 @@ final class ArrayHelper
         if (is_object($array)) {
             try {
                 return $array::$$key;
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 // This is expected to fail if the property does not exist, or __get() is not implemented.
                 // It is not reliably possible to check whether a property is accessible beforehand.
                 return $array->$key;
@@ -295,7 +294,7 @@ final class ArrayHelper
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
-    public static function getValueByPath($array, $path, $default = null, string $delimiter = '.')
+    public static function getValueByPath($array, array|Closure|float|int|string $path, mixed $default = null, string $delimiter = '.')
     {
         return self::getValue(
             $array,
@@ -341,7 +340,7 @@ final class ArrayHelper
      *
      * @param mixed $value The value to be written.
      */
-    public static function setValue(array &$array, $key, $value): void
+    public static function setValue(array &$array, $key, mixed $value): void
     {
         if ($key === null) {
             /** @var mixed */
@@ -422,7 +421,7 @@ final class ArrayHelper
      *
      * @psalm-param ArrayPath|null $path
      */
-    public static function setValueByPath(array &$array, $path, $value, string $delimiter = '.'): void
+    public static function setValueByPath(array &$array, $path, mixed $value, string $delimiter = '.'): void
     {
         self::setValue($array, $path === null ? null : self::parseMixedPath($path, $delimiter), $value);
     }
@@ -451,7 +450,7 @@ final class ArrayHelper
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
-    public static function remove(array &$array, $key, $default = null)
+    public static function remove(array &$array, array|float|int|string $key, mixed $default = null)
     {
         $keys = is_array($key) ? $key : [$key];
 
@@ -501,7 +500,7 @@ final class ArrayHelper
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
-    public static function removeByPath(array &$array, $path, $default = null, string $delimiter = '.')
+    public static function removeByPath(array &$array, array|float|int|string $path, mixed $default = null, string $delimiter = '.')
     {
         return self::remove($array, self::parseMixedPath($path, $delimiter), $default);
     }
@@ -524,7 +523,7 @@ final class ArrayHelper
      *
      * @return array The items that were removed from the array.
      */
-    public static function removeValue(array &$array, $value): array
+    public static function removeValue(array &$array, mixed $value): array
     {
         $result = [];
         /** @psalm-var mixed $val */
@@ -698,7 +697,7 @@ final class ArrayHelper
      *
      * @return array The grouped array.
      */
-    public static function group(iterable $array, $groups): array
+    public static function group(iterable $array, array|string $groups): array
     {
         return self::index($array, null, $groups);
     }
@@ -732,7 +731,7 @@ final class ArrayHelper
      *
      * @return array The list of column values.
      */
-    public static function getColumn(iterable $array, $name, bool $keepKeys = true): array
+    public static function getColumn(iterable $array, Closure|string $name, bool $keepKeys = true): array
     {
         $result = [];
         if ($keepKeys) {
@@ -794,7 +793,7 @@ final class ArrayHelper
      *
      * @return array Resulting map.
      */
-    public static function map(iterable $array, $from, $to, $group = null): array
+    public static function map(iterable $array, Closure|string $from, Closure|string $to, $group = null): array
     {
         if ($group === null) {
             if ($from instanceof Closure || $to instanceof Closure || !is_array($array)) {
@@ -835,7 +834,7 @@ final class ArrayHelper
      *
      * @return bool Whether the array contains the specified key.
      */
-    public static function keyExists(array $array, $key, bool $caseSensitive = true): bool
+    public static function keyExists(array $array, array|float|int|string $key, bool $caseSensitive = true): bool
     {
         if (is_array($key)) {
             if (count($key) === 1) {
@@ -856,14 +855,7 @@ final class ArrayHelper
         return self::rootKeyExists($array, $key, $caseSensitive);
     }
 
-    /**
-     * @param array $array
-     * @param float|int|string $key
-     * @param bool $caseSensitive
-     *
-     * @return bool
-     */
-    private static function rootKeyExists(array $array, $key, bool $caseSensitive): bool
+    private static function rootKeyExists(array $array, float|int|string $key, bool $caseSensitive): bool
     {
         $key = (string)$key;
 
@@ -881,13 +873,9 @@ final class ArrayHelper
     }
 
     /**
-     * @param array $array
-     * @param float|int|string $key
-     * @param bool $caseSensitive
-     *
      * @return array<int, array-key>
      */
-    private static function getExistsKeys(array $array, $key, bool $caseSensitive): array
+    private static function getExistsKeys(array $array, float|int|string $key, bool $caseSensitive): array
     {
         $key = (string)$key;
 
@@ -916,12 +904,10 @@ final class ArrayHelper
      * to "." (dot).
      *
      * @psalm-param ArrayPath $path
-     *
-     * @return bool
      */
     public static function pathExists(
         array $array,
-        $path,
+        array|float|int|string $path,
         bool $caseSensitive = true,
         string $delimiter = '.'
     ): bool {
@@ -1104,7 +1090,7 @@ final class ArrayHelper
      *
      * @link https://php.net/manual/en/function.in-array.php
      */
-    public static function isIn($needle, iterable $haystack, bool $strict = false): bool
+    public static function isIn(mixed $needle, iterable $haystack, bool $strict = false): bool
     {
         if (is_array($haystack)) {
             return in_array($needle, $haystack, $strict);
@@ -1264,26 +1250,17 @@ final class ArrayHelper
         return get_object_vars($object);
     }
 
-    /**
-     * @param mixed $key
-     *
-     * @return string
-     */
-    private static function normalizeArrayKey($key): string
+    private static function normalizeArrayKey(mixed $key): string
     {
         return is_float($key) ? NumericHelper::normalize($key) : (string)$key;
     }
 
     /**
-     * @param array|float|int|string $path
-     * @param string $delimiter
-     *
      * @psalm-param ArrayPath $path
      *
-     * @return array|float|int|string
      * @psalm-return ArrayKey
      */
-    private static function parseMixedPath($path, string $delimiter)
+    private static function parseMixedPath(array|float|int|string $path, string $delimiter): array|float|int|string
     {
         if (is_array($path)) {
             $newPath = [];
