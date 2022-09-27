@@ -12,7 +12,6 @@ use Yiisoft\Arrays\Tests\Objects\ObjectWithNestedSpecificArrayableObject;
 use Yiisoft\Arrays\Tests\Objects\Post1;
 use Yiisoft\Arrays\Tests\Objects\Post2;
 use Yiisoft\Arrays\Tests\Objects\Post3;
-use function get_class;
 use function strlen;
 
 final class ToArrayTest extends TestCase
@@ -62,7 +61,7 @@ final class ToArrayTest extends TestCase
                         'id',
                         'secret',
                         '_content' => 'content',
-                        'length' => fn($post) => strlen($post->content),
+                        'length' => fn ($post) => strlen($post->content),
                     ],
                 ]
             )
@@ -97,11 +96,11 @@ final class ToArrayTest extends TestCase
                     $object::class => [
                         'id',
                         'subObject',
-                        'id_plus_1' => static fn($post) => $post->id + 1,
+                        'id_plus_1' => static fn ($post) => $post->id + 1,
                     ],
                     $object->subObject::class => [
                         'id',
-                        'id_plus_1' => static fn($post) => $post->id + 1,
+                        'id_plus_1' => static fn ($post) => $post->id + 1,
                     ],
                 ]
             )
@@ -121,7 +120,7 @@ final class ToArrayTest extends TestCase
                 [
                     $object->subObject::class => [
                         'id',
-                        'id_plus_1' => static fn($post) => $post->id + 1,
+                        'id_plus_1' => static fn ($post) => $post->id + 1,
                     ],
                 ]
             )

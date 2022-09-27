@@ -51,7 +51,7 @@ final class ArraySorter
      * @throws InvalidArgumentException If the `$direction` or `$sortFlag` parameters do not have
      * correct number of elements as that of $key.`
      */
-    public static function multisort(array &$array, array|\Closure|string $key, array|int $direction = SORT_ASC, array|int $sortFlag = SORT_REGULAR): void
+    public static function multisort(array &$array, array|Closure|string $key, array|int $direction = SORT_ASC, array|int $sortFlag = SORT_REGULAR): void
     {
         $keys = self::getKeys($array, $key);
         if (empty($keys)) {
@@ -88,7 +88,7 @@ final class ArraySorter
      *
      * @return array<array-key, Closure|string> The keys.
      */
-    private static function getKeys(array $array, array|\Closure|string $key): array
+    private static function getKeys(array $array, array|Closure|string $key): array
     {
         $keys = is_array($key) ? $key : [$key];
         if (empty($keys) || empty($array)) {

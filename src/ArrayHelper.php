@@ -12,7 +12,6 @@ use Yiisoft\Strings\StringHelper;
 
 use function array_key_exists;
 use function count;
-use function get_class;
 use function gettype;
 use function in_array;
 use function is_array;
@@ -203,7 +202,7 @@ final class ArrayHelper
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
-    public static function getValue($array, array|\Closure|float|int|string $key, mixed $default = null)
+    public static function getValue($array, array|Closure|float|int|string $key, mixed $default = null)
     {
         if ($key instanceof Closure) {
             return $key($array, $default);
@@ -295,7 +294,7 @@ final class ArrayHelper
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
-    public static function getValueByPath($array, array|\Closure|float|int|string $path, mixed $default = null, string $delimiter = '.')
+    public static function getValueByPath($array, array|Closure|float|int|string $path, mixed $default = null, string $delimiter = '.')
     {
         return self::getValue(
             $array,
@@ -732,7 +731,7 @@ final class ArrayHelper
      *
      * @return array The list of column values.
      */
-    public static function getColumn(iterable $array, \Closure|string $name, bool $keepKeys = true): array
+    public static function getColumn(iterable $array, Closure|string $name, bool $keepKeys = true): array
     {
         $result = [];
         if ($keepKeys) {
@@ -794,7 +793,7 @@ final class ArrayHelper
      *
      * @return array Resulting map.
      */
-    public static function map(iterable $array, \Closure|string $from, \Closure|string $to, $group = null): array
+    public static function map(iterable $array, Closure|string $from, Closure|string $to, $group = null): array
     {
         if ($group === null) {
             if ($from instanceof Closure || $to instanceof Closure || !is_array($array)) {
@@ -874,7 +873,6 @@ final class ArrayHelper
     }
 
     /**
-     *
      * @return array<int, array-key>
      */
     private static function getExistsKeys(array $array, float|int|string $key, bool $caseSensitive): array
@@ -1258,7 +1256,6 @@ final class ArrayHelper
     }
 
     /**
-     *
      * @psalm-param ArrayPath $path
      *
      * @psalm-return ArrayKey

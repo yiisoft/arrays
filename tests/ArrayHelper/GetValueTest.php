@@ -53,7 +53,7 @@ final class GetValueTest extends TestCase
             ['noname', null],
             ['noname', 'test', 'test'],
             [
-                static fn($array, $defaultValue) => $array['date'] . $defaultValue,
+                static fn ($array, $defaultValue) => $array['date'] . $defaultValue,
                 '31-12-2113test',
                 'test',
             ],
