@@ -162,9 +162,6 @@ final class FilterTest extends TestCase
 
     /**
      * @dataProvider dataFilter
-     *
-     * @param array $expects
-     * @param array $filter
      */
     public function testFilter(array $expects, array $filter): void
     {

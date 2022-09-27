@@ -72,9 +72,7 @@ final class MapTest extends TestCase
                     'key-1' => '1',
                     'key-2' => '2-last',
                 ],
-                static function (array $row) {
-                    return "key-{$row['from']}";
-                },
+                static fn(array $row) => "key-{$row['from']}",
                 'to',
             ],
             [
@@ -83,9 +81,7 @@ final class MapTest extends TestCase
                     '2' => 'value-2-last',
                 ],
                 'from',
-                static function (array $row) {
-                    return "value-{$row['to']}";
-                },
+                static fn(array $row) => "value-{$row['to']}",
             ],
         ];
     }
@@ -134,9 +130,7 @@ final class MapTest extends TestCase
                         'key-2' => '2.2-last',
                     ],
                 ],
-                static function (array $row) {
-                    return "key-{$row['from']}";
-                },
+                static fn(array $row) => "key-{$row['from']}",
                 'to',
                 'group',
             ],
@@ -152,9 +146,7 @@ final class MapTest extends TestCase
                     ],
                 ],
                 'from',
-                static function (array $row) {
-                    return "value-{$row['to']}";
-                },
+                static fn(array $row) => "value-{$row['to']}",
                 'group',
             ],
             [
@@ -170,9 +162,7 @@ final class MapTest extends TestCase
                 ],
                 'from',
                 'to',
-                static function (array $row) {
-                    return "group-{$row['group']}";
-                },
+                static fn(array $row) => "group-{$row['group']}",
             ],
         ];
     }

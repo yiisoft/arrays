@@ -58,13 +58,11 @@ final class ToArrayTest extends TestCase
             ArrayHelper::toArray(
                 $object,
                 [
-                    get_class($object) => [
+                    $object::class => [
                         'id',
                         'secret',
                         '_content' => 'content',
-                        'length' => function ($post) {
-                            return strlen($post->content);
-                        },
+                        'length' => fn($post) => strlen($post->content),
                     ],
                 ]
             )
@@ -96,18 +94,14 @@ final class ToArrayTest extends TestCase
             ArrayHelper::toArray(
                 $object,
                 [
-                    get_class($object) => [
+                    $object::class => [
                         'id',
                         'subObject',
-                        'id_plus_1' => static function ($post) {
-                            return $post->id + 1;
-                        },
+                        'id_plus_1' => static fn($post) => $post->id + 1,
                     ],
-                    get_class($object->subObject) => [
+                    $object->subObject::class => [
                         'id',
-                        'id_plus_1' => static function ($post) {
-                            return $post->id + 1;
-                        },
+                        'id_plus_1' => static fn($post) => $post->id + 1,
                     ],
                 ]
             )
@@ -125,11 +119,9 @@ final class ToArrayTest extends TestCase
             ArrayHelper::toArray(
                 $object,
                 [
-                    get_class($object->subObject) => [
+                    $object->subObject::class => [
                         'id',
-                        'id_plus_1' => static function ($post) {
-                            return $post->id + 1;
-                        },
+                        'id_plus_1' => static fn($post) => $post->id + 1,
                     ],
                 ]
             )
@@ -190,8 +182,6 @@ final class ToArrayTest extends TestCase
      * @dataProvider dataRecursive
      *
      * @param array|object $object
-     * @param bool $recursive
-     * @param array $expected
      */
     public function testRecursive($object, bool $recursive, array $expected): void
     {

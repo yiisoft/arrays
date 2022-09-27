@@ -44,10 +44,8 @@ trait ArrayAccessTrait
      * This method is required by the interface {@see \ArrayAccess}.
      *
      * @param mixed $offset The offset to check on.
-     *
-     * @return bool
      */
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->data[$offset]);
     }
@@ -60,7 +58,7 @@ trait ArrayAccessTrait
      * @return mixed The element at the offset, null if no element is found at the offset.
      */
     #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset)
     {
         return $this->data[$offset] ?? null;
     }
@@ -71,7 +69,7 @@ trait ArrayAccessTrait
      * @param mixed $offset The offset to set element.
      * @param mixed $value The element value.
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         if ($offset === null) {
             $this->data[] = $value;
@@ -85,7 +83,7 @@ trait ArrayAccessTrait
      *
      * @param mixed $offset The offset to unset element.
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->data[$offset]);
     }
