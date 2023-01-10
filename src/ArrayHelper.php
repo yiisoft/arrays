@@ -259,7 +259,7 @@ final class ArrayHelper
                             && (
                                 $errorString === 'Undefined property: ' . get_class($array) . '::$' . $key
                                 || $errorString === (
-                                PHP_VERSION_ID >= 80000
+                                    PHP_VERSION_ID >= 80000
                                     ? 'Undefined array key "' . $key . '"'
                                     : 'Undefined index: ' . $key
                                 )
