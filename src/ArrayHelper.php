@@ -196,8 +196,7 @@ final class ArrayHelper
      * an array of keys or property name of the object, or an anonymous function
      * returning the value. The anonymous function signature should be:
      * `function($array, $defaultValue)`.
-     * @param mixed $default The default value to be returned if the specified array key does not exist. Not used when
-     * getting value from an object.
+     * @param mixed $default The default value to be returned if the specified array key does not exist.
      *
      * @psalm-param ArrayKey|Closure $key
      *
@@ -235,8 +234,7 @@ final class ArrayHelper
     /**
      * @param mixed $array Array or object to extract value from, otherwise method will return $default.
      * @param float|int|string $key Key name of the array element or property name of the object.
-     * @param mixed $default The default value to be returned if the specified array key does not exist. Not used when
-     * getting value from an object.
+     * @param mixed $default The default value to be returned if the specified array key does not exist.
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
@@ -307,8 +305,7 @@ final class ArrayHelper
      * @param array|Closure|float|int|string $path Key name of the array element, an array of keys or property name
      * of the object, or an anonymous function returning the value. The anonymous function signature should be:
      * `function($array, $defaultValue)`.
-     * @param mixed $default The default value to be returned if the specified array key does not exist. Not used when
-     * getting value from an object.
+     * @param mixed $default The default value to be returned if the specified array key does not exist.
      * @param string $delimiter A separator, used to parse string $key for embedded object property retrieving. Defaults
      * to "." (dot).
      *
