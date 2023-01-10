@@ -249,30 +249,9 @@ final class ArrayHelper
             try {
                 return $array::$$key;
             } catch (Throwable $e) {
-                $useDefault = false;
-                set_error_handler(
-                    static function (int $errorNumber, string $errorString) use ($array, $key, &$useDefault): bool {
-                        if (
-                            $errorNumber === (PHP_VERSION_ID >= 80000 ? E_WARNING : E_NOTICE)
-                            && (
-                                $errorString === 'Undefined property: ' . get_class($array) . '::$' . $key
-                                || $errorString === (
-                                    PHP_VERSION_ID >= 80000
-                                    ? 'Undefined array key "' . $key . '"'
-                                    : 'Undefined index: ' . $key
-                                )
-                            )
-                        ) {
-                            $useDefault = true;
-                            return true;
-                        }
-                        return false;
-                    }
-                );
-                /** @var mixed $value */
-                $value = $array->$key;
-                restore_error_handler();
-                return $useDefault ? $default : $value;
+                return property_exists($array, (string) $key) || method_exists($array, '__get')
+                    ? $array->$key
+                    : $default;
             }
         }
 
