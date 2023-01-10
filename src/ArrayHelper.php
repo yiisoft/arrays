@@ -251,9 +251,30 @@ final class ArrayHelper
             try {
                 return $array::$$key;
             } catch (Throwable $e) {
-                // This is expected to fail if the property does not exist, or __get() is not implemented.
-                // It is not reliably possible to check whether a property is accessible beforehand.
-                return $array->$key;
+                $useDefault = false;
+                set_error_handler(
+                    static function (int $errorNumber, string $errorString) use ($array, $key, &$useDefault): bool {
+                        if (
+                            $errorNumber === (PHP_VERSION_ID >= 80000 ? E_WARNING : E_NOTICE)
+                            && (
+                                $errorString === 'Undefined property: ' . get_class($array) . '::$' . $key
+                                || $errorString === (
+                                PHP_VERSION_ID >= 80000
+                                    ? 'Undefined array key "' . $key . '"'
+                                    : 'Undefined index: ' . $key
+                                )
+                            )
+                        ) {
+                            $useDefault = true;
+                            return true;
+                        }
+                        return false;
+                    }
+                );
+                /** @var mixed $value */
+                $value = $array->$key;
+                restore_error_handler();
+                return $useDefault ? $default : $value;
             }
         }
 

@@ -218,24 +218,28 @@ final class GetValueTest extends TestCase
         $this->assertEquals(250, ArrayHelper::getValueByPath($object, 'main.id'));
     }
 
-    /**
-     * This is expected to result in a PHP error.
-     */
     public function testGetValueNonexistingProperties1(): void
     {
-        $this->expectError();
         $object = new Post1();
         $this->assertNull(ArrayHelper::getValue($object, 'nonExisting'));
     }
 
-    /**
-     * This is expected to result in a PHP error.
-     */
     public function testGetValueNonexistingProperties2(): void
     {
-        $this->expectError();
         $arrayObject = new ArrayObject(['id' => 23], ArrayObject::ARRAY_AS_PROPS);
-        $this->assertEquals(23, ArrayHelper::getValue($arrayObject, 'nonExisting'));
+        $this->assertNull(ArrayHelper::getValue($arrayObject, 'nonExisting'));
+    }
+
+    public function testGetValueNonexistingProperties3(): void
+    {
+        $object = new Post1();
+        $this->assertSame('default', ArrayHelper::getValue($object, 'nonExisting', 'default'));
+    }
+
+    public function testGetValueNonexistingProperties4(): void
+    {
+        $arrayObject = new ArrayObject(['id' => 23], ArrayObject::ARRAY_AS_PROPS);
+        $this->assertNull(ArrayHelper::getValue($arrayObject, 'nonExisting'));
     }
 
     public function testGetValueFromStaticProperty(): void
@@ -243,17 +247,6 @@ final class GetValueTest extends TestCase
         $object = new StaticObject();
         $this->assertSame(1, ArrayHelper::getValue($object, 'a'));
         $this->assertSame(2, ArrayHelper::getValueByPath($object, 'nested.b'));
-    }
-
-    public function testGetUndefinedPropertyFromObject(): void
-    {
-        $object = new stdClass();
-        if (PHP_VERSION_ID >= 80000) {
-            $this->expectWarning();
-        } else {
-            $this->expectNotice();
-        }
-        ArrayHelper::getValue($object, 'var');
     }
 
     public function testExistingMagicObjectProperty(): void
