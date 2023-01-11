@@ -202,8 +202,11 @@ final class ArrayHelper
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
-    public static function getValue(array|object $array, array|Closure|float|int|string $key, mixed $default = null)
-    {
+    public static function getValue(
+        array|object $array,
+        array|Closure|float|int|string $key,
+        mixed $default = null
+    ): mixed {
         if ($key instanceof Closure) {
             return $key($array, $default);
         }
@@ -297,7 +300,7 @@ final class ArrayHelper
         array|Closure|float|int|string $path,
         mixed $default = null,
         string $delimiter = '.'
-    ) {
+    ): mixed {
         return self::getValue(
             $array,
             $path instanceof Closure ? $path : self::parseMixedPath($path, $delimiter),
