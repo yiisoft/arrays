@@ -2,7 +2,6 @@
 
 ## 3.0.0 under development
 
-- Enh: Add composer require checker into CI
 - Enh #115: Raise required PHP version to `^8.0`, move union type hints from annotations
   to methods' signatures (@xepozz, @vjik)
 
