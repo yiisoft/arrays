@@ -243,6 +243,14 @@ final class ArrayHelper
         }
 
         if (is_object($array)) {
+            $key = (string) $key;
+
+            if (str_ends_with($key, '()')) {
+                $method = substr($key, 0, -2);
+                /** @psalm-suppress MixedMethodCall */
+                return $array->$method();
+            }
+
             try {
                 /** @psalm-suppress MixedPropertyFetch */
                 return $array::$$key;
