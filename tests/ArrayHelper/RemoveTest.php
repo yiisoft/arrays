@@ -41,13 +41,8 @@ final class RemoveTest extends TestCase
 
     /**
      * @dataProvider removeData
-     *
-     * @param array|string $key
-     * @param mixed $default
-     * @param mixed $expectedValue
-     * @param array $expectedArray
      */
-    public function testRemove($key, $default, $expectedValue, array $expectedArray): void
+    public function testRemove(array|string $key, mixed $default, mixed $expectedValue, array $expectedArray): void
     {
         $array = [
             'name' => 'Dmitry',
@@ -105,11 +100,6 @@ final class RemoveTest extends TestCase
 
     /**
      * @dataProvider dataRemoveByFloatKey
-     *
-     * @param array $array
-     * @param float $key
-     * @param string $expectedValue
-     * @param array$expectedArray
      */
     public function testRemoveByFloatKey(array $array, float $key, string $expectedValue, array $expectedArray): void
     {
@@ -145,13 +135,8 @@ final class RemoveTest extends TestCase
 
     /**
      * @dataProvider removeByPathData
-     *
-     * @param array|string $key
-     * @param mixed $default
-     * @param mixed $expectedValue
-     * @param array $expectedArray
      */
-    public function testRemoveByPath($key, $default, $expectedValue, array $expectedArray): void
+    public function testRemoveByPath(array|string $key, mixed $default, mixed $expectedValue, array $expectedArray): void
     {
         $array = [
             'name' => [
@@ -186,13 +171,8 @@ final class RemoveTest extends TestCase
 
     /**
      * @dataProvider removeByPathWithCustomDelimiterData
-     *
-     * @param array|string $key
-     * @param mixed $default
-     * @param mixed $expectedValue
-     * @param array $expectedArray
      */
-    public function testRemoveByPathWithCustomDelimiter($key, $default, $expectedValue, array $expectedArray): void
+    public function testRemoveByPathWithCustomDelimiter(array|string $key, mixed $default, mixed $expectedValue, array $expectedArray): void
     {
         $array = [
             'name' => [

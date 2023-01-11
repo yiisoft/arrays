@@ -51,8 +51,12 @@ final class ArraySorter
      * @throws InvalidArgumentException If the `$direction` or `$sortFlag` parameters do not have
      * correct number of elements as that of $key.`
      */
-    public static function multisort(array &$array, $key, $direction = SORT_ASC, $sortFlag = SORT_REGULAR): void
-    {
+    public static function multisort(
+        array &$array,
+        array|Closure|string $key,
+        array|int $direction = SORT_ASC,
+        array|int $sortFlag = SORT_REGULAR
+    ): void {
         $keys = self::getKeys($array, $key);
         if (empty($keys)) {
             return;
@@ -73,7 +77,10 @@ final class ArraySorter
 
         $_args = self::getArguments($array, $keys, $direction, $sortFlag);
 
+        /** @psalm-suppress UnsupportedReferenceUsage */
         $_args[] = &$array;
+
+        /** @psalm-suppress MixedArgument */
         array_multisort(...$_args);
     }
 
@@ -88,7 +95,7 @@ final class ArraySorter
      *
      * @return array<array-key, Closure|string> The keys.
      */
-    private static function getKeys(array $array, $key): array
+    private static function getKeys(array $array, array|Closure|string $key): array
     {
         $keys = is_array($key) ? $key : [$key];
         if (empty($keys) || empty($array)) {
@@ -106,7 +113,7 @@ final class ArraySorter
      * @param array<array-key, int> $direction Array of sorting directions.
      * @param array<array-key, int> $sortFlags Array of sort flags.
      *
-     * @return array{array, int, int} The arguments.
+     * @return array The arguments.
      */
     private static function getArguments(array $array, array $keys, array $direction, array $sortFlags): array
     {
@@ -119,7 +126,7 @@ final class ArraySorter
         }
 
         // This fix is used for cases when main sorting specified by columns has equal values.
-        // Without it it will lead to Fatal Error: Nesting level too deep - recursive dependency?
+        // Without it will lead to Fatal Error: Nesting level too deep - recursive dependency?
         $args[] = range(1, count($array));
         $args[] = SORT_ASC;
         $args[] = SORT_NUMERIC;
