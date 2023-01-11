@@ -1235,6 +1235,7 @@ final class ArrayHelper
 
         /**
          * @psalm-suppress UnnecessaryVarAnnotation
+         *
          * @var array $result
          */
 
