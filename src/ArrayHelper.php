@@ -232,25 +232,29 @@ final class ArrayHelper
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
-    private static function getRootValue(array|object $array, float|int|string $key, mixed $default): mixed
+    private static function getRootValue(mixed $array, float|int|string $key, mixed $default): mixed
     {
         if (is_array($array)) {
             $key = self::normalizeArrayKey($key);
             return array_key_exists($key, $array) ? $array[$key] : $default;
         }
 
-        try {
-            /** @psalm-suppress MixedPropertyFetch */
-            return $array::$$key;
-        } catch (Throwable) {
-            /**
-             * This is expected to fail if the property does not exist, or __get() is not implemented.
-             * It is not reliably possible to check whether a property is accessible beforehand.
-             *
-             * @psalm-suppress MixedPropertyFetch
-             */
-            return $array->$key;
+        if (is_object($array)) {
+            try {
+                /** @psalm-suppress MixedPropertyFetch */
+                return $array::$$key;
+            } catch (Throwable) {
+                /**
+                 * This is expected to fail if the property does not exist, or __get() is not implemented.
+                 * It is not reliably possible to check whether a property is accessible beforehand.
+                 *
+                 * @psalm-suppress MixedPropertyFetch
+                 */
+                return $array->$key;
+            }
         }
+
+        return $default;
     }
 
     /**
