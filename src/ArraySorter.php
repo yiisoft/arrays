@@ -77,7 +77,10 @@ final class ArraySorter
 
         $_args = self::getArguments($array, $keys, $direction, $sortFlag);
 
+        /** @psalm-suppress UnsupportedReferenceUsage */
         $_args[] = &$array;
+
+        /** @psalm-suppress MixedArgument */
         array_multisort(...$_args);
     }
 
@@ -110,7 +113,7 @@ final class ArraySorter
      * @param array<array-key, int> $direction Array of sorting directions.
      * @param array<array-key, int> $sortFlags Array of sort flags.
      *
-     * @return array{array, int, int} The arguments.
+     * @return array The arguments.
      */
     private static function getArguments(array $array, array $keys, array $direction, array $sortFlags): array
     {

@@ -681,7 +681,9 @@ final class ArrayHelper
                 if (!array_key_exists($value, $lastArray)) {
                     $lastArray[$value] = [];
                 }
+                /** @psalm-suppress MixedAssignment */
                 $lastArray = &$lastArray[$value];
+                /** @var array $lastArray */
             }
 
             if ($key === null) {
@@ -963,10 +965,10 @@ final class ArrayHelper
                 $key = (string)$key;
             }
             if (!$valuesOnly && is_string($key)) {
-                $key = htmlspecialchars($key, ENT_QUOTES|ENT_SUBSTITUTE, $encoding, true);
+                $key = htmlspecialchars($key, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
             }
             if (is_string($value)) {
-                $d[$key] = htmlspecialchars($value, ENT_QUOTES|ENT_SUBSTITUTE, $encoding, true);
+                $d[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
             } elseif (is_array($value)) {
                 $d[$key] = self::htmlEncode($value, $valuesOnly, $encoding);
             } else {
@@ -1223,13 +1225,19 @@ final class ArrayHelper
                 if (!array_key_exists($key, $resultNode)) {
                     $resultNode[$key] = [];
                 }
+                /** @psalm-suppress MixedAssignment */
                 $resultNode = &$resultNode[$key];
+                /** @var array $resultNode */
             }
-            /** @var mixed */
+            /** @var array */
             $resultNode = $nodeValue;
         }
 
-        /** @var array $result */
+        /**
+         * @psalm-suppress UnnecessaryVarAnnotation
+         *
+         * @var array $result
+         */
 
         foreach ($excludeFilters as $filter) {
             $excludeNode = &$result;
@@ -1241,7 +1249,7 @@ final class ArrayHelper
                 }
 
                 if ($i < $numNestedKeys) {
-                    /** @var mixed */
+                    /** @psalm-suppress MixedAssignment */
                     $excludeNode = &$excludeNode[$key];
                 } else {
                     unset($excludeNode[$key]);
@@ -1249,6 +1257,8 @@ final class ArrayHelper
                 }
             }
         }
+
+        /** @var array $result */
 
         return $result;
     }
