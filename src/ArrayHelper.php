@@ -57,7 +57,7 @@ final class ArrayHelper
      * ]
      * ```
      *
-     * @param array|object|string $object The object to be converted into an array.
+     * @param mixed $object The object to be converted into an array.
      *
      * It is possible to provide default way of converting object to array for a specific class by implementing
      * {@see \Yiisoft\Arrays\ArrayableInterface} in its class.
@@ -71,7 +71,7 @@ final class ArrayHelper
      *
      * @return array The array representation of the object.
      */
-    public static function toArray($object, array $properties = [], bool $recursive = true): array
+    public static function toArray(mixed $object, array $properties = [], bool $recursive = true): array
     {
         if (is_array($object)) {
             if ($recursive) {
@@ -345,7 +345,7 @@ final class ArrayHelper
      *
      * @param mixed $value The value to be written.
      */
-    public static function setValue(array &$array, $key, mixed $value): void
+    public static function setValue(array &$array, array|float|int|string|null $key, mixed $value): void
     {
         if ($key === null) {
             /** @var mixed */
@@ -426,8 +426,12 @@ final class ArrayHelper
      *
      * @psalm-param ArrayPath|null $path
      */
-    public static function setValueByPath(array &$array, $path, mixed $value, string $delimiter = '.'): void
-    {
+    public static function setValueByPath(
+        array &$array,
+        array|float|int|string|null $path,
+        mixed $value,
+        string $delimiter = '.'
+    ): void {
         self::setValue($array, $path === null ? null : self::parseMixedPath($path, $delimiter), $value);
     }
 
@@ -455,7 +459,7 @@ final class ArrayHelper
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
-    public static function remove(array &$array, array|float|int|string $key, mixed $default = null)
+    public static function remove(array &$array, array|float|int|string $key, mixed $default = null): mixed
     {
         $keys = is_array($key) ? $key : [$key];
 
@@ -505,8 +509,12 @@ final class ArrayHelper
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
-    public static function removeByPath(array &$array, array|float|int|string $path, mixed $default = null, string $delimiter = '.')
-    {
+    public static function removeByPath(
+        array &$array,
+        array|float|int|string $path,
+        mixed $default = null,
+        string $delimiter = '.'
+    ): mixed {
         return self::remove($array, self::parseMixedPath($path, $delimiter), $default);
     }
 
@@ -638,17 +646,20 @@ final class ArrayHelper
      * @param iterable $array The array or iterable object that needs to be indexed or grouped.
      * @param Closure|string|null $key The column name or anonymous function which result will be used
      * to index the array.
-     * @param Closure[]|string|string[]|null $groups The array of keys, that will be used to group the input array
-     * by one or more keys. If the `$key` attribute or its value for the particular element is null and `$groups` is not
-     * defined, the array element will be discarded. Otherwise, if `$groups` is specified, array element will be added
-     * to the result array without any key.
+     * @param Closure[]|string|string[]|null $groups The array of keys, that will be used to group the input
+     * array by one or more keys. If the `$key` attribute or its value for the particular element is null and `$groups`
+     * is not defined, the array element will be discarded. Otherwise, if `$groups` is specified, array element will be
+     * added to the result array without any key.
      *
      * @psalm-param iterable<mixed, array|object> $array
      *
      * @return array The indexed and/or grouped array.
      */
-    public static function index(iterable $array, $key, $groups = []): array
-    {
+    public static function index(
+        iterable $array,
+        Closure|string|null $key,
+        array|string|null $groups = []
+    ): array {
         $result = [];
         $groups = (array)$groups;
 
@@ -798,8 +809,12 @@ final class ArrayHelper
      *
      * @return array Resulting map.
      */
-    public static function map(iterable $array, Closure|string $from, Closure|string $to, $group = null): array
-    {
+    public static function map(
+        iterable $array,
+        Closure|string $from,
+        Closure|string $to,
+        Closure|string|null $group = null
+    ): array {
         if ($group === null) {
             if ($from instanceof Closure || $to instanceof Closure || !is_array($array)) {
                 $result = [];
