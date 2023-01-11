@@ -202,17 +202,10 @@ final class ArrayHelper
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
-    public static function getValue($array, array|Closure|float|int|string $key, mixed $default = null)
+    public static function getValue(array|object $array, array|Closure|float|int|string $key, mixed $default = null)
     {
         if ($key instanceof Closure) {
             return $key($array, $default);
-        }
-
-        /** @psalm-suppress DocblockTypeContradiction */
-        if (!is_array($array) && !is_object($array)) {
-            throw new InvalidArgumentException(
-                'getValue() can not get value from ' . gettype($array) . '. Only array and object are supported.'
-            );
         }
 
         if (is_array($key)) {
@@ -239,24 +232,25 @@ final class ArrayHelper
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
-    private static function getRootValue(mixed $array, float|int|string $key, mixed $default)
+    private static function getRootValue(array|object $array, float|int|string $key, mixed $default): mixed
     {
         if (is_array($array)) {
             $key = self::normalizeArrayKey($key);
             return array_key_exists($key, $array) ? $array[$key] : $default;
         }
 
-        if (is_object($array)) {
-            try {
-                return $array::$$key;
-            } catch (Throwable) {
-                // This is expected to fail if the property does not exist, or __get() is not implemented.
-                // It is not reliably possible to check whether a property is accessible beforehand.
-                return $array->$key;
-            }
+        try {
+            /** @psalm-suppress MixedPropertyFetch */
+            return $array::$$key;
+        } catch (Throwable) {
+            /**
+             * This is expected to fail if the property does not exist, or __get() is not implemented.
+             * It is not reliably possible to check whether a property is accessible beforehand.
+             *
+             * @psalm-suppress MixedPropertyFetch
+             */
+            return $array->$key;
         }
-
-        return $default;
     }
 
     /**
@@ -294,8 +288,12 @@ final class ArrayHelper
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
-    public static function getValueByPath($array, array|Closure|float|int|string $path, mixed $default = null, string $delimiter = '.')
-    {
+    public static function getValueByPath(
+        array|object $array,
+        array|Closure|float|int|string $path,
+        mixed $default = null,
+        string $delimiter = '.'
+    ) {
         return self::getValue(
             $array,
             $path instanceof Closure ? $path : self::parseMixedPath($path, $delimiter),

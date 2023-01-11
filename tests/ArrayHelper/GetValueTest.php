@@ -285,14 +285,6 @@ final class GetValueTest extends TestCase
         ArrayHelper::getValueByPath($order, 'magic.name');
     }
 
-    public function testGetValueFromInvalidArray(): void
-    {
-        $this->expectExceptionMessage(
-            'getValue() can not get value from integer. Only array and object are supported.'
-        );
-        ArrayHelper::getValue(42, 'key');
-    }
-
     public function testDefaultArrayValue(): void
     {
         $array = [

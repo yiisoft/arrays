@@ -57,8 +57,7 @@ trait ArrayAccessTrait
      *
      * @return mixed The element at the offset, null if no element is found at the offset.
      */
-    #[\ReturnTypeWillChange]
-    public function offsetGet(mixed $offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->data[$offset] ?? null;
     }
