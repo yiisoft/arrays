@@ -2,7 +2,7 @@
 
 ## 2.1.1 under development
 
-- no changes in this release.
+- Enh #115: Raise required PHP version to `^8.0` (@xepozz, @vjik)
 
 ## 2.1.0 August 20, 2022
 
@@ -19,7 +19,7 @@
 
 ## 1.0.1 February 10, 2021
 
-- Chg: Update yiisoft/strings dependency (@samdark)
+- Chg: Update `yiisoft/strings` dependency (@samdark)
 
 ## 1.0.0 February 02, 2021
 
