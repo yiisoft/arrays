@@ -119,7 +119,7 @@ final class ArraySorter
         }
 
         // This fix is used for cases when main sorting specified by columns has equal values.
-        // Without it it will lead to Fatal Error: Nesting level too deep - recursive dependency?
+        // Without it will lead to Fatal Error: Nesting level too deep - recursive dependency?
         $args[] = range(1, count($array));
         $args[] = SORT_ASC;
         $args[] = SORT_NUMERIC;

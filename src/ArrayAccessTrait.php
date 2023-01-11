@@ -7,11 +7,11 @@ namespace Yiisoft\Arrays;
 use ArrayIterator;
 
 /**
- * ArrayAccessTrait provides the implementation for {@see \IteratorAggregate}, {@see \ArrayAccess}
+ * `ArrayAccessTrait` provides the implementation for {@see \IteratorAggregate}, {@see \ArrayAccess}
  * and {@see \Countable}.
  *
- * Note that ArrayAccessTrait requires the class using it contain a property named `data` which should be an array.
- * The data will be exposed by ArrayAccessTrait to support accessing the class object like an array.
+ * Note that `ArrayAccessTrait` requires the class using it contain a property named `data` which should be an array.
+ * The data will be exposed by `ArrayAccessTrait` to support accessing the class object like an array.
  *
  * @property array $data
  */

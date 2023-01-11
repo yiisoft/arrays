@@ -11,9 +11,9 @@ use function is_int;
 use function is_string;
 
 /**
- * ArrayableTrait provides a common implementation of the {@see ArrayableInterface} interface.
+ * `ArrayableTrait` provides a common implementation of the {@see ArrayableInterface} interface.
  *
- * ArrayableTrait implements {@see ArrayableInterface::toArray()} by respecting the field definitions as declared
+ * `ArrayableTrait` implements {@see ArrayableInterface::toArray()} by respecting the field definitions as declared
  * in {@see ArrayableInterface::fields()} and {@see ArrayableInterface::extraFields()}.
  */
 trait ArrayableTrait
