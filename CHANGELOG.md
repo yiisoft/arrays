@@ -1,8 +1,9 @@
 # Yii Arrays Change Log
 
-## 2.1.1 under development
+## 3.0.0 under development
 
-- Enh #115: Raise required PHP version to `^8.0` (@xepozz, @vjik)
+- Enh #115: Raise required PHP version to `^8.0`, move union type hints from annotations
+  to methods' signatures (@xepozz, @vjik)
 
 ## 2.1.0 August 20, 2022
 
