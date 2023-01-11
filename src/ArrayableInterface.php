@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays;
 
 /**
- * ArrayableInterface should be implemented by classes that want to support customizable representation
+ * `ArrayableInterface` should be implemented by classes that want to support customizable representation
  * of their instances.
  *
- * For example, if a class implements ArrayableInterface, by calling {@see ArrayableInterface::toArray()},
+ * For example, if a class implements `ArrayableInterface`, by calling {@see ArrayableInterface::toArray()},
  * an instance of this class can be turned into an array (including all its embedded objects) which can
  * then be further transformed easily into other formats, such as JSON, XML.
  *

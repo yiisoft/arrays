@@ -53,9 +53,7 @@ final class GetValueTest extends TestCase
             ['noname', null],
             ['noname', 'test', 'test'],
             [
-                static function ($array, $defaultValue) {
-                    return $array['date'] . $defaultValue;
-                },
+                static fn ($array, $defaultValue) => $array['date'] . $defaultValue,
                 '31-12-2113test',
                 'test',
             ],
@@ -285,14 +283,6 @@ final class GetValueTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         ArrayHelper::getValueByPath($order, 'magic.name');
-    }
-
-    public function testGetValueFromInvalidArray(): void
-    {
-        $this->expectExceptionMessage(
-            'getValue() can not get value from integer. Only array and object are supported.'
-        );
-        ArrayHelper::getValue(42, 'key');
     }
 
     public function testDefaultArrayValue(): void
