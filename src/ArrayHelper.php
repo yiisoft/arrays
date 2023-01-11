@@ -682,6 +682,7 @@ final class ArrayHelper
                     $lastArray[$value] = [];
                 }
                 $lastArray = &$lastArray[$value];
+                /** @var array $lastArray */
             }
 
             if ($key === null) {
@@ -963,10 +964,10 @@ final class ArrayHelper
                 $key = (string)$key;
             }
             if (!$valuesOnly && is_string($key)) {
-                $key = htmlspecialchars($key, ENT_QUOTES|ENT_SUBSTITUTE, $encoding, true);
+                $key = htmlspecialchars($key, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
             }
             if (is_string($value)) {
-                $d[$key] = htmlspecialchars($value, ENT_QUOTES|ENT_SUBSTITUTE, $encoding, true);
+                $d[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
             } elseif (is_array($value)) {
                 $d[$key] = self::htmlEncode($value, $valuesOnly, $encoding);
             } else {
@@ -1220,6 +1221,7 @@ final class ArrayHelper
             // We've found a value now let's insert it.
             $resultNode = &$result;
             foreach ($keys as $key) {
+                /** @var array $resultNode */
                 if (!array_key_exists($key, $resultNode)) {
                     $resultNode[$key] = [];
                 }
@@ -1241,7 +1243,6 @@ final class ArrayHelper
                 }
 
                 if ($i < $numNestedKeys) {
-                    /** @var mixed */
                     $excludeNode = &$excludeNode[$key];
                 } else {
                     unset($excludeNode[$key]);
@@ -1249,6 +1250,8 @@ final class ArrayHelper
                 }
             }
         }
+
+        /** @var array $result */
 
         return $result;
     }
