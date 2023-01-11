@@ -301,7 +301,7 @@ final class GetValueTest extends TestCase
 
     public function testGetters(): void
     {
-        $object = new class() {
+        $object = new class () {
             public function getValue(): int
             {
                 return 7;
