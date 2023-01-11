@@ -681,8 +681,9 @@ final class ArrayHelper
                 if (!array_key_exists($value, $lastArray)) {
                     $lastArray[$value] = [];
                 }
-                /** @var array */
+                /** @psalm-suppress MixedAssignment */
                 $lastArray = &$lastArray[$value];
+                /** @var array $lastArray */
             }
 
             if ($key === null) {
@@ -1224,14 +1225,18 @@ final class ArrayHelper
                 if (!array_key_exists($key, $resultNode)) {
                     $resultNode[$key] = [];
                 }
-                /** @var array */
+                /** @psalm-suppress MixedAssignment */
                 $resultNode = &$resultNode[$key];
+                /** @var array $resultNode */
             }
             /** @var array */
             $resultNode = $nodeValue;
         }
 
-        /** @var array $result */
+        /**
+         * @psalm-suppress UnnecessaryVarAnnotation
+         * @var array $result
+         */
 
         foreach ($excludeFilters as $filter) {
             $excludeNode = &$result;
@@ -1243,7 +1248,7 @@ final class ArrayHelper
                 }
 
                 if ($i < $numNestedKeys) {
-                    /** @var mixed */
+                    /** @psalm-suppress MixedAssignment */
                     $excludeNode = &$excludeNode[$key];
                 } else {
                     unset($excludeNode[$key]);
