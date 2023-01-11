@@ -681,8 +681,8 @@ final class ArrayHelper
                 if (!array_key_exists($value, $lastArray)) {
                     $lastArray[$value] = [];
                 }
+                /** @var array */
                 $lastArray = &$lastArray[$value];
-                /** @var array $lastArray */
             }
 
             if ($key === null) {
@@ -1221,13 +1221,13 @@ final class ArrayHelper
             // We've found a value now let's insert it.
             $resultNode = &$result;
             foreach ($keys as $key) {
-                /** @var array $resultNode */
                 if (!array_key_exists($key, $resultNode)) {
                     $resultNode[$key] = [];
                 }
+                /** @var array */
                 $resultNode = &$resultNode[$key];
             }
-            /** @var mixed */
+            /** @var array */
             $resultNode = $nodeValue;
         }
 
@@ -1243,6 +1243,7 @@ final class ArrayHelper
                 }
 
                 if ($i < $numNestedKeys) {
+                    /** @var mixed */
                     $excludeNode = &$excludeNode[$key];
                 } else {
                     unset($excludeNode[$key]);
