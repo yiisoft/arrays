@@ -1,5 +1,9 @@
 # Yii Arrays Change Log
 
+## 3.0.1 under development
+
+- no changes in this release.
+
 ## 3.0.0 January 12, 2023
 
 - Fix #103: `ArrayableTrait::toArray()` returned an invalid result when no fields were specified (@ganigeorgiev)
