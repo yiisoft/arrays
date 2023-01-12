@@ -8,7 +8,7 @@ final class Post2
 {
     public $id = 123;
     public $content = 'test';
-    private $secret = 's';
+    private string $secret = 's';
 
     public function getSecret(): string
     {

@@ -69,12 +69,8 @@ final class KeyAndPathExistsTest extends TestCase
 
     /**
      * @dataProvider dataKeyExists
-     *
-     * @param bool $expected
-     * @param mixed $key
-     * @param bool $caseSensitive
      */
-    public function testKeyExists(bool $expected, $key, bool $caseSensitive = true): void
+    public function testKeyExists(bool $expected, mixed $key, bool $caseSensitive = true): void
     {
         $this->assertSame($expected, ArrayHelper::keyExists($this->array, $key, $caseSensitive));
     }
@@ -106,12 +102,8 @@ final class KeyAndPathExistsTest extends TestCase
 
     /**
      * @dataProvider dataPathExists
-     *
-     * @param bool $expected
-     * @param mixed $key
-     * @param bool $caseSensitive
      */
-    public function testPathExist(bool $expected, $key, bool $caseSensitive = true): void
+    public function testPathExist(bool $expected, mixed $key, bool $caseSensitive = true): void
     {
         $this->assertSame($expected, ArrayHelper::pathExists($this->array, $key, $caseSensitive));
     }
