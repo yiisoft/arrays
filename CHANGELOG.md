@@ -1,11 +1,11 @@
 # Yii Arrays Change Log
 
-## 3.0.0 under development
+## 3.0.0 January 12, 2023
 
-- Enh #122: Add getters' support (keys like "getMyProperty()") to `ArrayHelper` (@vjik) 
+- Fix #103: `ArrayableTrait::toArray()` returned an invalid result when no fields were specified (@ganigeorgiev)
 - Enh #115: Raise required PHP version to `^8.0`, move union type hints from annotations
   to methods' signatures (@xepozz, @vjik)
-- Fix #103: `ArrayableTrait::toArray()` returned an invalid result when no fields were specified (@ganigeorgiev)
+- Enh #122: Add getters' support (keys like "getMyProperty()") to `ArrayHelper` (@vjik)
 
 ## 2.1.0 August 20, 2022
 
