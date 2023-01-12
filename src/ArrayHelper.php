@@ -192,7 +192,7 @@ final class ArrayHelper
      *
      * @param array|object $array Array or object to extract value from.
      * @param array|Closure|float|int|string $key Key name of the array element,
-     * an array of keys or property name of the object, or an anonymous function
+     * an array of keys, object property name, object method like `getName()`, or an anonymous function
      * returning the value. The anonymous function signature should be:
      * `function($array, $defaultValue)`.
      * @param mixed $default The default value to be returned if the specified array key does not exist. Not used when
@@ -229,7 +229,7 @@ final class ArrayHelper
 
     /**
      * @param mixed $array Array or object to extract value from, otherwise method will return $default.
-     * @param float|int|string $key Key name of the array element or property name of the object.
+     * @param float|int|string $key Key name of the array element, object property name or object method like `getValue()`.
      * @param mixed $default The default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
      *
