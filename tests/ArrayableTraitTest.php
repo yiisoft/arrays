@@ -35,6 +35,38 @@ final class ArrayableTraitTest extends TestCase
         $object = new HardArrayableObject();
         $this->assertSame(
             [
+                'x' => 1,
+                'y' => 2,
+                'nested' => [
+                    'a' => 1,
+                    'b' => 2,
+                ],
+                'nested2' => [
+                    'X' => [
+                        'a' => 1,
+                        'b' => 2,
+                    ],
+                    'Y' => [
+                        'a' => [
+                            'x' => 1,
+                            'y' => 2,
+                        ],
+                        'b' => [
+                            'k' => 3,
+                            'm' => 4,
+                        ],
+                    ],
+                ],
+                'specific' => [
+                    '/x' => [
+                        'a' => 1,
+                    ],
+                ],
+            ],
+            $object->toArray()
+        );
+        $this->assertSame(
+            [
                 'nested' => [
                     'a' => 1,
                     'b' => 2,
@@ -114,7 +146,10 @@ final class ArrayableTraitTest extends TestCase
             [
                 'nested2' => [
                     'Y' => [
-                        'a' => [],
+                        'a' => [
+                            'x' => 1,
+                            'y' => 2,
+                        ],
                     ],
                 ],
             ],

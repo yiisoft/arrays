@@ -5,6 +5,7 @@
 - Enh #122: Add getters' support (keys like "getMyProperty()") to `ArrayHelper` (@vjik) 
 - Enh #115: Raise required PHP version to `^8.0`, move union type hints from annotations
   to methods' signatures (@xepozz, @vjik)
+- Fix #103: `ArrayableTrait::toArray()` returned an invalid result when no fields were specified (@ganigeorgiev)
 
 ## 2.1.0 August 20, 2022
 
