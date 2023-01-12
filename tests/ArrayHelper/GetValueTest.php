@@ -298,4 +298,16 @@ final class GetValueTest extends TestCase
 
         $this->assertSame(['c' => 'value'], $result);
     }
+
+    public function testGetters(): void
+    {
+        $object = new class () {
+            public function getValue(): int
+            {
+                return 7;
+            }
+        };
+
+        $this->assertSame(7, ArrayHelper::getValue($object, 'getValue()'));
+    }
 }

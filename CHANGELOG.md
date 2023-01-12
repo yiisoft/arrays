@@ -2,6 +2,7 @@
 
 ## 3.0.0 under development
 
+- Enh #122: Add getters' support (keys like "getMyProperty()") to `ArrayHelper` (@vjik) 
 - Enh #115: Raise required PHP version to `^8.0`, move union type hints from annotations
   to methods' signatures (@xepozz, @vjik)
 
