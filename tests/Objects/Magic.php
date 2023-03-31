@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Tests\Objects;
 
 use InvalidArgumentException;
+
 use function array_key_exists;
 
 final class Magic
