@@ -19,5 +19,5 @@ jobs:
         ['ubuntu-latest']
       php: >-
         ['8.0']
-      secrets:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
