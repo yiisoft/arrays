@@ -8,6 +8,7 @@ use ArrayObject;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Throwable;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Tests\Objects\Magic;
 use Yiisoft\Arrays\Tests\Objects\Post1;
@@ -221,9 +222,12 @@ final class GetValueTest extends TestCase
      */
     public function testGetValueNonexistingProperties1(): void
     {
-        $this->expectError();
-        $object = new Post1();
-        $this->assertNull(ArrayHelper::getValue($object, 'nonExisting'));
+        try {
+            $object = new Post1();
+            ArrayHelper::getValue($object, 'nonExisting');
+        } catch (Throwable $e) {
+            $this->assertSame('Undefined property: Yiisoft\Arrays\Tests\Objects\Post1::$nonExisting', $e->getMessage());
+        }
     }
 
     /**
@@ -231,9 +235,12 @@ final class GetValueTest extends TestCase
      */
     public function testGetValueNonexistingProperties2(): void
     {
-        $this->expectError();
-        $arrayObject = new ArrayObject(['id' => 23], ArrayObject::ARRAY_AS_PROPS);
-        $this->assertEquals(23, ArrayHelper::getValue($arrayObject, 'nonExisting'));
+        try {
+            $arrayObject = new ArrayObject(['id' => 23], ArrayObject::ARRAY_AS_PROPS);
+            ArrayHelper::getValue($arrayObject, 'nonExisting');
+        } catch (Throwable $e) {
+            $this->assertSame('Undefined array key "nonExisting"', $e->getMessage());
+        }
     }
 
     public function testGetValueFromStaticProperty(): void
@@ -246,12 +253,12 @@ final class GetValueTest extends TestCase
     public function testGetUndefinedPropertyFromObject(): void
     {
         $object = new stdClass();
-        if (PHP_VERSION_ID >= 80000) {
-            $this->expectWarning();
-        } else {
-            $this->expectNotice();
+
+        try {
+            ArrayHelper::getValue($object, 'var');
+        } catch (Throwable $e) {
+            $this->assertSame('Undefined property: stdClass::$var', $e->getMessage());
         }
-        ArrayHelper::getValue($object, 'var');
     }
 
     public function testExistingMagicObjectProperty(): void
