@@ -220,27 +220,40 @@ final class GetValueTest extends TestCase
     /**
      * This is expected to result in a PHP error.
      */
-    public function testGetValueNonexistingProperties1(): void
+    public function testGetValueNonExistingProperties1(): void
     {
+        $object = new Post1();
+
+        $exception = null;
         try {
-            $object = new Post1();
             ArrayHelper::getValue($object, 'nonExisting');
         } catch (Throwable $e) {
-            $this->assertSame('Undefined property: Yiisoft\Arrays\Tests\Objects\Post1::$nonExisting', $e->getMessage());
+            $exception = $e;
         }
+
+        $this->assertNotNull($exception);
+        $this->assertSame(
+            'Undefined property: Yiisoft\Arrays\Tests\Objects\Post1::$nonExisting',
+            $exception->getMessage()
+        );
     }
 
     /**
      * This is expected to result in a PHP error.
      */
-    public function testGetValueNonexistingProperties2(): void
+    public function testGetValueNonExistingProperties2(): void
     {
+        $arrayObject = new ArrayObject(['id' => 23], ArrayObject::ARRAY_AS_PROPS);
+
+        $exception = null;
         try {
-            $arrayObject = new ArrayObject(['id' => 23], ArrayObject::ARRAY_AS_PROPS);
             ArrayHelper::getValue($arrayObject, 'nonExisting');
         } catch (Throwable $e) {
-            $this->assertSame('Undefined array key "nonExisting"', $e->getMessage());
+            $exception = $e;
         }
+
+        $this->assertNotNull($exception);
+        $this->assertSame('Undefined array key "nonExisting"', $exception->getMessage());
     }
 
     public function testGetValueFromStaticProperty(): void
@@ -254,11 +267,15 @@ final class GetValueTest extends TestCase
     {
         $object = new stdClass();
 
+        $exception = null;
         try {
             ArrayHelper::getValue($object, 'var');
         } catch (Throwable $e) {
-            $this->assertSame('Undefined property: stdClass::$var', $e->getMessage());
+            $exception = $e;
         }
+
+        $this->assertNotNull($exception);
+        $this->assertSame('Undefined property: stdClass::$var', $exception->getMessage());
     }
 
     public function testExistingMagicObjectProperty(): void
