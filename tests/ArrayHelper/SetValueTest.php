@@ -361,8 +361,7 @@ final class SetValueTest extends TestCase
         array|float|int|string|null $path,
         mixed $value,
         mixed $expected
-    ): void
-    {
+    ): void {
         ArrayHelper::setValueByPath($arrayInput, $path, $value, '~');
         $this->assertEquals($expected, $arrayInput);
     }
