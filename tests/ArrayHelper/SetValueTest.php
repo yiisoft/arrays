@@ -111,11 +111,13 @@ final class SetValueTest extends TestCase
 
     /**
      * @dataProvider dataProviderSetValue
-     *
-     * @param array|float|int|string|null $key
      */
-    public function testSetValue(array $arrayInput, $key, mixed $value, mixed $expected): void
-    {
+    public function testSetValue(
+        array $arrayInput,
+        array|float|int|string|null $key,
+        mixed $value,
+        mixed $expected
+    ): void {
         ArrayHelper::setValue($arrayInput, $key, $value);
         $this->assertEquals($expected, $arrayInput);
     }
@@ -298,11 +300,13 @@ final class SetValueTest extends TestCase
 
     /**
      * @dataProvider dataProviderSetValueByPath
-     *
-     * @param array|float|int|string|null $path
      */
-    public function testSetValueByPath(array $arrayInput, $path, mixed $value, mixed $expected): void
-    {
+    public function testSetValueByPath(
+        array $arrayInput,
+        array|float|int|string|null $path,
+        mixed $value,
+        mixed $expected
+    ): void {
         ArrayHelper::setValueByPath($arrayInput, $path, $value);
         $this->assertEquals($expected, $arrayInput);
     }
@@ -351,10 +355,13 @@ final class SetValueTest extends TestCase
 
     /**
      * @dataProvider setValueByPathWithCustomDelimiterData
-     *
-     * @param array|float|int|string|null $path
      */
-    public function testSetValueByPathWithCustomDelimiter(array $arrayInput, $path, mixed $value, mixed $expected): void
+    public function testSetValueByPathWithCustomDelimiter(
+        array $arrayInput,
+        array|float|int|string|null $path,
+        mixed $value,
+        mixed $expected
+    ): void
     {
         ArrayHelper::setValueByPath($arrayInput, $path, $value, '~');
         $this->assertEquals($expected, $arrayInput);
