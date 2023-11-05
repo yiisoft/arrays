@@ -598,7 +598,6 @@ final class ArrayHelper
         self::setValue($array, $path === null ? null : self::parseMixedPath($path, $delimiter), $value);
     }
 
-
     /**
      * Removes an item from an array and returns the value. If the key does not exist in the array, the default value
      * will be returned instead.
