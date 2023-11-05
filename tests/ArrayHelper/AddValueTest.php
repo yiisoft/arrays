@@ -142,7 +142,7 @@ final class AddValueTest extends TestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         ]);
     }
 
@@ -302,7 +302,7 @@ final class AddValueTest extends TestCase
                         'in' => [
                             'val1',
                             'key' => 'val',
-                            ['arr' => 'val']
+                            ['arr' => 'val'],
                         ],
                     ],
                 ],
