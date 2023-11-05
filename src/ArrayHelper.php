@@ -441,7 +441,7 @@ final class ArrayHelper
     {
         if ($key === null) {
             /** @var mixed */
-            $array = [...$array, $value];
+            $array []= $value;
             return;
         }
 
