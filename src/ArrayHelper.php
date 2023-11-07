@@ -385,9 +385,7 @@ final class ArrayHelper
      *
      *  ```php
      *   $array = [
-     *       'key' => [
-     *
-     *       ]
+     *     'key' => [],
      *   ];
      * ```
      *
