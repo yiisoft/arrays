@@ -410,7 +410,7 @@ final class ArrayHelper
      *
      * @param array $array The array to append the value to.
      * @param array|float|int|string|null $key The path of where do you want to append a value to `$array`
-     *  the path can be described by an array of keys. If the path is null then `$array` will be assigned the `[$value]`.
+     *  the path can be described by an array of keys. If the path is null then `$value` will be appended to the `$array`.
      *
      * @psalm-param ArrayKey|null $key
      *
