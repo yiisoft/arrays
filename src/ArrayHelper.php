@@ -408,25 +408,6 @@ final class ArrayHelper
      *   ]
      *  ```
      *
-     *   If the value exists, it will become the first element of the array
-     *   ```php
-     *       $array = [
-     *           'key' => 'in',
-     *       ];
-     *   ```
-     *
-     *   The result of:
-     *   ```php
-     *       ArrayHelper::addValue($array, 'key.in', 'variable1');
-     *    ```
-     *
-     *   will be the following:
-     *   ```php
-     *       [
-     *           'key' => ['in', 'variable1'],
-     *       ]
-     *  ```
-     *
      * @param array $array The array to write the value to.
      * @param array|float|int|string|null $key The path of where do you want to write a value to `$array`
      *  the path can be described by an array of keys. If the path is null then `$array` will be assigned the `[$value]`.
