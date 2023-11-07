@@ -379,7 +379,7 @@ final class ArrayHelper
     }
 
     /**
-     * Appends a value to an associative array at the key path specified.
+     * Find array in an associative array at the key path specified and add passed value to him.
      * If there is no such key path yet, it will be created recursively and an empty array will be initialized.
      * If the value exists, it will become the first element of the array
      *
