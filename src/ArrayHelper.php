@@ -513,7 +513,7 @@ final class ArrayHelper
     }
 
     /**
-     * Adds a value into an associative array at the key path specified.
+     * Writes a value into an associative array at the key path specified.
      * If there is no such key path yet, it will be created recursively.
      * If the key exists, it will be overwritten.
      *
