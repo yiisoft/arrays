@@ -487,9 +487,12 @@ final class ArrayHelper
      *
      *   will be the following:
      *   ```php
-     *       [
-     *           'key' => ['in', 'variable1'],
-     *       ]
+     * [
+     *     'key' => [
+     *         'in',
+     *         'in' => 'variable1',
+     *     ],
+     * ]
      *  ```
      *
      * @param array $array The array to append the value to.
