@@ -446,11 +446,9 @@ final class ArrayHelper
      * If there is no such key path yet, it will be created recursively and an empty array will be initialized.
      *
      * ```php
-     *   $array = [
-     *      'key' => [
-     *
-     *        ]
-     *    ];
+     * $array = [
+     *     'key' => [],
+     * ];
      * ```
      *
      * The result of:
