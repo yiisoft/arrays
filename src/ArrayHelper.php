@@ -379,6 +379,86 @@ final class ArrayHelper
     }
 
     /**
+     * Find array value in array at the key path specified and add passed value to him.
+     *
+     * If there is no such key path yet, it will be created recursively and an empty array will be initialized.
+     *
+     * ```php
+     * $array = ['key' => []];
+     *
+     * ArrayHelper::addValue($array, ['key', 'in'], 'variable1');
+     * ArrayHelper::addValue($array, ['key', 'in'], 'variable2');
+     *
+     * // Result: ['key' => ['in' => ['variable1', 'variable2']]]
+     * ```
+     *
+     * If the value exists, it will become the first element of the array.
+     *
+     * ```php
+     * $array = ['key' => 'in'];
+     *
+     * ArrayHelper::addValue($array, ['key'], 'variable1');
+     *
+     * // Result: ['key' => ['in', 'variable1']]
+     * ```
+     *
+     * @param array $array The array to append the value to.
+     * @param array|float|int|string|null $key The path of where do you want to append a value to `$array`. The path can
+     * be described by an array of keys. If the path is null then `$value` will be appended to the `$array`.
+     *
+     * @psalm-param ArrayKey|null $key
+     *
+     * @param mixed $value The value to be appended.
+     */
+    public static function addValue(array &$array, array|float|int|string|null $key, mixed $value): void
+    {
+        if ($key === null) {
+            $array[] = $value;
+            return;
+        }
+
+        $keys = is_array($key) ? $key : [$key];
+
+        while (count($keys) > 0) {
+            $k = self::normalizeArrayKey(array_shift($keys));
+
+            if (!array_key_exists($k, $array)) {
+                $array[$k] = [];
+            } elseif (!is_array($array[$k])) {
+                $array[$k] = [$array[$k]];
+            }
+
+            $array = &$array[$k];
+        }
+
+        $array[] = $value;
+    }
+
+    /**
+     * Find array value in array at the key path specified and add passed value to him.
+     *
+     * @see addValue
+     *
+     * @param array $array The array to append the value to.
+     * @param array|float|int|string|null $path The path of where do you want to append a value to `$array`. The path
+     * can be described by a string when each key should be separated by a dot. You can also describe the path as
+     * an array of keys. If the path is null then `$value` will be appended to the `$array`.
+     * @param mixed $value The value to be added.
+     * @param string $delimiter A separator, used to parse string $key for embedded object property retrieving. Defaults
+     * to "." (dot).
+     *
+     * @psalm-param ArrayPath|null $path
+     */
+    public static function addValueByPath(
+        array &$array,
+        array|float|int|string|null $path,
+        mixed $value,
+        string $delimiter = '.'
+    ): void {
+        self::addValue($array, $path === null ? null : self::parseMixedPath($path, $delimiter), $value);
+    }
+
+    /**
      * Writes a value into an associative array at the key path specified.
      * If there is no such key path yet, it will be created recursively.
      * If the key exists, it will be overwritten.

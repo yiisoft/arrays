@@ -10,6 +10,7 @@
   to methods' signatures (@xepozz, @vjik)
 - Enh #122: Add getters' support (keys like "getMyProperty()") to `ArrayHelper` (@vjik)
 - Bug #103: `ArrayableTrait::toArray()` returned an invalid result when no fields were specified (@ganigeorgiev)
+- New #137: Add methods `ArrayHelper::addValue()` and `ArrayHelper::addValueByPath()` (@Kutuzovska)
 
 ## 2.1.0 August 20, 2022
 

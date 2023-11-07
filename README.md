@@ -54,6 +54,8 @@ Overall the helper has the following method groups.
 
 ### Setting data
 
+- addValue
+- addValueByPath
 - setValue
 - setValueByPath
 
