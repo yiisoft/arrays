@@ -151,7 +151,7 @@ final class AddValueTest extends TestCase
                 'val',
                 [
                     'key' => [null, 'val'],
-                ]
+                ],
             ],
         ]);
     }
