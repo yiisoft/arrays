@@ -433,7 +433,7 @@ final class ArrayHelper
      *
      * @psalm-param ArrayKey|null $key
      *
-     * @param mixed $value The value to be written.
+     * @param mixed $value The value to be appended.
      */
     public static function addValue(array &$array, array|float|int|string|null $key, mixed $value): void
     {
