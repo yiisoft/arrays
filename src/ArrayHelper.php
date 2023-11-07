@@ -442,7 +442,7 @@ final class ArrayHelper
     }
 
     /**
-     * Writes a value into an associative array at the key path specified.
+     * Appends a value into an associative array at the key path specified.
      * If there is no such key path yet, it will be created recursively and an empty array will be initialized.
      *
      * ```php
