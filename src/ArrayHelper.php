@@ -492,7 +492,7 @@ final class ArrayHelper
      *       ]
      *  ```
      *
-     * @param array $array The array to write the value to.
+     * @param array $array The array to append the value to.
      * @param array|float|int|string|null $path The path of where do you want to add a value to `$array`.
      * The path can be described by a string when each key should be separated by a dot.
      * You can also describe the path as an array of keys. If the path is null then `$array` will be assigned
