@@ -495,8 +495,8 @@ final class ArrayHelper
      * @param array $array The array to append the value to.
      * @param array|float|int|string|null $path The path of where do you want to add a value to `$array`.
      * The path can be described by a string when each key should be separated by a dot.
-     * You can also describe the path as an array of keys. If the path is null then `$array` will be assigned
-     * the `[$value]`.
+     * You can also describe the path as an array of keys. If the path is null then `$value` will be appended to
+     * the `$array`.
      * @param mixed $value The value to be added.
      * @param string $delimiter A separator, used to parse string $key for embedded object property retrieving. Defaults
      * to "." (dot).
