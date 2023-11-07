@@ -381,8 +381,7 @@ final class ArrayHelper
     /**
      * Find array in an associative array at the key path specified and add passed value to him.
      * If there is no such key path yet, it will be created recursively and an empty array will be initialized.
-     * If the value exists, it will become the first element of the array
-     *
+     * *
      *  ```php
      *   $array = [
      *     'key' => [],
@@ -408,6 +407,24 @@ final class ArrayHelper
      *   ]
      *  ```
      *
+     * If the value exists, it will become the first element of the array
+     *
+     * ```php
+     *  $array = [
+     *    'key' => 'in,
+     *  ];
+     * ```
+     * The result of:
+     *  ```php
+     *   ArrayHelper::addValue($array, ['key'], 'variable1');
+     *  ```
+     *  will be the following:
+     *  ```php
+     *   $array = [
+     *     'key' => ['in', 'variable1'],
+     *   ];
+     *  ```
+     *
      * @param array $array The array to append the value to.
      * @param array|float|int|string|null $key The path of where do you want to append a value to `$array`
      *  the path can be described by an array of keys. If the path is null then `$value` will be appended to the `$array`.
@@ -428,7 +445,7 @@ final class ArrayHelper
 
         while (count($keys) > 0) {
             $k = self::normalizeArrayKey(array_shift($keys));
-            if (!isset($array[$k])) {
+            if (!array_key_exists($k, $array)) {
                 $array[$k] = [];
             }
             if (!is_array($array[$k])) {
