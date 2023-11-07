@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ArrayHelper;
+namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
@@ -10,7 +10,7 @@ use Yiisoft\Arrays\ArrayHelper;
 final class AddValueTest extends TestCase
 {
     /**
-     * @return array[] common test data for [[testAddValue()]] and [[testAddValueByPath()]]
+     * @return array[] Common test data for `testAddValue()` and `testAddValueByPath()`.
      */
     private function commonDataProvider(): array
     {
@@ -81,9 +81,9 @@ final class AddValueTest extends TestCase
     }
 
     /**
-     * Data provider for [[testAddValue()]].
+     * Data provider for `testAddValue()`.
      *
-     * @return array test data
+     * @return array[] The test data.
      */
     public function dataProviderAddValue(): array
     {
@@ -170,9 +170,9 @@ final class AddValueTest extends TestCase
     }
 
     /**
-     * Data provider for [[testAddValueByPath()]].
+     * Data provider for `testAddValueByPath()`.
      *
-     * @return array test data
+     * @return array The test data.
      */
     public function dataProviderAddValueByPath(): array
     {

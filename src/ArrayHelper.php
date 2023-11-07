@@ -379,55 +379,32 @@ final class ArrayHelper
     }
 
     /**
-     * Find array in an associative array at the key path specified and add passed value to him.
+     * Find array value in array at the key path specified and add passed value to him.
+     *
      * If there is no such key path yet, it will be created recursively and an empty array will be initialized.
-     * *
-     *  ```php
-     *   $array = [
-     *     'key' => [],
-     *   ];
-     * ```
-     *
-     *  The result of:
-     * ```php
-     *  ArrayHelper::addValue($array, ['key', 'in'], 'variable1');
-     *  ArrayHelper::addValue($array, ['key', 'in'], 'variable2');
-     * ```
-     *
-     *  will be the following:
-     *
-     *  ```php
-     *   [
-     *       'key' => [
-     *           'in' => [
-     *               'variable1',
-     *               'variable2',
-     *           ]
-     *       ]
-     *   ]
-     *  ```
-     *
-     * If the value exists, it will become the first element of the array
      *
      * ```php
-     *  $array = [
-     *    'key' => 'in,
-     *  ];
+     * $array = ['key' => []];
+     *
+     * ArrayHelper::addValue($array, ['key', 'in'], 'variable1');
+     * ArrayHelper::addValue($array, ['key', 'in'], 'variable2');
+     *
+     * // Result: ['key' => ['in' => ['variable1', 'variable2']]]
      * ```
-     * The result of:
-     *  ```php
-     *   ArrayHelper::addValue($array, ['key'], 'variable1');
-     *  ```
-     *  will be the following:
-     *  ```php
-     *   $array = [
-     *     'key' => ['in', 'variable1'],
-     *   ];
-     *  ```
+     *
+     * If the value exists, it will become the first element of the array.
+     *
+     * ```php
+     * $array = ['key' => 'in'];
+     *
+     * ArrayHelper::addValue($array, ['key'], 'variable1');
+     *
+     * // Result: ['key' => ['in', 'variable1']]
+     * ```
      *
      * @param array $array The array to append the value to.
-     * @param array|float|int|string|null $key The path of where do you want to append a value to `$array`
-     *  the path can be described by an array of keys. If the path is null then `$value` will be appended to the `$array`.
+     * @param array|float|int|string|null $key The path of where do you want to append a value to `$array`. The path can
+     * be described by an array of keys. If the path is null then `$value` will be appended to the `$array`.
      *
      * @psalm-param ArrayKey|null $key
      *
@@ -436,7 +413,6 @@ final class ArrayHelper
     public static function addValue(array &$array, array|float|int|string|null $key, mixed $value): void
     {
         if ($key === null) {
-            /** @var mixed */
             $array[] = $value;
             return;
         }
@@ -455,67 +431,18 @@ final class ArrayHelper
             $array = &$array[$k];
         }
 
-        /** @var mixed */
-        $array [] = $value;
+        $array[] = $value;
     }
 
     /**
-     * Appends a value into an associative array at the key path specified.
-     * If there is no such key path yet, it will be created recursively and an empty array will be initialized.
+     * Find array value in array at the key path specified and add passed value to him.
      *
-     * ```php
-     * $array = [
-     *     'key' => [],
-     * ];
-     * ```
-     *
-     * The result of:
-     *
-     *  ```php
-     *   ArrayHelper::addValue($array, 'key.in', 'variable1');
-     *   ArrayHelper::addValue($array, 'key.in', 'variable2');
-     *  ```
-     *
-     *   will be the following:
-     *
-     *   ```php
-     *    [
-     *        'key' => [
-     *            'in' => [
-     *                'variable1',
-     *                'variable2',
-     *            ]
-     *        ]
-     *    ]
-     *   ```
-     *
-     *   If the value exists, it will become the first element of the array
-     *   ```php
-     *       $array = [
-     *           'key' => 'in',
-     *       ];
-     *   ```
-     *
-     *   The result of:
-     *   ```php
-     *       ArrayHelper::addValue($array, 'key.in', 'variable1');
-     *    ```
-     *
-     *   will be the following:
-     *   ```php
-     * [
-     *     'key' => [
-     *         'in',
-     *         'in' => 'variable1',
-     *     ],
-     * ]
-     *  ```
+     * @see addValue
      *
      * @param array $array The array to append the value to.
-     * @param array|float|int|string|null $path The path of where do you want to add a value to `$array`.
-     * The path can be described by a string when each key should be separated by a dot.
-     * You can also describe the path as an array of keys. If the path is null then `$value` will be appended to
-     * the `$array`.
+     * @param array|float|int|string|null $path The path of where do you want to append a value to `$array`. The path
+     * can be described by a string when each key should be separated by a dot. You can also describe the path as
+     * an array of keys. If the path is null then `$value` will be appended to the `$array`.
      * @param mixed $value The value to be added.
      * @param string $delimiter A separator, used to parse string $key for embedded object property retrieving. Defaults
      * to "." (dot).
