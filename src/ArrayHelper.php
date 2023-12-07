@@ -75,7 +75,6 @@ final class ArrayHelper
     {
         if (is_array($object)) {
             if ($recursive) {
-                /** @var mixed $value */
                 foreach ($object as $key => $value) {
                     if (is_array($value) || is_object($value)) {
                         $object[$key] = self::toArray($value, $properties);
@@ -97,10 +96,8 @@ final class ArrayHelper
                      */
                     foreach ($properties[$className] as $key => $name) {
                         if (is_int($key)) {
-                            /** @var mixed */
                             $result[$name] = $object->$name;
                         } else {
-                            /** @var mixed */
                             $result[$key] = self::getValue($object, $name);
                         }
                     }
@@ -114,10 +111,8 @@ final class ArrayHelper
                 $result = [];
                 /**
                  * @var string $key
-                 * @var mixed $value
                  */
                 foreach ($object as $key => $value) {
-                    /** @var mixed */
                     $result[$key] = $value;
                 }
             }
@@ -145,22 +140,18 @@ final class ArrayHelper
     {
         $result = array_shift($arrays) ?: [];
         while (!empty($arrays)) {
-            /** @var mixed $value */
             foreach (array_shift($arrays) as $key => $value) {
                 if (is_int($key)) {
                     if (array_key_exists($key, $result)) {
                         if ($result[$key] !== $value) {
-                            /** @var mixed */
                             $result[] = $value;
                         }
                     } else {
-                        /** @var mixed */
                         $result[$key] = $value;
                     }
                 } elseif (isset($result[$key]) && is_array($value) && is_array($result[$key])) {
                     $result[$key] = self::merge($result[$key], $value);
                 } else {
-                    /** @var mixed */
                     $result[$key] = $value;
                 }
             }
@@ -215,7 +206,6 @@ final class ArrayHelper
             /** @psalm-var array<mixed,string|int> $key */
             $lastKey = array_pop($key);
             foreach ($key as $keyPart) {
-                /** @var mixed */
                 $array = self::getRootValue($array, $keyPart, null);
                 if (!is_array($array) && !is_object($array)) {
                     return $default;
@@ -356,7 +346,6 @@ final class ArrayHelper
     public static function setValue(array &$array, array|float|int|string|null $key, mixed $value): void
     {
         if ($key === null) {
-            /** @var mixed */
             $array = $value;
             return;
         }
@@ -372,9 +361,9 @@ final class ArrayHelper
                 $array[$k] = [$array[$k]];
             }
             $array = &$array[$k];
+            /** @var array $array */
         }
 
-        /** @var mixed */
         $array[self::normalizeArrayKey(array_shift($keys))] = $value;
     }
 
@@ -429,6 +418,7 @@ final class ArrayHelper
             }
 
             $array = &$array[$k];
+            /** @var array $array */
         }
 
         $array[] = $value;
@@ -561,7 +551,6 @@ final class ArrayHelper
 
         $key = self::normalizeArrayKey(array_shift($keys));
         if (array_key_exists($key, $array)) {
-            /** @var mixed */
             $value = $array[$key];
             unset($array[$key]);
             return $value;
@@ -627,10 +616,8 @@ final class ArrayHelper
     public static function removeValue(array &$array, mixed $value): array
     {
         $result = [];
-        /** @psalm-var mixed $val */
         foreach ($array as $key => $val) {
             if ($val === $value) {
-                /** @var mixed */
                 $result[$key] = $val;
                 unset($array[$key]);
             }
@@ -779,7 +766,6 @@ final class ArrayHelper
                     $lastArray[] = $element;
                 }
             } else {
-                /** @var mixed */
                 $value = self::getValue($element, $key);
                 if ($value !== null) {
                     $lastArray[self::normalizeArrayKey($value)] = $element;
@@ -842,12 +828,10 @@ final class ArrayHelper
         $result = [];
         if ($keepKeys) {
             foreach ($array as $k => $element) {
-                /** @var mixed */
                 $result[$k] = self::getValue($element, $name);
             }
         } else {
             foreach ($array as $element) {
-                /** @var mixed */
                 $result[] = self::getValue($element, $name);
             }
         }
@@ -910,7 +894,6 @@ final class ArrayHelper
                 $result = [];
                 foreach ($array as $element) {
                     $key = (string)self::getValue($element, $from);
-                    /** @var mixed */
                     $result[$key] = self::getValue($element, $to);
                 }
 
@@ -924,7 +907,6 @@ final class ArrayHelper
         foreach ($array as $element) {
             $groupKey = (string)self::getValue($element, $group);
             $key = (string)self::getValue($element, $from);
-            /** @var mixed */
             $result[$groupKey][$key] = self::getValue($element, $to);
         }
 
@@ -952,7 +934,6 @@ final class ArrayHelper
             }
 
             foreach (self::getExistsKeys($array, array_shift($key), $caseSensitive) as $existKey) {
-                /** @var mixed */
                 $array = self::getRootValue($array, $existKey, null);
                 if (is_array($array) && self::keyExists($array, $key, $caseSensitive)) {
                     return true;
@@ -1044,10 +1025,6 @@ final class ArrayHelper
     public static function htmlEncode(iterable $data, bool $valuesOnly = true, string $encoding = null): array
     {
         $d = [];
-        /**
-         * @var mixed $key
-         * @var mixed $value
-         */
         foreach ($data as $key => $value) {
             if (!is_int($key)) {
                 $key = (string)$key;
@@ -1060,7 +1037,6 @@ final class ArrayHelper
             } elseif (is_array($value)) {
                 $d[$key] = self::htmlEncode($value, $valuesOnly, $encoding);
             } else {
-                /** @var mixed */
                 $d[$key] = $value;
             }
         }
@@ -1087,10 +1063,6 @@ final class ArrayHelper
     public static function htmlDecode(iterable $data, bool $valuesOnly = true): array
     {
         $decoded = [];
-        /**
-         * @var mixed $key
-         * @var mixed $value
-         */
         foreach ($data as $key => $value) {
             if (!is_int($key)) {
                 $key = (string)$key;
@@ -1103,7 +1075,6 @@ final class ArrayHelper
             } elseif (is_array($value)) {
                 $decoded[$key] = self::htmlDecode($value);
             } else {
-                /** @var mixed */
                 $decoded[$key] = $value;
             }
         }
@@ -1174,7 +1145,6 @@ final class ArrayHelper
             return array_keys($array) === range(0, count($array) - 1);
         }
 
-        /** @psalm-var mixed $value */
         foreach ($array as $key => $_value) {
             if (!is_int($key)) {
                 return false;
@@ -1206,7 +1176,6 @@ final class ArrayHelper
             return in_array($needle, $haystack, $strict);
         }
 
-        /** @psalm-var mixed $value */
         foreach ($haystack as $value) {
             if ($needle == $value && (!$strict || $needle === $value)) {
                 return true;
@@ -1232,7 +1201,6 @@ final class ArrayHelper
      */
     public static function isSubset(iterable $needles, iterable $haystack, bool $strict = false): bool
     {
-        /** @psalm-var mixed $needle */
         foreach ($needles as $needle) {
             if (!self::isIn($needle, $haystack, $strict)) {
                 return false;
@@ -1303,7 +1271,6 @@ final class ArrayHelper
                 if (!is_array($nodeValue) || !array_key_exists($key, $nodeValue)) {
                     continue 2; // Jump to next filter.
                 }
-                /** @var mixed */
                 $nodeValue = $nodeValue[$key];
             }
 
