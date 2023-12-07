@@ -144,7 +144,7 @@ final class ArrayHelper
      * Recursive merging will be conducted if both arrays have an element of array type and are having the same key.
      * For integer-keyed elements, the elements from the latter array will be appended to the former array.
      *
-     * @param array[] $arrays[] Arrays to be merged.
+     * @param array[] $arrays Arrays to be merged.
      * @param int|null $depth The maximum depth that merging is recursively. `Null` means unlimited depth.
      *
      * @return array The merged array (the original arrays are not changed).
