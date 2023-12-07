@@ -2,7 +2,8 @@
 
 ## 3.0.1 under development
 
-- no changes in this release.
+- New #139: Add `ArrayHelper::restrictedMerge()` method that allow to merge two or more arrays recursively with
+  specified depth (@vjik)
 
 ## 3.0.0 January 12, 2023
 

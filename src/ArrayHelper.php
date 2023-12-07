@@ -124,13 +124,10 @@ final class ArrayHelper
     }
 
     /**
-     * Merges two or more arrays into one recursively.
-     * If each array has an element with the same string key value, the latter
-     * will overwrite the former (different from {@see array_merge_recursive()}).
-     * Recursive merging will be conducted if both arrays have an element of array
-     * type and are having the same key.
-     * For integer-keyed elements, the elements from the latter array will
-     * be appended to the former array.
+     * Merges two or more arrays into one recursively. If each array has an element with the same string key value,
+     * the latter will overwrite the former (different from {@see array_merge_recursive()}). Recursive merging will be
+     * conducted if both arrays have an element of array type and are having the same key. For integer-keyed elements,
+     * the elements from the latter array will be appended to the former array.
      *
      * @param array ...$arrays Arrays to be merged.
      *
@@ -142,7 +139,15 @@ final class ArrayHelper
     }
 
     /**
-     * @param array[] $arrays
+     * Merges two or more arrays into one recursively with specified depth. If each array has an element with the same
+     * string key value, the latter will overwrite the former (different from {@see array_merge_recursive()}).
+     * Recursive merging will be conducted if both arrays have an element of array type and are having the same key.
+     * For integer-keyed elements, the elements from the latter array will be appended to the former array.
+     *
+     * @param array[] $arrays[] Arrays to be merged.
+     * @param int|null $depth The maximum depth that merging is recursively. `Null` means unlimited depth.
+     *
+     * @return array The merged array (the original arrays are not changed).
      */
     public static function restrictedMerge(array $arrays, ?int $depth): array
     {

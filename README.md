@@ -87,6 +87,7 @@ Overall the helper has the following method groups.
 - filter
 - map
 - merge
+- restrictedMerge
 - toArray
 
 ### Other
