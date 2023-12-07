@@ -361,6 +361,7 @@ final class ArrayHelper
                 $array[$k] = [$array[$k]];
             }
             $array = &$array[$k];
+            /** @var array $array */
         }
 
         $array[self::normalizeArrayKey(array_shift($keys))] = $value;
@@ -417,6 +418,7 @@ final class ArrayHelper
             }
 
             $array = &$array[$k];
+            /** @var array $array */
         }
 
         $array[] = $value;

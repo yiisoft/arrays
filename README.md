@@ -32,7 +32,7 @@ The package provides:
 ## Installation
 
 ```shell
-composer require yiisoft/arrays --prefer-dist
+composer require yiisoft/arrays
 ```
 
 ## ArrayHelper usage
