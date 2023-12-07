@@ -207,7 +207,7 @@ final class MergeTest extends TestCase
         $array1 = [
             'top' => 1,
             'n1' => [
-                'n1-1' => 1
+                'n1-1' => 1,
             ],
             'n2' => [
                 'n2-1' => [1, 2],
