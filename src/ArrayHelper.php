@@ -138,25 +138,15 @@ final class ArrayHelper
      */
     public static function merge(...$arrays): array
     {
-        $result = array_shift($arrays) ?: [];
-        while (!empty($arrays)) {
-            foreach (array_shift($arrays) as $key => $value) {
-                if (is_int($key)) {
-                    if (array_key_exists($key, $result)) {
-                        if ($result[$key] !== $value) {
-                            $result[] = $value;
-                        }
-                    } else {
-                        $result[$key] = $value;
-                    }
-                } elseif (isset($result[$key]) && is_array($value) && is_array($result[$key])) {
-                    $result[$key] = self::merge($result[$key], $value);
-                } else {
-                    $result[$key] = $value;
-                }
-            }
-        }
-        return $result;
+        return self::doMerge($arrays, null);
+    }
+
+    /**
+     * @param array[] $arrays
+     */
+    public static function restrictedMerge(array $arrays, ?int $depth): array
+    {
+        return self::doMerge($arrays, $depth);
     }
 
     /**
@@ -1333,6 +1323,37 @@ final class ArrayHelper
     public static function getObjectVars(object $object): ?array
     {
         return get_object_vars($object);
+    }
+
+    /**
+     * @param array[] $arrays
+     */
+    private static function doMerge(array $arrays, ?int $depth, int $currentDepth = 0): array
+    {
+        $result = array_shift($arrays) ?: [];
+        while (!empty($arrays)) {
+            foreach (array_shift($arrays) as $key => $value) {
+                if (is_int($key)) {
+                    if (array_key_exists($key, $result)) {
+                        if ($result[$key] !== $value) {
+                            $result[] = $value;
+                        }
+                    } else {
+                        $result[$key] = $value;
+                    }
+                } elseif (
+                    isset($result[$key])
+                    && ($depth === null || $currentDepth < $depth)
+                    && is_array($value)
+                    && is_array($result[$key])
+                ) {
+                    $result[$key] = self::doMerge([$result[$key], $value], $depth, $currentDepth + 1);
+                } else {
+                    $result[$key] = $value;
+                }
+            }
+        }
+        return $result;
     }
 
     private static function normalizeArrayKey(mixed $key): string
