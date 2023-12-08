@@ -100,7 +100,7 @@ final class MergeTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public static function dataRestrictedMerge(): array
+    public static function dataParametrizedMerge(): array
     {
         return [
             'unlimited' => [
@@ -200,9 +200,9 @@ final class MergeTest extends TestCase
     }
 
     /**
-     * @dataProvider dataRestrictedMerge
+     * @dataProvider dataParametrizedMerge
      */
-    public function testRestrictedMerge(array $expected, ?int $depth): void
+    public function testParametrizedMerge(array $expected, ?int $depth): void
     {
         $array1 = [
             'top' => 1,
@@ -240,7 +240,7 @@ final class MergeTest extends TestCase
             ],
         ];
 
-        $result = ArrayHelper::restrictedMerge([$array1, $array2, $array3], $depth);
+        $result = ArrayHelper::parametrizedMerge([$array1, $array2, $array3], $depth);
 
         $this->assertSame($expected, $result);
     }

@@ -149,7 +149,7 @@ final class ArrayHelper
      *
      * @return array The merged array (the original arrays are not changed).
      */
-    public static function restrictedMerge(array $arrays, ?int $depth): array
+    public static function parametrizedMerge(array $arrays, ?int $depth): array
     {
         return self::doMerge($arrays, $depth);
     }
