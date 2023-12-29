@@ -1321,11 +1321,11 @@ final class ArrayHelper
      *
      * @param object $object The object to be handled.
      *
-     * @return array|null The public member variables of the object or null if not object given.
+     * @return array The public member variables of the object.
      *
      * @link https://www.php.net/manual/en/function.get-object-vars.php
      */
-    public static function getObjectVars(object $object): ?array
+    public static function getObjectVars(object $object): array
     {
         return get_object_vars($object);
     }
