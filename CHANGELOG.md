@@ -4,6 +4,7 @@
 
 - New #139: Add `ArrayHelper::parametrizedMerge()` method that allows to merge two or more arrays recursively with
   specified depth (@vjik)
+- Enh #140: Remove `null` from return type of `ArrayHelper::getObjectVars()` method (@Tigrov) 
 
 ## 3.0.0 January 12, 2023
 
