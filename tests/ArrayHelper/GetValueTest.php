@@ -53,11 +53,6 @@ final class GetValueTest extends TestCase
             ['name', 'test'],
             ['noname', null],
             ['noname', 'test', 'test'],
-            [
-                static fn ($array, $defaultValue) => $array['date'] . $defaultValue,
-                '31-12-2113test',
-                'test',
-            ],
             [['version', 2], 'two'],
             [['version', 2.0], 'two'],
             [42.7, 500],
@@ -101,8 +96,8 @@ final class GetValueTest extends TestCase
 
 
         $posts = [
-            new ArrayObject(['title' => 'hello world']),
-            new ArrayObject(['title' => 'hello test', 'tag' => 'test']),
+            (object)['title' => 'hello world'],
+            (object)['title' => 'hello test', 'tag' => 'test'],
         ];
 
         $taggedPost = ArrayHelper::getValue($posts, fn ($post) => isset($post->tag));

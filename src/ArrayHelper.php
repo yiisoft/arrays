@@ -98,7 +98,7 @@ final class ArrayHelper
                         if (is_int($key)) {
                             $result[$name] = $object->$name;
                         } else {
-                            $result[$key] = self::getValue($object, $name);
+                            $result[$key] = $name instanceof Closure ? $name($object) : self::getValue($object, $name);
                         }
                     }
 
@@ -253,15 +253,11 @@ final class ArrayHelper
     }
 
     private static function getValueByMatcher(
-        array|object $array,
+        array $array,
         Closure $match,
         mixed $default = null
     ): mixed
     {
-        if (is_object($array)) {
-            $array = self::getObjectVars($array);
-        }
-
         foreach ($array as $key => $value) {
             if ($match($value, $key)) {
                 return $value;
@@ -779,7 +775,7 @@ final class ArrayHelper
                     $lastArray[] = $element;
                 }
             } else {
-                $value = self::getValue($element, $key);
+                $value = $key instanceof Closure ? $key($element) : self::getValue($element, $key);
                 if ($value !== null) {
                     $lastArray[self::normalizeArrayKey($value)] = $element;
                 }
@@ -841,11 +837,11 @@ final class ArrayHelper
         $result = [];
         if ($keepKeys) {
             foreach ($array as $k => $element) {
-                $result[$k] = self::getValue($element, $name);
+                $result[$k] = $name instanceof Closure ? $name($element) : self::getValue($element, $name);
             }
         } else {
             foreach ($array as $element) {
-                $result[] = self::getValue($element, $name);
+                $result[] = $name instanceof Closure ? $name($element) : self::getValue($element, $name);
             }
         }
 
@@ -906,8 +902,8 @@ final class ArrayHelper
             if ($from instanceof Closure || $to instanceof Closure || !is_array($array)) {
                 $result = [];
                 foreach ($array as $element) {
-                    $key = (string)self::getValue($element, $from);
-                    $result[$key] = self::getValue($element, $to);
+                    $key = (string)($from instanceof Closure ? $from($element) : self::getValue($element, $from));
+                    $result[$key] = $to instanceof Closure ? $to($element) : self::getValue($element, $to);
                 }
 
                 return $result;
@@ -918,9 +914,9 @@ final class ArrayHelper
 
         $result = [];
         foreach ($array as $element) {
-            $groupKey = (string)self::getValue($element, $group);
-            $key = (string)self::getValue($element, $from);
-            $result[$groupKey][$key] = self::getValue($element, $to);
+            $groupKey = (string)($group instanceof Closure ? $group($element) : self::getValue($element, $group));
+            $key = (string)($from instanceof Closure ? $from($element) : self::getValue($element, $from));
+            $result[$groupKey][$key] = $to instanceof Closure ? $to($element) : self::getValue($element, $to);
         }
 
         return $result;
