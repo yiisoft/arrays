@@ -178,14 +178,14 @@ final class ArrayHelper
      *
      * @param array|object $array Array or object to extract value from.
      * @param array|Closure|float|int|string $key Key name of the array element,
-     * an array of keys, object property name, object method like `getName()` or an anonymous function. The anonymous function signature should be:
+     * an array of keys, object property name, object method like `getName()` or a callable. The callable function signature should be:
      * `function($value, $key)`.
      * @param mixed $default The default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
      *
      * @psalm-param ArrayKey|Closure $key
      *
-     * @return mixed The value of the element if found or the return value of anonymous function is truthy, default value otherwise.
+     * @return mixed The value of the element if found or the return value of callable is truthy, default value otherwise.
      */
     public static function getValue(
         array|object $array,

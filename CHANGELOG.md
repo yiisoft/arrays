@@ -1,7 +1,8 @@
 # Yii Arrays Change Log
 
-## 3.0.1 under development
+## 4.0.0 under development
 
+- Chg #142: Redefine the callable parameter in `ArrayHelper::getValue()` to be a value matcher (yus-ham)
 - New #139: Add `ArrayHelper::parametrizedMerge()` method that allows to merge two or more arrays recursively with
   specified depth (@vjik)
 - Enh #140: Remove `null` from return type of `ArrayHelper::getObjectVars()` method (@Tigrov) 
