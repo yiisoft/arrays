@@ -167,9 +167,9 @@ final class ArrayHelper
      * // Working with object:
      * $username = \Yiisoft\Arrays\ArrayHelper::getValue($user, 'username');
      *
-     * // Working with anonymous function:
-     * $fullName = \Yiisoft\Arrays\ArrayHelper::getValue($user, function ($user, $defaultValue) {
-     *     return $user->firstName . ' ' . $user->lastName;
+     * // Retrieve the value by matcher function:
+     * $firstActiveMember = \Yiisoft\Arrays\ArrayHelper::getValue($users, function ($user, $key) {
+     *     return $user->type === 'member' && $user->isActive;
      * });
      *
      * // Using an array of keys to retrieve the value:
@@ -178,15 +178,14 @@ final class ArrayHelper
      *
      * @param array|object $array Array or object to extract value from.
      * @param array|Closure|float|int|string $key Key name of the array element,
-     * an array of keys, object property name, object method like `getName()`, or an anonymous function
-     * returning the value. The anonymous function signature should be:
-     * `function($array, $defaultValue)`.
+     * an array of keys, object property name, object method like `getName()` or an anonymous function. The anonymous function signature should be:
+     * `function($value, $key)`.
      * @param mixed $default The default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
      *
      * @psalm-param ArrayKey|Closure $key
      *
-     * @return mixed The value of the element if found, default value otherwise.
+     * @return mixed The value of the element if found or the return value of anonymous function is truthy, default value otherwise.
      */
     public static function getValue(
         array|object $array,
@@ -194,7 +193,7 @@ final class ArrayHelper
         mixed $default = null
     ): mixed {
         if ($key instanceof Closure) {
-            return $key($array, $default);
+            return self::getValueByMatcher($array, $key, $default);
         }
 
         if (is_array($key)) {
@@ -247,6 +246,25 @@ final class ArrayHelper
                  * @psalm-suppress MixedPropertyFetch
                  */
                 return $array->$key;
+            }
+        }
+
+        return $default;
+    }
+
+    private static function getValueByMatcher(
+        array|object $array,
+        Closure $match,
+        mixed $default = null
+    ): mixed
+    {
+        if (is_object($array)) {
+            $array = self::getObjectVars($array);
+        }
+
+        foreach ($array as $key => $value) {
+            if ($match($value, $key)) {
+                return $value;
             }
         }
 

@@ -89,6 +89,26 @@ final class GetValueTest extends TestCase
         $this->assertEquals($expected, ArrayHelper::getValue($this->array, $key, $default));
     }
 
+    public function testGetValueByMatcher(): void
+    {
+        $users = [
+            ['name' => 'Cebe', 'status'  => 'active'],
+            ['name' => 'John', 'status'  => 'not active'],
+        ];
+
+        $activeUser = ArrayHelper::getValue($users, fn ($user) => $user['status'] === 'active');
+        $this->assertEquals('Cebe', $activeUser['name']);
+
+
+        $posts = [
+            new ArrayObject(['title' => 'hello world']),
+            new ArrayObject(['title' => 'hello test', 'tag' => 'test']),
+        ];
+
+        $taggedPost = ArrayHelper::getValue($posts, fn ($post) => isset($post->tag));
+        $this->assertEquals('hello test', $taggedPost->title);
+    }
+
     public function dataProviderGetValueByPathFromArray(): array
     {
         return array_merge($this->commonDataProviderFromArray(), [
