@@ -92,7 +92,7 @@ final class ArrayHelper
                     $result = [];
                     /**
                      * @var int|string $key
-                     * @var string $name
+                     * @var string|Closure $name
                      */
                     foreach ($properties[$className] as $key => $name) {
                         if (is_int($key)) {
