@@ -185,7 +185,7 @@ final class ArrayHelper
      *
      * @psalm-param ArrayKey|Closure $key
      * 
-     * @throws InvalidArgumentException if `$array` is an object.
+     * @throws InvalidArgumentException if `$key` is callable and `$array` is an object.
      * @return mixed The value of the element if found or the return value of callable is truthy, default value otherwise.
      */
     public static function getValue(
