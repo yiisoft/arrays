@@ -96,7 +96,7 @@ final class ArrayHelper
                      */
                     foreach ($properties[$className] as $key => $name) {
                         if (is_int($key)) {
-                            $result[$name] = $object->$name;
+                            $result[(string)$name] = $object->$name;
                         } else {
                             $result[$key] = $name instanceof Closure ? $name($object) : self::getValue($object, $name);
                         }
