@@ -92,13 +92,13 @@ final class ArrayHelper
                     $result = [];
                     /**
                      * @var int|string $key
-                     * @var string $name
+                     * @var string|Closure $name
                      */
                     foreach ($properties[$className] as $key => $name) {
                         if (is_int($key)) {
-                            $result[$name] = $object->$name;
+                            $result[(string)$name] = $object->$name;
                         } else {
-                            $result[$key] = self::getValue($object, $name);
+                            $result[$key] = $name instanceof Closure ? $name($object) : self::getValue($object, $name);
                         }
                     }
 
@@ -167,9 +167,9 @@ final class ArrayHelper
      * // Working with object:
      * $username = \Yiisoft\Arrays\ArrayHelper::getValue($user, 'username');
      *
-     * // Working with anonymous function:
-     * $fullName = \Yiisoft\Arrays\ArrayHelper::getValue($user, function ($user, $defaultValue) {
-     *     return $user->firstName . ' ' . $user->lastName;
+     * // Retrieve the value by matcher function:
+     * $firstActiveMember = \Yiisoft\Arrays\ArrayHelper::getValue($users, function ($user, $key) {
+     *     return $user->type === 'member' && $user->isActive;
      * });
      *
      * // Using an array of keys to retrieve the value:
@@ -178,15 +178,15 @@ final class ArrayHelper
      *
      * @param array|object $array Array or object to extract value from.
      * @param array|Closure|float|int|string $key Key name of the array element,
-     * an array of keys, object property name, object method like `getName()`, or an anonymous function
-     * returning the value. The anonymous function signature should be:
-     * `function($array, $defaultValue)`.
+     * an array of keys, object property name, object method like `getName()` or a callable. The callable function signature should be:
+     * `function($value, $key)`.
      * @param mixed $default The default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
      *
      * @psalm-param ArrayKey|Closure $key
-     *
-     * @return mixed The value of the element if found, default value otherwise.
+     * 
+     * @throws InvalidArgumentException if `$key` is callable and `$array` is an object.
+     * @return mixed The value of the element if found or the return value of callable is truthy, default value otherwise.
      */
     public static function getValue(
         array|object $array,
@@ -194,7 +194,10 @@ final class ArrayHelper
         mixed $default = null
     ): mixed {
         if ($key instanceof Closure) {
-            return $key($array, $default);
+            if (is_object($array)) {
+                throw new InvalidArgumentException('Matcher cannot be applied to an object');
+            }
+            return self::getValueByMatcher($array, $key, $default);
         }
 
         if (is_array($key)) {
@@ -247,6 +250,21 @@ final class ArrayHelper
                  * @psalm-suppress MixedPropertyFetch
                  */
                 return $array->$key;
+            }
+        }
+
+        return $default;
+    }
+
+    private static function getValueByMatcher(
+        array $array,
+        Closure $match,
+        mixed $default = null
+    ): mixed
+    {
+        foreach ($array as $key => $value) {
+            if ($match($value, $key)) {
+                return $value;
             }
         }
 
@@ -761,7 +779,7 @@ final class ArrayHelper
                     $lastArray[] = $element;
                 }
             } else {
-                $value = self::getValue($element, $key);
+                $value = $key instanceof Closure ? $key($element) : self::getValue($element, $key);
                 if ($value !== null) {
                     $lastArray[self::normalizeArrayKey($value)] = $element;
                 }
@@ -823,11 +841,11 @@ final class ArrayHelper
         $result = [];
         if ($keepKeys) {
             foreach ($array as $k => $element) {
-                $result[$k] = self::getValue($element, $name);
+                $result[$k] = $name instanceof Closure ? $name($element) : self::getValue($element, $name);
             }
         } else {
             foreach ($array as $element) {
-                $result[] = self::getValue($element, $name);
+                $result[] = $name instanceof Closure ? $name($element) : self::getValue($element, $name);
             }
         }
 
@@ -888,8 +906,8 @@ final class ArrayHelper
             if ($from instanceof Closure || $to instanceof Closure || !is_array($array)) {
                 $result = [];
                 foreach ($array as $element) {
-                    $key = (string)self::getValue($element, $from);
-                    $result[$key] = self::getValue($element, $to);
+                    $key = (string)($from instanceof Closure ? $from($element) : self::getValue($element, $from));
+                    $result[$key] = $to instanceof Closure ? $to($element) : self::getValue($element, $to);
                 }
 
                 return $result;
@@ -900,9 +918,9 @@ final class ArrayHelper
 
         $result = [];
         foreach ($array as $element) {
-            $groupKey = (string)self::getValue($element, $group);
-            $key = (string)self::getValue($element, $from);
-            $result[$groupKey][$key] = self::getValue($element, $to);
+            $groupKey = (string)($group instanceof Closure ? $group($element) : self::getValue($element, $group));
+            $key = (string)($from instanceof Closure ? $from($element) : self::getValue($element, $from));
+            $result[$groupKey][$key] = $to instanceof Closure ? $to($element) : self::getValue($element, $to);
         }
 
         return $result;
