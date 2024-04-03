@@ -1331,6 +1331,29 @@ final class ArrayHelper
     }
 
     /**
+     * Replace key in array.
+     *
+     * @param array $array Source array.
+     * @param int|string $from Key to replace.
+     * @param int|string $to Key to replace with.
+     *
+     * @return array The result array.
+     */
+    public static function replaceKey(array $array, int|string $from, int|string $to): array
+    {
+        if (!isset($array[$from])) {
+            return $array;
+        }
+
+        $result = [];
+        foreach ($array as $key => $value) {
+            $result[$key === $from ? $to : $key] = $value;
+        }
+
+        return $result;
+    }
+
+    /**
      * @param array[] $arrays
      */
     private static function doMerge(array $arrays, ?int $depth, int $currentDepth = 0): array
