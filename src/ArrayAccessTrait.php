@@ -6,6 +6,8 @@ namespace Yiisoft\Arrays;
 
 use ArrayIterator;
 
+use function count;
+
 /**
  * `ArrayAccessTrait` provides the implementation for {@see \IteratorAggregate}, {@see \ArrayAccess}
  * and {@see \Countable}.

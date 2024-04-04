@@ -4,11 +4,19 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays;
 
+use function array_combine;
 use function array_key_exists;
+use function array_keys;
+use function array_merge;
+use function array_unique;
 use function in_array;
 use function is_array;
 use function is_int;
 use function is_string;
+use function str_starts_with;
+use function strlen;
+use function strstr;
+use function substr;
 
 /**
  * `ArrayableTrait` provides a common implementation of the {@see ArrayableInterface} interface.
@@ -199,8 +207,8 @@ trait ArrayableTrait
         $result = [];
 
         foreach ($fields as $field) {
-            if (str_starts_with($field, "{$rootField}.")) {
-                $result[] = preg_replace('/^' . preg_quote($rootField, '/') . '\./i', '', $field);
+            if (str_starts_with($field, "$rootField.")) {
+                $result[] = substr($field, strlen($rootField) + 1);
             }
         }
 
