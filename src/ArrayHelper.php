@@ -1345,12 +1345,11 @@ final class ArrayHelper
             return $array;
         }
 
-        $result = [];
-        foreach ($array as $key => $value) {
-            $result[$key === $from ? $to : $key] = $value;
-        }
-
-        return $result;
+        $keys = array_keys($array);
+        $index = array_search($from, $keys);
+        $keys[$index] = $to;
+        
+        return array_combine($keys, $array);
     }
 
     /**
