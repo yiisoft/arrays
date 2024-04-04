@@ -199,8 +199,8 @@ trait ArrayableTrait
         $result = [];
 
         foreach ($fields as $field) {
-            if (str_starts_with($field, "{$rootField}.")) {
-                $result[] = preg_replace('/^' . preg_quote($rootField, '/') . '\./i', '', $field);
+            if (str_starts_with($field, "$rootField.")) {
+                $result[] = substr($field, strlen($rootField) + 1);
             }
         }
 
