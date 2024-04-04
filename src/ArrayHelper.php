@@ -1348,7 +1348,7 @@ final class ArrayHelper
         $keys = array_keys($array);
         $index = array_search($from, $keys);
         $keys[$index] = $to;
-        
+
         return array_combine($keys, $array);
     }
 
