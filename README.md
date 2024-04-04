@@ -88,7 +88,7 @@ Overall the helper has the following method groups.
 - map
 - merge
 - parametrizedMerge
-- replaceKey
+- renameKey
 - toArray
 
 ### Other

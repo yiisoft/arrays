@@ -1331,15 +1331,15 @@ final class ArrayHelper
     }
 
     /**
-     * Replace key in array.
+     * Rename key in array.
      *
      * @param array $array Source array.
-     * @param int|string $from Key to replace.
-     * @param int|string $to Key to replace with.
+     * @param int|string $from Key to rename.
+     * @param int|string $to New key name.
      *
      * @return array The result array.
      */
-    public static function replaceKey(array $array, int|string $from, int|string $to): array
+    public static function renameKey(array $array, int|string $from, int|string $to): array
     {
         if (!isset($array[$from])) {
             return $array;

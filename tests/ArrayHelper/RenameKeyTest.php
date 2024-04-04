@@ -7,9 +7,9 @@ namespace ArrayHelper;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 
-final class ReplaceKeyTest extends TestCase
+final class RenameKeyTest extends TestCase
 {
-    public static function dataReplaceKey(): iterable
+    public static function dataBase(): iterable
     {
         yield 'base' => [
             ['new-name' => 'asc', 'age' => 'desc'],
@@ -44,11 +44,11 @@ final class ReplaceKeyTest extends TestCase
     }
 
     /**
-     * @dataProvider dataReplaceKey
+     * @dataProvider dataBase
      */
-    public function testReplaceKey(array $expected, array $array, string|int $from, string|int $to): void
+    public function testBase(array $expected, array $array, string|int $from, string|int $to): void
     {
-        $result = ArrayHelper::replaceKey($array, $from, $to);
+        $result = ArrayHelper::renameKey($array, $from, $to);
 
         $this->assertSame($expected, $result);
     }
