@@ -1341,7 +1341,7 @@ final class ArrayHelper
      */
     public static function renameKey(array $array, int|string $from, int|string $to): array
     {
-        if (!isset($array[$from])) {
+        if (!array_key_exists($from, $array)) {
             return $array;
         }
 

@@ -41,6 +41,12 @@ final class RenameKeyTest extends TestCase
             1,
             4,
         ];
+        yield 'null-values' => [
+            [0 => 'a', 4 => null, 2 => 'c'],
+            ['a', null, 'c'],
+            1,
+            4,
+        ];
     }
 
     /**
