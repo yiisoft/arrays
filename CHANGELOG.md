@@ -1,5 +1,9 @@
 # Yii Arrays Change Log
 
+## 3.1.1 under development
+
+- no changes in this release.
+
 ## 3.1.0 April 04, 2024
 
 - New #139: Add `ArrayHelper::parametrizedMerge()` method that allows to merge two or more arrays recursively with
