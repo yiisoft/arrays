@@ -10,15 +10,31 @@ use Throwable;
 use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Strings\StringHelper;
 
+use function array_column;
+use function array_combine;
 use function array_key_exists;
+use function array_keys;
+use function array_merge;
+use function array_pop;
+use function array_search;
+use function array_shift;
 use function count;
+use function end;
+use function explode;
+use function get_object_vars;
 use function gettype;
+use function htmlspecialchars;
+use function htmlspecialchars_decode;
 use function in_array;
 use function is_array;
 use function is_float;
 use function is_int;
 use function is_object;
 use function is_string;
+use function range;
+use function str_ends_with;
+use function strcasecmp;
+use function substr;
 
 /**
  * Yii array helper provides static methods allowing you to deal with arrays more efficiently.

@@ -7,7 +7,12 @@ namespace Yiisoft\Arrays;
 use Closure;
 use InvalidArgumentException;
 
+use function array_fill;
+use function array_multisort;
+use function count;
 use function is_array;
+use function is_scalar;
+use function range;
 
 final class ArraySorter
 {
