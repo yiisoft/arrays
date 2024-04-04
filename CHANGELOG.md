@@ -5,7 +5,8 @@
 - New #139: Add `ArrayHelper::parametrizedMerge()` method that allows to merge two or more arrays recursively with
   specified depth (@vjik)
 - Enh #140: Remove `null` from return type of `ArrayHelper::getObjectVars()` method (@Tigrov)
-- New #149: Add `ArrayrHelper::renameKey()` (@vjik, @Tigrov)
+- New #149, #152: Add `ArrayrHelper::renameKey()` (@vjik, @Tigrov)
+- Enh #152: Minor `ArrayableTrait` refactoring (@Tigrov) 
 
 ## 3.0.0 January 12, 2023
 
