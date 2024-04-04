@@ -1331,6 +1331,28 @@ final class ArrayHelper
     }
 
     /**
+     * Rename key in array.
+     *
+     * @param array $array Source array.
+     * @param int|string $from Key to rename.
+     * @param int|string $to New key name.
+     *
+     * @return array The result array.
+     */
+    public static function renameKey(array $array, int|string $from, int|string $to): array
+    {
+        if (!isset($array[$from])) {
+            return $array;
+        }
+
+        $keys = array_keys($array);
+        $index = array_search($from, $keys);
+        $keys[$index] = $to;
+
+        return array_combine($keys, $array);
+    }
+
+    /**
      * @param array[] $arrays
      */
     private static function doMerge(array $arrays, ?int $depth, int $currentDepth = 0): array
