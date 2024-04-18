@@ -109,7 +109,7 @@ Array sorter has one static method which usage is like the following:
 [\IteratorAggregate](https://www.php.net/manual/class.iteratoraggregate),
 [\ArrayAccess](https://www.php.net/manual/class.arrayaccess) and
 [\Countable](https://www.php.net/manualn/class.countable.php).
- 
+
 Note that `ArrayAccessTrait` requires the class using it contain a property named `data` which should be an array.
 The data will be exposed by ArrayAccessTrait to support accessing the class object like an array.
 
@@ -164,38 +164,14 @@ $car = new Car();
 $data = $car->toArray(['type', 'color']); // ['type' => 'Crossover', 'color' => 'Red']
 ```
 
-## Testing
+## Documentation
 
-### Unit testing
+- More information can be found in the [Internals.](docs/internals.md)
 
-The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
+## Support
 
-```shell
-./vendor/bin/phpunit
-```
-
-### Mutation testing
-
-The package tests are checked with [Infection](https://infection.github.io/) mutation framework with
-[Infection Static Analysis Plugin](https://github.com/Roave/infection-static-analysis-plugin). To run it:
-
-```shell
-./vendor/bin/roave-infection-static-analysis-plugin
-```
-
-### Static analysis
-
-The code is statically analyzed with [Psalm](https://psalm.dev/). To run static analysis:
-
-```shell
-./vendor/bin/psalm
-```
-
-## License
-
-The Yii Arrays is free software. It is released under the terms of the BSD License. Please see [`LICENSE`](./LICENSE.md) for more information.
-
-Maintained by [Yii Software](https://www.yiiframework.com/).
+If you need help or have a question, the [Yii Forum](https://forum.yiiframework.com/c/yii-3-0/63) is a good place for that.
+You may also check out other [Yii Community Resources](https://www.yiiframework.com/community).
 
 ## Support the project
 
@@ -208,3 +184,10 @@ Maintained by [Yii Software](https://www.yiiframework.com/).
 [![Telegram](https://img.shields.io/badge/telegram-join-1DA1F2?style=flat&logo=telegram)](https://t.me/yii3en)
 [![Facebook](https://img.shields.io/badge/facebook-join-1DA1F2?style=flat&logo=facebook&logoColor=ffffff)](https://www.facebook.com/groups/yiitalk)
 [![Slack](https://img.shields.io/badge/slack-join-1DA1F2?style=flat&logo=slack)](https://yiiframework.com/go/slack)
+
+## License
+
+The Yii Access is free software. It is released under the terms of the BSD License.
+Please see [`LICENSE`](./LICENSE.md) for more information.
+
+Maintained by [Yii Software](https://www.yiiframework.com/).
