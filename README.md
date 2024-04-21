@@ -166,7 +166,7 @@ $data = $car->toArray(['type', 'color']); // ['type' => 'Crossover', 'color' => 
 
 ## Documentation
 
-- More information can be found in the [Internals.](docs/internals.md)
+- [Internals](docs/internals.md)
 
 ## Support
 
