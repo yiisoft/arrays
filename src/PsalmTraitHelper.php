@@ -13,5 +13,7 @@ final class PsalmTraitHelper
     /** @use ArrayAccessTrait<array-key, mixed> */
     use ArrayAccessTrait;
 
+    use ArrayableTrait;
+
     public array $data = [];
 }
