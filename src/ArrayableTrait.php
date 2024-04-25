@@ -83,7 +83,7 @@ trait ArrayableTrait
      * Returns the list of fields that can be expanded further and returned by {@see ArrayableInterface::toArray()}.
      *
      * This method is similar to {@see ArrayableInterface::fields()} except that the list of fields returned
-     * by this method are not returned by default by {@see ArrayableInterface::toArray()}]. Only when field names
+     * by this method are not returned by default by {@see ArrayableInterface::toArray()}. Only when field names
      * to be expanded are explicitly specified when calling {@see ArrayableInterface::toArray()}, will their values
      * be exported.
      *
