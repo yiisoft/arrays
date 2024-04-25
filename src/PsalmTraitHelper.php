@@ -10,10 +10,10 @@ namespace Yiisoft\Arrays;
  */
 final class PsalmTraitHelper
 {
+    use ArrayableTrait;
+
     /** @use ArrayAccessTrait<array-key, mixed> */
     use ArrayAccessTrait;
-
-    use ArrayableTrait;
 
     public array $data = [];
 }
