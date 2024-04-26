@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Arrays;
+namespace Yiisoft\Arrays\Tests;
+
+use Yiisoft\Arrays\ArrayableTrait;
+use Yiisoft\Arrays\ArrayAccessTrait;
 
 /**
  * @internal Need for correct psalm analysis.
