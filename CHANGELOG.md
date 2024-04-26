@@ -2,7 +2,8 @@
 
 ## 3.1.1 under development
 
-- no changes in this release.
+- Enh #156: Improve psalm types in `ArrayHelper::getObjectVars()`, `ArrayableInterface`, `ArrayableTrait` and 
+  `ArrayAccessTrait` (@vjik)
 
 ## 3.1.0 April 04, 2024
 

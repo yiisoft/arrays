@@ -9,8 +9,9 @@
 >
     <projectFiles>
         <directory name="src" />
+        <file name="tests/PsalmTraitHelper.php" />
         <ignoreFiles>
-            <directory name="vendor"/>
+            <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>

@@ -1340,6 +1340,8 @@ final class ArrayHelper
      * @return array The public member variables of the object.
      *
      * @link https://www.php.net/manual/en/function.get-object-vars.php
+     *
+     * @psalm-return array<string, mixed>
      */
     public static function getObjectVars(object $object): array
     {
