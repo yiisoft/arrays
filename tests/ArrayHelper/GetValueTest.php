@@ -87,8 +87,8 @@ final class GetValueTest extends TestCase
     public function testGetValueByMatcher(): void
     {
         $users = [
-            ['name' => 'Cebe', 'status'  => 'active'],
-            ['name' => 'John', 'status'  => 'not active'],
+            ['name' => 'Cebe', 'status' => 'active'],
+            ['name' => 'John', 'status' => 'not active'],
         ];
 
         $activeUser = ArrayHelper::getValue($users, fn ($user) => $user['status'] === 'active');

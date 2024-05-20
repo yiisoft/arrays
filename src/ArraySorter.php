@@ -7,7 +7,12 @@ namespace Yiisoft\Arrays;
 use Closure;
 use InvalidArgumentException;
 
+use function array_fill;
+use function array_multisort;
+use function count;
 use function is_array;
+use function is_scalar;
+use function range;
 
 final class ArraySorter
 {
@@ -45,7 +50,7 @@ final class ArraySorter
      * When sorting by multiple keys with different sorting directions, use an array of sorting directions.
      * @param array<array-key, int>|int $sortFlag The PHP sort flag. Valid values include
      * `SORT_REGULAR`, `SORT_NUMERIC`, `SORT_STRING`, `SORT_LOCALE_STRING`, `SORT_NATURAL` and `SORT_FLAG_CASE`.
-     * Please refer to [PHP manual](http://php.net/manual/en/function.sort.php)
+     * Please refer to [PHP manual](https://php.net/manual/en/function.sort.php)
      * for more details. When sorting by multiple keys with different sort flags, use an array of sort flags.
      *
      * @throws InvalidArgumentException If the `$direction` or `$sortFlag` parameters do not have

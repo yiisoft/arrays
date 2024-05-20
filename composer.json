@@ -10,12 +10,12 @@
     "homepage": "https://www.yiiframework.com/",
     "license": "BSD-3-Clause",
     "support": {
-        "issues": "https://github.com/yiisoft/arrays/issues",
+        "issues": "https://github.com/yiisoft/arrays/issues?state=open",
+        "source": "https://github.com/yiisoft/arrays",
         "forum": "https://forum.yiiframework.com/",
         "wiki": "https://www.yiiframework.com/wiki/",
-        "irc": "irc://irc.freenode.net/yii",
-        "chat": "https://t.me/yii3en",
-        "source": "https://github.com/yiisoft/arrays"
+        "irc": "ircs://irc.libera.chat:6697/yii",
+        "chat": "https://t.me/yii3en"
     },
     "funding": [
         {
@@ -34,10 +34,10 @@
     "require-dev": {
         "maglnet/composer-require-checker": "^4.4",
         "phpunit/phpunit": "^9.5",
-        "rector/rector": "^0.19.0",
+        "rector/rector": "^1.0.0",
         "roave/infection-static-analysis-plugin": "^1.25",
         "spatie/phpunit-watcher": "^1.23",
-        "vimeo/psalm": "^4.30|^5.20"
+        "vimeo/psalm": "^4.30|^5.23"
     },
     "autoload": {
         "psr-4": {

@@ -1,11 +1,18 @@
 # Yii Arrays Change Log
 
-## 4.0.0 under development
+## 3.1.1 under development
 
-- Chg #142: Redefine the callable parameter in `ArrayHelper::getValue()` to be a value matcher (yus-ham)
+- New #142: Add `ArrayHelper::find()`, `ArrayHelper::findKey()`, `ArrayHelper::findAny()` and `ArrayHelper::findAll()` method for value retrieval or checks by a predicate function (@yus-ham)
+- Enh #156: Improve psalm types in `ArrayHelper::getObjectVars()`, `ArrayableInterface`, `ArrayableTrait` and 
+  `ArrayAccessTrait` (@vjik)
+
+## 3.1.0 April 04, 2024
+
 - New #139: Add `ArrayHelper::parametrizedMerge()` method that allows to merge two or more arrays recursively with
   specified depth (@vjik)
-- Enh #140: Remove `null` from return type of `ArrayHelper::getObjectVars()` method (@Tigrov) 
+- New #149, #152: Add `ArrayrHelper::renameKey()` (@vjik, @Tigrov)
+- Enh #140: Remove `null` from return type of `ArrayHelper::getObjectVars()` method (@Tigrov)
+- Enh #152: Minor `ArrayableTrait` refactoring (@Tigrov)
 
 ## 3.0.0 January 12, 2023
 
