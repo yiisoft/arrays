@@ -50,6 +50,8 @@ Overall the helper has the following method groups.
 - getValueByPath
 - getColumn
 - getObjectVars
+- find
+- findKey
 
 ### Setting data
 
@@ -78,6 +80,8 @@ Overall the helper has the following method groups.
 
 - isIn
 - isSubset
+- any
+- all
 
 ### Transformation
 
