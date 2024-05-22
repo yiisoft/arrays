@@ -53,6 +53,11 @@ final class GetValueTest extends TestCase
             ['name', 'test'],
             ['noname', null],
             ['noname', 'test', 'test'],
+            [
+                static fn ($array, $defaultValue) => $array['date'] . $defaultValue,
+                '31-12-2113test',
+                'test',
+            ],
             [['version', 2], 'two'],
             [['version', 2.0], 'two'],
             [42.7, 500],
@@ -82,26 +87,6 @@ final class GetValueTest extends TestCase
     public function testGetValueFromArray($key, $expected, $default = null): void
     {
         $this->assertEquals($expected, ArrayHelper::getValue($this->array, $key, $default));
-    }
-
-    public function testGetValueByMatcher(): void
-    {
-        $users = [
-            ['name' => 'Cebe', 'status' => 'active'],
-            ['name' => 'John', 'status' => 'not active'],
-        ];
-
-        $activeUser = ArrayHelper::getValue($users, fn ($user) => $user['status'] === 'active');
-        $this->assertEquals('Cebe', $activeUser['name']);
-
-
-        $posts = [
-            (object)['title' => 'hello world'],
-            (object)['title' => 'hello test', 'tag' => 'test'],
-        ];
-
-        $taggedPost = ArrayHelper::getValue($posts, fn ($post) => isset($post->tag));
-        $this->assertEquals('hello test', $taggedPost->title);
     }
 
     public function dataProviderGetValueByPathFromArray(): array
