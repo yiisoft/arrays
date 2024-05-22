@@ -1436,4 +1436,72 @@ final class ArrayHelper
 
         return is_string($path) ? StringHelper::parsePath($path, $delimiter) : $path;
     }
+
+    /**
+     * @param array $array The array that should be searched
+     * @param Closure $predicate The predicate callback to call to check each element. The first parameter contains the value, the second parameter contains the corresponding key. If this function returns truthy value, the value is returned from `find()` and the callback will not be called for further elements
+     * 
+     * @return mixed Returns the value of the first element for which the `$predicate` callback returns true. If no matching element is found the function returns `null`
+     */
+    public static function find(array $array, Closure $predicate): mixed
+    {
+        foreach ($array as $key => $value) {
+            if ($predicate($value, $key)) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array The array that should be searched
+     * @param Closure $predicate The predicate callback to call to check each element. The first parameter contains the value, the second parameter contains the corresponding key. If this function returns truthy value, the key is returned from `findKey()` and the callback will not be called for further elements
+     * 
+     * @return string|int|null Returns the key of the first element for which the `$predicate` callback returns `true`. If no matching element is found the function returns `null`
+     */
+    public static function findKey(array $array, Closure $predicate): string|int|null
+    {
+        foreach ($array as $key => $value) {
+            if ($predicate($value, $key)) {
+                return $key;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array The array that should be searched
+     * @param Closure $predicate The predicate callback to call to check each element. The first parameter contains the value, the second parameter contains the corresponding key. If this function returns truthy value, `true` is returned from `any()` and the callback will not be called for further elements
+     * 
+     * @return bool Returns `true`, if one element for which predicate callback returns truthy value. Otherwise the function returns `false`
+     */
+    public static function any(array $array, Closure $predicate): bool
+    {
+        foreach ($array as $key => $value) {
+            if ($predicate($value, $key)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array The array that should be searched
+     * @param Closure $predicate The predicate callback to call to check each element. The first parameter contains the value, the second parameter contains the corresponding key. If this function returns falsy value, `false` is returned from `all()` and the callback will not be called for further elements
+     * 
+     * @return bool Returns `false`, if one element for which predicate callback returns truthy value. Otherwise the function returns `false`
+     */
+    public static function all(array $array, Closure $predicate): bool
+    {
+        foreach ($array as $key => $value) {
+            if (!$predicate($value, $key)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
