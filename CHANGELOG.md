@@ -2,7 +2,7 @@
 
 ## 3.1.1 under development
 
-- New #142: Add `ArrayHelper::find()`, `ArrayHelper::findKey()`, `ArrayHelper::findAny()` and `ArrayHelper::findAll()` methods for value retrieval or checks by a predicate function (@yus-ham)
+- New #142: Add `ArrayHelper::find()`, `ArrayHelper::findKey()`, `ArrayHelper::any()` and `ArrayHelper::all()` methods for value retrieval or checks by a predicate function (@yus-ham)
 - Enh #156: Improve psalm types in `ArrayHelper::getObjectVars()`, `ArrayableInterface`, `ArrayableTrait` and 
   `ArrayAccessTrait` (@vjik)
 
