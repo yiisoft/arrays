@@ -12,14 +12,14 @@ final class FindTest extends TestCase
 {
     private array $array = [
         [
-            "a" => 1,
-            "b" => 2,
-            "c" => 3,
-            "d" => 4,
-            "e" => 5,
+            'a' => 1,
+            'b' => 2,
+            'c' => 3,
+            'd' => 4,
+            'e' => 5,
         ],
         [
-            1, 2, 3, 4, 5
+            1, 2, 3, 4, 5,
         ],
     ];
 
@@ -29,7 +29,7 @@ final class FindTest extends TestCase
             [$this->array[0], fn ($value) => $value > 3, 4],
             [$this->array[1], fn ($value) => $value > 3, 4],
             [$this->array[1], fn ($value) => $value > 5, null],
-            [$this->array[0], fn ($value, $key) => $key === "c", 3],
+            [$this->array[0], fn ($value, $key) => $key === 'c', 3],
             [$this->array[0], fn () => false, null],
             [[], fn () => true, null],
         ];
@@ -49,10 +49,10 @@ final class FindTest extends TestCase
     public function dataProviderFindKeyFromArray(): array
     {
         return [
-            [$this->array[0], fn ($value) => $value > 3, "d"],
+            [$this->array[0], fn ($value) => $value > 3, 'd'],
             [$this->array[1], fn ($value) => $value > 3, 3],
             [$this->array[1], fn ($value) => $value > 5, null],
-            [$this->array[0], fn ($value, $key) => $key === "c", "c"],
+            [$this->array[0], fn ($value, $key) => $key === 'c', 'c'],
             [$this->array[0], fn () => false, null],
             [[], fn () => true, null],
         ];
@@ -75,7 +75,7 @@ final class FindTest extends TestCase
             [$this->array[0], fn ($value) => $value > 3, true],
             [$this->array[1], fn ($value) => $value > 3, true],
             [$this->array[1], fn ($value) => $value > 5, false],
-            [$this->array[0], fn ($value, $key) => $key === "c", true],
+            [$this->array[0], fn ($value, $key) => $key === 'c', true],
             [$this->array[0], fn () => false, false],
             [[], fn () => true, false],
         ];
