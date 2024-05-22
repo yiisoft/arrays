@@ -201,7 +201,6 @@ final class ArrayHelper
      *
      * @psalm-param ArrayKey|Closure $key
      *
-     * @throws InvalidArgumentException if `$key` is callable and `$array` is an object.
      * @return mixed The value of the element if found or the return value of callable is truthy, default value otherwise.
      */
     public static function getValue(
@@ -210,9 +209,6 @@ final class ArrayHelper
         mixed $default = null
     ): mixed {
         if ($key instanceof Closure) {
-            if (is_object($array)) {
-                throw new InvalidArgumentException('Matcher cannot be applied to an object');
-            }
             return self::getValueByMatcher($array, $key, $default);
         }
 
