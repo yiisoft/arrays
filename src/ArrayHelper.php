@@ -1445,7 +1445,7 @@ final class ArrayHelper
      *
      * @return mixed The value of the first element for which the `$predicate` callback returns true. If no matching element is found the function returns `null`.
      */
-    public static function find(array $array, Closure $predicate): mixed
+    public static function find(array $array, callable $predicate): mixed
     {
         foreach ($array as $key => $value) {
             if ($predicate($value, $key)) {
@@ -1464,7 +1464,7 @@ final class ArrayHelper
      *
      * @return int|string|null The key of the first element for which the `$predicate` callback returns `true`. If no matching element is found the function returns `null`.
      */
-    public static function findKey(array $array, Closure $predicate): int|string|null
+    public static function findKey(array $array, callable $predicate): int|string|null
     {
         foreach ($array as $key => $value) {
             if ($predicate($value, $key)) {
@@ -1483,7 +1483,7 @@ final class ArrayHelper
      *
      * @return bool `true` if one element for which predicate callback returns truthy value. Otherwise the function returns `false`.
      */
-    public static function any(array $array, Closure $predicate): bool
+    public static function any(array $array, callable $predicate): bool
     {
         foreach ($array as $key => $value) {
             if ($predicate($value, $key)) {
@@ -1502,7 +1502,7 @@ final class ArrayHelper
      *
      * @return bool `false` if one element for which predicate callback returns falsy value. Otherwise the function returns `true`.
      */
-    public static function all(array $array, Closure $predicate): bool
+    public static function all(array $array, callable $predicate): bool
     {
         foreach ($array as $key => $value) {
             if (!$predicate($value, $key)) {
