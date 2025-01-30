@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 
@@ -199,9 +200,7 @@ final class MergeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataParametrizedMerge
-     */
+    #[DataProvider('dataParametrizedMerge')]
     public function testParametrizedMerge(array $expected, ?int $depth): void
     {
         $array1 = [

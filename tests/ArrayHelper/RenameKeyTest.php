@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArrayHelper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 
@@ -49,9 +50,7 @@ final class RenameKeyTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataBase
-     */
+    #[DataProvider('dataBase')]
     public function testBase(array $expected, array $array, string|int $from, string|int $to): void
     {
         $result = ArrayHelper::renameKey($array, $from, $to);

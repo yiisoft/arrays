@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Tests\Objects\IterableObject;
 
 final class IndexTest extends TestCase
 {
-    public function dataBase(): array
+    public static function dataBase(): array
     {
         return [
             [
@@ -46,9 +47,7 @@ final class IndexTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataBase
-     */
+    #[DataProvider('dataBase')]
     public function testBase(array $expected, $key): void
     {
         $array = [
@@ -78,7 +77,7 @@ final class IndexTest extends TestCase
         $this->assertSame($expected, ArrayHelper::index(new IterableObject($array), 'id'));
     }
 
-    public function dataIndexGroupBy(): array
+    public static function dataIndexGroupBy(): array
     {
         return [
             [
@@ -206,9 +205,7 @@ final class IndexTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataIndexGroupBy
-     */
+    #[DataProvider('dataIndexGroupBy')]
     public function testIndexGroupBy(array $expected, $key, $groups): void
     {
         $array = [

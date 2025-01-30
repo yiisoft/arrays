@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 
@@ -40,7 +41,7 @@ final class KeyAndPathExistsTest extends TestCase
     /**
      * @return array[] common test data for [[testKeyExists()]] and [[testPathExists()]]
      */
-    private function commonData(): array
+    private static function commonData(): array
     {
         return [
             [true, 'name'],
@@ -53,9 +54,9 @@ final class KeyAndPathExistsTest extends TestCase
         ];
     }
 
-    public function dataKeyExists(): array
+    public static function dataKeyExists(): array
     {
-        return array_merge($this->commonData(), [
+        return array_merge(self::commonData(), [
             [true, 'admin.firstname'],
             [true, 'admin.lastname'],
             [false, 'post.id'],
@@ -67,17 +68,15 @@ final class KeyAndPathExistsTest extends TestCase
         ]);
     }
 
-    /**
-     * @dataProvider dataKeyExists
-     */
+    #[DataProvider('dataKeyExists')]
     public function testKeyExists(bool $expected, mixed $key, bool $caseSensitive = true): void
     {
         $this->assertSame($expected, ArrayHelper::keyExists($this->array, $key, $caseSensitive));
     }
 
-    public function dataPathExists(): array
+    public static function dataPathExists(): array
     {
-        return array_merge($this->commonData(), [
+        return array_merge(self::commonData(), [
             [true, 'post.id'],
             [false, 'post.id.value'],
             [false, 'post.ID'],
@@ -100,9 +99,7 @@ final class KeyAndPathExistsTest extends TestCase
         ]);
     }
 
-    /**
-     * @dataProvider dataPathExists
-     */
+    #[DataProvider('dataPathExists')]
     public function testPathExist(bool $expected, mixed $key, bool $caseSensitive = true): void
     {
         $this->assertSame($expected, ArrayHelper::pathExists($this->array, $key, $caseSensitive));

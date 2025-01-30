@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use ArrayObject;
+use Error;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Throwable;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Tests\Objects\Magic;
 use Yiisoft\Arrays\Tests\Objects\Post1;
@@ -47,7 +48,7 @@ final class GetValueTest extends TestCase
     /**
      * @return array[] common test data for [[testGetValue()]] and [[testGetValueByPath()]]
      */
-    private function commonDataProviderFromArray(): array
+    private static function commonDataProviderFromArray(): array
     {
         return [
             ['name', 'test'],
@@ -64,9 +65,9 @@ final class GetValueTest extends TestCase
         ];
     }
 
-    public function dataProviderGetValueFromArray(): array
+    public static function dataProviderGetValueFromArray(): array
     {
-        return array_merge($this->commonDataProviderFromArray(), [
+        return array_merge(self::commonDataProviderFromArray(), [
             ['admin.firstname', 'Qiang'],
             ['admin.lastname', 'Xue'],
             [['version', '1.0', 'status'], 'released'],
@@ -77,21 +78,15 @@ final class GetValueTest extends TestCase
         ]);
     }
 
-    /**
-     * @dataProvider dataProviderGetValueFromArray
-     *
-     * @param $key
-     * @param $expected
-     * @param null $default
-     */
+    #[DataProvider('dataProviderGetValueFromArray')]
     public function testGetValueFromArray($key, $expected, $default = null): void
     {
         $this->assertEquals($expected, ArrayHelper::getValue($this->array, $key, $default));
     }
 
-    public function dataProviderGetValueByPathFromArray(): array
+    public static function dataProviderGetValueByPathFromArray(): array
     {
-        return array_merge($this->commonDataProviderFromArray(), [
+        return array_merge(self::commonDataProviderFromArray(), [
             ['post.id', 5],
             ['post.id', 5, 'test'],
             ['nopost.id', null],
@@ -113,13 +108,7 @@ final class GetValueTest extends TestCase
         ]);
     }
 
-    /**
-     * @dataProvider dataProviderGetValueByPathFromArray
-     *
-     * @param $key
-     * @param $expected
-     * @param null $default
-     */
+    #[DataProvider('dataProviderGetValueByPathFromArray')]
     public function testGetValueByPathFromArray($key, $expected, $default = null): void
     {
         $this->assertEquals($expected, ArrayHelper::getValueByPath($this->array, $key, $default));
@@ -224,17 +213,18 @@ final class GetValueTest extends TestCase
     {
         $object = new Post1();
 
-        $exception = null;
-        try {
-            ArrayHelper::getValue($object, 'nonExisting');
-        } catch (Throwable $e) {
-            $exception = $e;
-        }
+        $errorMessage = null;
+        set_error_handler(
+            static function (int $code, string $message) use (&$errorMessage) {
+                $errorMessage = $message;
+            }
+        );
+        ArrayHelper::getValue($object, 'nonExisting');
+        restore_error_handler();
 
-        $this->assertNotNull($exception);
         $this->assertSame(
             'Undefined property: Yiisoft\Arrays\Tests\Objects\Post1::$nonExisting',
-            $exception->getMessage()
+            $errorMessage
         );
     }
 
@@ -245,15 +235,16 @@ final class GetValueTest extends TestCase
     {
         $arrayObject = new ArrayObject(['id' => 23], ArrayObject::ARRAY_AS_PROPS);
 
-        $exception = null;
-        try {
-            ArrayHelper::getValue($arrayObject, 'nonExisting');
-        } catch (Throwable $e) {
-            $exception = $e;
-        }
+        $errorMessage = null;
+        set_error_handler(
+            static function (int $code, string $message) use (&$errorMessage) {
+                $errorMessage = $message;
+            }
+        );
+        ArrayHelper::getValue($arrayObject, 'nonExisting');
+        restore_error_handler();
 
-        $this->assertNotNull($exception);
-        $this->assertSame('Undefined array key "nonExisting"', $exception->getMessage());
+        $this->assertSame('Undefined array key "nonExisting"', $errorMessage);
     }
 
     public function testGetValueFromStaticProperty(): void
@@ -267,15 +258,16 @@ final class GetValueTest extends TestCase
     {
         $object = new stdClass();
 
-        $exception = null;
-        try {
-            ArrayHelper::getValue($object, 'var');
-        } catch (Throwable $e) {
-            $exception = $e;
-        }
+        $errorMessage = null;
+        set_error_handler(
+            static function (int $code, string $message) use (&$errorMessage) {
+                $errorMessage = $message;
+            }
+        );
+        ArrayHelper::getValue($object, 'var');
+        restore_error_handler();
 
-        $this->assertNotNull($exception);
-        $this->assertSame('Undefined property: stdClass::$var', $exception->getMessage());
+        $this->assertSame('Undefined property: stdClass::$var', $errorMessage);
     }
 
     public function testExistingMagicObjectProperty(): void

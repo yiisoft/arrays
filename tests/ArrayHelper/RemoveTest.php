@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 
 final class RemoveTest extends TestCase
 {
-    public function removeData(): array
+    public static function removeData(): array
     {
         return [
             [
@@ -39,9 +40,7 @@ final class RemoveTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider removeData
-     */
+    #[DataProvider('removeData')]
     public function testRemove(array|string $key, mixed $default, mixed $expectedValue, array $expectedArray): void
     {
         $array = [
@@ -80,7 +79,7 @@ final class RemoveTest extends TestCase
         $this->assertSame([1 => 'a', 3 => 'c'], $array);
     }
 
-    public function dataRemoveByFloatKey(): array
+    public static function dataRemoveByFloatKey(): array
     {
         return [
             [
@@ -98,9 +97,7 @@ final class RemoveTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataRemoveByFloatKey
-     */
+    #[DataProvider('dataRemoveByFloatKey')]
     public function testRemoveByFloatKey(array $array, float $key, string $expectedValue, array $expectedArray): void
     {
         $value = ArrayHelper::remove($array, $key);
@@ -109,7 +106,7 @@ final class RemoveTest extends TestCase
         $this->assertSame($expectedArray, $array);
     }
 
-    public function removeByPathData(): array
+    public static function removeByPathData(): array
     {
         return [
             [
@@ -133,9 +130,7 @@ final class RemoveTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider removeByPathData
-     */
+    #[DataProvider('removeByPathData')]
     public function testRemoveByPath(array|string $key, mixed $default, mixed $expectedValue, array $expectedArray): void
     {
         $array = [
@@ -151,7 +146,7 @@ final class RemoveTest extends TestCase
         $this->assertEquals($expectedArray, $array);
     }
 
-    public function removeByPathWithCustomDelimiterData(): array
+    public static function removeByPathWithCustomDelimiterData(): array
     {
         return [
             [
@@ -169,9 +164,7 @@ final class RemoveTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider removeByPathWithCustomDelimiterData
-     */
+    #[DataProvider('removeByPathWithCustomDelimiterData')]
     public function testRemoveByPathWithCustomDelimiter(array|string $key, mixed $default, mixed $expectedValue, array $expectedArray): void
     {
         $array = [
