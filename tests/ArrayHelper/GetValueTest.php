@@ -10,7 +10,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Throwable;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Tests\Objects\Magic;
 use Yiisoft\Arrays\Tests\Objects\Post1;
