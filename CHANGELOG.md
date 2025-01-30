@@ -6,6 +6,7 @@
   `ArrayAccessTrait` (@vjik)
 - Bug #165: Explicitly mark nullable parameters (@vjik)
 - Enh #165: Raise the minimum PHP version to 8.1 (@vjik)
+- Bug #166: `ArrayHelper::getValue()` returns default value on empty array key (@vjik) 
 
 ## 3.1.0 April 04, 2024
 
