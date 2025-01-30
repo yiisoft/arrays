@@ -62,7 +62,7 @@ final class ToArrayTest extends TestCase
                         'id',
                         'secret',
                         '_content' => 'content',
-                        'length' => fn ($post) => strlen($post->content),
+                        'length' => fn (Post2 $post) => strlen($post->content),
                     ],
                 ]
             )

@@ -1033,7 +1033,7 @@ final class ArrayHelper
      *
      * @link https://www.php.net/manual/en/function.htmlspecialchars.php
      */
-    public static function htmlEncode(iterable $data, bool $valuesOnly = true, string $encoding = null): array
+    public static function htmlEncode(iterable $data, bool $valuesOnly = true, ?string $encoding = null): array
     {
         $d = [];
         foreach ($data as $key => $value) {

@@ -7,7 +7,7 @@ namespace Yiisoft\Arrays\Tests\Objects;
 final class Post2
 {
     public $id = 123;
-    public $content = 'test';
+    public string $content = 'test';
     private string $secret = 's';
 
     public function getSecret(): string
