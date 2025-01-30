@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use ArrayObject;
+use Error;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -213,17 +214,18 @@ final class GetValueTest extends TestCase
     {
         $object = new Post1();
 
-        $exception = null;
-        try {
-            ArrayHelper::getValue($object, 'nonExisting');
-        } catch (Throwable $e) {
-            $exception = $e;
-        }
+        $errorMessage = null;
+        set_error_handler(
+            static function (int $code, string $message) use (&$errorMessage) {
+                $errorMessage = $message;
+            }
+        );
+        ArrayHelper::getValue($object, 'nonExisting');
+        restore_error_handler();
 
-        $this->assertNotNull($exception);
         $this->assertSame(
             'Undefined property: Yiisoft\Arrays\Tests\Objects\Post1::$nonExisting',
-            $exception->getMessage()
+            $errorMessage
         );
     }
 
@@ -234,15 +236,16 @@ final class GetValueTest extends TestCase
     {
         $arrayObject = new ArrayObject(['id' => 23], ArrayObject::ARRAY_AS_PROPS);
 
-        $exception = null;
-        try {
-            ArrayHelper::getValue($arrayObject, 'nonExisting');
-        } catch (Throwable $e) {
-            $exception = $e;
-        }
+        $errorMessage = null;
+        set_error_handler(
+            static function (int $code, string $message) use (&$errorMessage) {
+                $errorMessage = $message;
+            }
+        );
+        ArrayHelper::getValue($arrayObject, 'nonExisting');
+        restore_error_handler();
 
-        $this->assertNotNull($exception);
-        $this->assertSame('Undefined array key "nonExisting"', $exception->getMessage());
+        $this->assertSame('Undefined array key "nonExisting"', $errorMessage);
     }
 
     public function testGetValueFromStaticProperty(): void
@@ -256,15 +259,16 @@ final class GetValueTest extends TestCase
     {
         $object = new stdClass();
 
-        $exception = null;
-        try {
-            ArrayHelper::getValue($object, 'var');
-        } catch (Throwable $e) {
-            $exception = $e;
-        }
+        $errorMessage = null;
+        set_error_handler(
+            static function (int $code, string $message) use (&$errorMessage) {
+                $errorMessage = $message;
+            }
+        );
+        ArrayHelper::getValue($object, 'var');
+        restore_error_handler();
 
-        $this->assertNotNull($exception);
-        $this->assertSame('Undefined property: stdClass::$var', $exception->getMessage());
+        $this->assertSame('Undefined property: stdClass::$var', $errorMessage);
     }
 
     public function testExistingMagicObjectProperty(): void

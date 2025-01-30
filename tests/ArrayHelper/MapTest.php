@@ -85,7 +85,7 @@ final class MapTest extends TestCase
         ];
     }
 
-    #[DataProvider('dataBase')]
+    #[DataProvider('dataWithoutGroup')]
     public function testWithoutGroup(array $expected, $from, $to): void
     {
         $array = [

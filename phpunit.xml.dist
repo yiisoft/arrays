@@ -14,7 +14,7 @@
          displayDetailsOnPhpunitDeprecations="true"
 >
     <php>
-        <ini name="error_reporting" value="-1"/>
+        <ini name="error_reporting" value="-1" />
     </php>
 
     <testsuites>
