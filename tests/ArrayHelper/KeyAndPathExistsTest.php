@@ -65,6 +65,7 @@ final class KeyAndPathExistsTest extends TestCase
             [false, ['version', '1.0.name']],
             [false, ['post', 'author.name']],
             [true, '42.7'],
+            [false, []],
         ]);
     }
 

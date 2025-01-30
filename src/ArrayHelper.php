@@ -943,6 +943,10 @@ final class ArrayHelper
     public static function keyExists(array $array, array|float|int|string $key, bool $caseSensitive = true): bool
     {
         if (is_array($key)) {
+            if (empty($key)) {
+                return false;
+            }
+
             if (count($key) === 1) {
                 return self::rootKeyExists($array, end($key), $caseSensitive);
             }
