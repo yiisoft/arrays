@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace ArrayHelper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 
 final class FilterTest extends TestCase
 {
-    public function dataFilter(): array
+    public static function dataFilter(): array
     {
         return [
             'topArray' => [
@@ -160,9 +161,7 @@ final class FilterTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataFilter
-     */
+    #[DataProvider('dataFilter')]
     public function testFilter(array $expects, array $filter): void
     {
         $array = [

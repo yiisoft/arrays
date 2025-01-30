@@ -6,6 +6,7 @@ namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use ArrayObject;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Throwable;
@@ -47,7 +48,7 @@ final class GetValueTest extends TestCase
     /**
      * @return array[] common test data for [[testGetValue()]] and [[testGetValueByPath()]]
      */
-    private function commonDataProviderFromArray(): array
+    private static function commonDataProviderFromArray(): array
     {
         return [
             ['name', 'test'],
@@ -64,9 +65,9 @@ final class GetValueTest extends TestCase
         ];
     }
 
-    public function dataProviderGetValueFromArray(): array
+    public static function dataProviderGetValueFromArray(): array
     {
-        return array_merge($this->commonDataProviderFromArray(), [
+        return array_merge(self::commonDataProviderFromArray(), [
             ['admin.firstname', 'Qiang'],
             ['admin.lastname', 'Xue'],
             [['version', '1.0', 'status'], 'released'],
@@ -77,21 +78,15 @@ final class GetValueTest extends TestCase
         ]);
     }
 
-    /**
-     * @dataProvider dataProviderGetValueFromArray
-     *
-     * @param $key
-     * @param $expected
-     * @param null $default
-     */
+    #[DataProvider('dataProviderGetValueFromArray')]
     public function testGetValueFromArray($key, $expected, $default = null): void
     {
         $this->assertEquals($expected, ArrayHelper::getValue($this->array, $key, $default));
     }
 
-    public function dataProviderGetValueByPathFromArray(): array
+    public static function dataProviderGetValueByPathFromArray(): array
     {
-        return array_merge($this->commonDataProviderFromArray(), [
+        return array_merge(self::commonDataProviderFromArray(), [
             ['post.id', 5],
             ['post.id', 5, 'test'],
             ['nopost.id', null],
@@ -113,13 +108,7 @@ final class GetValueTest extends TestCase
         ]);
     }
 
-    /**
-     * @dataProvider dataProviderGetValueByPathFromArray
-     *
-     * @param $key
-     * @param $expected
-     * @param null $default
-     */
+    #[DataProvider('dataProviderGetValueByPathFromArray')]
     public function testGetValueByPathFromArray($key, $expected, $default = null): void
     {
         $this->assertEquals($expected, ArrayHelper::getValueByPath($this->array, $key, $default));

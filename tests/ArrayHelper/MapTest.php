@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Tests\Objects\IterableObject;
 
 final class MapTest extends TestCase
 {
-    public function dataBase(): array
+    public static function dataBase(): array
     {
         return [
             [
@@ -35,9 +36,7 @@ final class MapTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataBase
-     */
+    #[DataProvider('dataBase')]
     public function testBase(array $expected, ?string $group = null): void
     {
         $array = [
@@ -56,7 +55,7 @@ final class MapTest extends TestCase
         );
     }
 
-    public function dataWithoutGroup(): array
+    public static function dataWithoutGroup(): array
     {
         return [
             [
@@ -86,9 +85,7 @@ final class MapTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataWithoutGroup
-     */
+    #[DataProvider('dataBase')]
     public function testWithoutGroup(array $expected, $from, $to): void
     {
         $array = [
@@ -101,7 +98,7 @@ final class MapTest extends TestCase
         $this->assertSame($expected, ArrayHelper::map(new IterableObject($array), $from, $to));
     }
 
-    public function dataWithGroup(): array
+    public static function dataWithGroup(): array
     {
         return [
             [
@@ -167,9 +164,7 @@ final class MapTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataWithGroup
-     */
+    #[DataProvider('dataWithGroup')]
     public function testWithGroup(array $expected, $from, $to, $group): void
     {
         $array = [

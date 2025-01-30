@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayHelper;
@@ -139,7 +140,7 @@ final class ToArrayTest extends TestCase
         );
     }
 
-    public function dataRecursive(): array
+    public static function dataRecursive(): array
     {
         $objectWithNestedSpecificArrayableObject = new ObjectWithNestedSpecificArrayableObject();
 
@@ -178,12 +179,8 @@ final class ToArrayTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataRecursive
-     *
-     * @param array|object $object
-     */
-    public function testRecursive($object, bool $recursive, array $expected): void
+    #[DataProvider('dataRecursive')]
+    public function testRecursive(array|object $object, bool $recursive, array $expected): void
     {
         $array = ArrayHelper::toArray($object, [], $recursive);
         $this->assertSame($expected, $array);

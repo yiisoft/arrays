@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 
@@ -12,7 +13,7 @@ final class AddValueTest extends TestCase
     /**
      * @return array[] Common test data for `testAddValue()` and `testAddValueByPath()`.
      */
-    private function commonDataProvider(): array
+    private static function commonDataProvider(): array
     {
         return [
             [
@@ -85,9 +86,9 @@ final class AddValueTest extends TestCase
      *
      * @return array[] The test data.
      */
-    public function dataProviderAddValue(): array
+    public static function dataProviderAddValue(): array
     {
-        return array_merge($this->commonDataProvider(), [
+        return array_merge(self::commonDataProvider(), [
             [
                 [
                     'key' => [
@@ -156,9 +157,7 @@ final class AddValueTest extends TestCase
         ]);
     }
 
-    /**
-     * @dataProvider dataProviderAddValue
-     */
+    #[DataProvider('dataProviderAddValue')]
     public function testAddValue(
         array $arrayInput,
         array|float|int|string|null $key,
@@ -174,9 +173,9 @@ final class AddValueTest extends TestCase
      *
      * @return array The test data.
      */
-    public function dataProviderAddValueByPath(): array
+    public static function dataProviderAddValueByPath(): array
     {
-        return array_merge($this->commonDataProvider(), [
+        return array_merge(self::commonDataProvider(), [
             [
                 [
                     'key1' => 'val1',
@@ -349,9 +348,7 @@ final class AddValueTest extends TestCase
         ]);
     }
 
-    /**
-     * @dataProvider dataProviderAddValueByPath
-     */
+    #[DataProvider('dataProviderAddValueByPath')]
     public function testAddValueByPath(
         array $arrayInput,
         array|float|int|string|null $path,
@@ -362,7 +359,7 @@ final class AddValueTest extends TestCase
         $this->assertEquals($expected, $arrayInput);
     }
 
-    public function addValueByPathWithCustomDelimiterData(): array
+    public static function addValueByPathWithCustomDelimiterData(): array
     {
         return [
             [
@@ -404,9 +401,7 @@ final class AddValueTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider addValueByPathWithCustomDelimiterData
-     */
+    #[DataProvider('addValueByPathWithCustomDelimiterData')]
     public function testAddValueByPathWithCustomDelimiter(
         array $arrayInput,
         array|float|int|string|null $path,
