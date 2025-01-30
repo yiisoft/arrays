@@ -6,6 +6,7 @@
   `ArrayAccessTrait` (@vjik)
 - Bug #165: Explicitly mark nullable parameters (@vjik)
 - Enh #165: Raise the minimum PHP version to 8.1 (@vjik)
+- Chg #166: Change PHP constraint in `composer.json` to `~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0` (@vjik)
 
 ## 3.1.0 April 04, 2024
 
