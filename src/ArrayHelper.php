@@ -217,7 +217,6 @@ final class ArrayHelper
             if (empty($key)) {
                 return $default;
             }
-            /** @psalm-var array<mixed,string|int> $key */
             $lastKey = array_pop($key);
             foreach ($key as $keyPart) {
                 $array = self::getRootValue($array, $keyPart, null);
@@ -950,6 +949,8 @@ final class ArrayHelper
             if (count($key) === 1) {
                 return self::rootKeyExists($array, end($key), $caseSensitive);
             }
+
+            /** @psalm-var non-empty-array<array-key,float|int|string> $key */
 
             foreach (self::getExistsKeys($array, array_shift($key), $caseSensitive) as $existKey) {
                 $array = self::getRootValue($array, $existKey, null);
