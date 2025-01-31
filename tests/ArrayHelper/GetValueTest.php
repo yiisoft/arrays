@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
 use ArrayObject;
-use Error;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
