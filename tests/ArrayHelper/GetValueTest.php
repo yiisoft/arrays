@@ -74,6 +74,8 @@ final class GetValueTest extends TestCase
             [['version', '1.0.name'], 'defaultValue', 'defaultValue'],
             [['post', 'author.name'], 'defaultValue', 'defaultValue'],
             ['42.7', 500],
+            [[], null, null],
+            [[], 'test', 'test'],
         ]);
     }
 
