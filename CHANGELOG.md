@@ -1,14 +1,14 @@
 # Yii Arrays Change Log
 
-## 3.1.1 under development
+## 3.2.0 February 01, 2025
 
+- Chg #167: Change PHP constraint in `composer.json` to `~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0` (@vjik)
 - Enh #156: Improve psalm types in `ArrayHelper::getObjectVars()`, `ArrayableInterface`, `ArrayableTrait` and 
   `ArrayAccessTrait` (@vjik)
-- Bug #165: Explicitly mark nullable parameters (@vjik)
 - Enh #165: Raise the minimum PHP version to 8.1 (@vjik)
-- Bug #166: `ArrayHelper::getValue()` returns default value on empty array key (@vjik) 
-- Bug #166: `ArrayHelper::keyExists()` returns false on empty array key (@vjik) 
-- Chg #167: Change PHP constraint in `composer.json` to `~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0` (@vjik)
+- Bug #165: Explicitly mark nullable parameters (@vjik)
+- Bug #166: `ArrayHelper::getValue()` returns default value on empty array key (@vjik)
+- Bug #166: `ArrayHelper::keyExists()` returns false on empty array key (@vjik)
 
 ## 3.1.0 April 04, 2024
 
