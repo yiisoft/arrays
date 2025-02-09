@@ -217,58 +217,21 @@ final class ArrayHelper
             if (empty($key)) {
                 return $default;
             }
-            $lastKey = array_pop($key);
-            foreach ($key as $keyPart) {
-                $array = self::getRootValue($array, $keyPart, null);
+            $count = count($key);
+            if ($count === 1) {
+                return self::getRootValue($array, $key[0], $default);
+            }
+            $lastIndex = $count - 1;
+            for ($i = 0; $i < $lastIndex; $i++) {
+                $array = self::getRootValue($array, $key[$i], null);
                 if (!is_array($array) && !is_object($array)) {
                     return $default;
                 }
             }
-            return self::getRootValue($array, $lastKey, $default);
+            return self::getRootValue($array, $key[$lastIndex], $default);
         }
 
         return self::getRootValue($array, $key, $default);
-    }
-
-    /**
-     * @param mixed $array Array or object to extract value from, otherwise method will return $default.
-     * @param float|int|string $key Key name of the array element, object property name or object method like `getValue()`.
-     * @param mixed $default The default value to be returned if the specified array key does not exist. Not used when
-     * getting value from an object.
-     *
-     * @return mixed The value of the element if found, default value otherwise.
-     */
-    private static function getRootValue(mixed $array, float|int|string $key, mixed $default): mixed
-    {
-        if (is_array($array)) {
-            $key = self::normalizeArrayKey($key);
-            return array_key_exists($key, $array) ? $array[$key] : $default;
-        }
-
-        if (is_object($array)) {
-            $key = (string) $key;
-
-            if (str_ends_with($key, '()')) {
-                $method = substr($key, 0, -2);
-                /** @psalm-suppress MixedMethodCall */
-                return $array->$method();
-            }
-
-            try {
-                /** @psalm-suppress MixedPropertyFetch */
-                return $array::$$key;
-            } catch (Throwable) {
-                /**
-                 * This is expected to fail if the property does not exist, or __get() is not implemented.
-                 * It is not reliably possible to check whether a property is accessible beforehand.
-                 *
-                 * @psalm-suppress MixedPropertyFetch
-                 */
-                return $array->$key;
-            }
-        }
-
-        return $default;
     }
 
     /**
@@ -751,7 +714,10 @@ final class ArrayHelper
         $result = [];
         $groups = (array)$groups;
 
-        /** @var mixed $element */
+        // Pre-validate array elements
+        if (!is_array($array)) {
+            $array = iterator_to_array($array);
+        }
         foreach ($array as $element) {
             if (!is_array($element) && !is_object($element)) {
                 throw new InvalidArgumentException(
@@ -759,32 +725,46 @@ final class ArrayHelper
                     '. The $array should be either multidimensional array or an array of objects.'
                 );
             }
+        }
 
-            $lastArray = &$result;
-
-            foreach ($groups as $group) {
-                $value = self::normalizeArrayKey(
-                    self::getValue($element, $group)
-                );
-                if (!array_key_exists($value, $lastArray)) {
-                    $lastArray[$value] = [];
+        // Fast path for simple indexing
+        if (empty($groups)) {
+            if ($key === null) {
+                return [];
+            }
+            foreach ($array as $element) {
+                $value = self::getValue($element, $key);
+                if ($value !== null) {
+                    $result[self::normalizeArrayKey($value)] = $element;
                 }
-                /** @psalm-suppress MixedAssignment */
-                $lastArray = &$lastArray[$value];
-                /** @var array $lastArray */
+            }
+            return $result;
+        }
+
+        // Process groups
+        foreach ($array as $element) {
+            $target = &$result;
+            foreach ($groups as $group) {
+                $groupValue = self::getValue($element, $group);
+                if ($groupValue === null) {
+                    continue 2;
+                }
+                $groupKey = self::normalizeArrayKey($groupValue);
+                if (!isset($target[$groupKey])) {
+                    $target[$groupKey] = [];
+                }
+                $target = &$target[$groupKey];
             }
 
             if ($key === null) {
-                if (!empty($groups)) {
-                    $lastArray[] = $element;
-                }
+                $target[] = $element;
             } else {
                 $value = self::getValue($element, $key);
                 if ($value !== null) {
-                    $lastArray[self::normalizeArrayKey($value)] = $element;
+                    $target[self::normalizeArrayKey($value)] = $element;
                 }
             }
-            unset($lastArray);
+            unset($target);
         }
 
         return $result;
@@ -804,6 +784,17 @@ final class ArrayHelper
      */
     public static function group(iterable $array, array|string $groups): array
     {
+        if (!is_array($array)) {
+            $array = iterator_to_array($array);
+        }
+        if (empty($array)) {
+            return [];
+        }
+        
+        if (is_string($groups)) {
+            $groups = [$groups];
+        }
+        
         return self::index($array, null, $groups);
     }
 
@@ -1043,23 +1034,57 @@ final class ArrayHelper
      */
     public static function htmlEncode(iterable $data, bool $valuesOnly = true, ?string $encoding = null): array
     {
+        if (!is_array($data)) {
+            $data = iterator_to_array($data);
+        }
+
+        if ($valuesOnly) {
+            return self::htmlEncodeValues($data, $encoding);
+        }
+
+        return self::htmlEncodeKeysAndValues($data, $encoding);
+    }
+
+    /**
+     * @param array $data
+     * @param string|null $encoding
+     * @return array
+     */
+    private static function htmlEncodeValues(array $data, ?string $encoding): array
+    {
         $d = [];
         foreach ($data as $key => $value) {
-            if (!is_int($key)) {
-                $key = (string)$key;
-            }
-            if (!$valuesOnly && is_string($key)) {
-                $key = htmlspecialchars($key, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
-            }
             if (is_string($value)) {
                 $d[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
             } elseif (is_array($value)) {
-                $d[$key] = self::htmlEncode($value, $valuesOnly, $encoding);
+                $d[$key] = self::htmlEncodeValues($value, $encoding);
             } else {
                 $d[$key] = $value;
             }
         }
+        return $d;
+    }
 
+    /**
+     * @param array $data
+     * @param string|null $encoding
+     * @return array
+     */
+    private static function htmlEncodeKeysAndValues(array $data, ?string $encoding): array
+    {
+        $d = [];
+        foreach ($data as $key => $value) {
+            if (!is_int($key)) {
+                $key = htmlspecialchars((string)$key, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
+            }
+            if (is_string($value)) {
+                $d[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
+            } elseif (is_array($value)) {
+                $d[$key] = self::htmlEncodeKeysAndValues($value, $encoding);
+            } else {
+                $d[$key] = $value;
+            }
+        }
         return $d;
     }
 
@@ -1443,5 +1468,46 @@ final class ArrayHelper
         }
 
         return is_string($path) ? StringHelper::parsePath($path, $delimiter) : $path;
+    }
+
+    /**
+     * @param mixed $array Array or object to extract value from, otherwise method will return $default.
+     * @param float|int|string $key Key name of the array element, object property name or object method like `getValue()`.
+     * @param mixed $default The default value to be returned if the specified array key does not exist. Not used when
+     * getting value from an object.
+     *
+     * @return mixed The value of the element if found, default value otherwise.
+     */
+    private static function getRootValue(mixed $array, float|int|string $key, mixed $default): mixed
+    {
+        if (is_array($array)) {
+            $key = self::normalizeArrayKey($key);
+            return array_key_exists($key, $array) ? $array[$key] : $default;
+        }
+
+        if (is_object($array)) {
+            $key = (string) $key;
+
+            if (str_ends_with($key, '()')) {
+                $method = substr($key, 0, -2);
+                /** @psalm-suppress MixedMethodCall */
+                return $array->$method();
+            }
+
+            try {
+                /** @psalm-suppress MixedPropertyFetch */
+                return $array::$$key;
+            } catch (Throwable) {
+                /**
+                 * This is expected to fail if the property does not exist, or __get() is not implemented.
+                 * It is not reliably possible to check whether a property is accessible beforehand.
+                 *
+                 * @psalm-suppress MixedPropertyFetch
+                 */
+                return $array->$key;
+            }
+        }
+
+        return $default;
     }
 }
