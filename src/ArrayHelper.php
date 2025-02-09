@@ -332,8 +332,7 @@ final class ArrayHelper
      *  ];
      * ```
      *
-     * The result of `ArrayHelper::setValue($array, ['key', 'in'], ['arr' => 'val']);`
-     * will be the following:
+     * The result of `ArrayHelper::setValue($array, ['key', 'in'], ['arr' => 'val']);` will be the following:
      *
      * ```php
      *  [
@@ -842,11 +841,35 @@ final class ArrayHelper
             return [];
         }
 
-        if (is_string($groups)) {
-            $groups = [$groups];
+        $groups = is_string($groups) ? [$groups] : $groups;
+        $result = [];
+
+        foreach ($array as $element) {
+            if (!is_array($element) && !is_object($element)) {
+                throw new InvalidArgumentException(
+                    'group() can not get value from ' . gettype($element) .
+                    '. The $array should be either multidimensional array or an array of objects.'
+                );
+            }
+
+            $target = &$result;
+            foreach ($groups as $group) {
+                $groupValue = self::getValue($element, $group);
+                if ($groupValue === null) {
+                    continue 2;
+                }
+                $groupKey = self::normalizeArrayKey($groupValue);
+                if (!isset($target[$groupKey])) {
+                    $target[$groupKey] = [];
+                }
+                $target = &$target[$groupKey];
+            }
+
+            $target[] = $element;
+            unset($target);
         }
 
-        return self::index($array, null, $groups);
+        return $result;
     }
 
     /**
@@ -909,12 +932,17 @@ final class ArrayHelper
      * ];
      *
      * $result = ArrayHelper::map($array, 'id', 'name');
-     * // the result is:
-     * // [
-     * //     '123' => 'aaa',
-     * //     '124' => 'bbb',
-     * //     '345' => 'ccc',
-     * // ]
+     * ```
+     *
+     * The result will be an associative array, where the key is the value of `id` attribute
+     *
+     * ```php
+     * [
+     *     '123' => 'aaa',
+     *     '124' => 'bbb',
+     *     '345' => 'ccc',
+     * ]
+     * ```
      *
      * $result = ArrayHelper::map($array, 'id', 'name', 'class');
      * // the result is:
@@ -1089,26 +1117,28 @@ final class ArrayHelper
             $data = iterator_to_array($data);
         }
 
-        if ($valuesOnly) {
-            return self::htmlEncodeValues($data, $encoding);
-        }
+        $encoding ??= ini_get('default_charset') ?: 'UTF-8';
+        $flags = ENT_QUOTES | ENT_SUBSTITUTE;
 
-        return self::htmlEncodeKeysAndValues($data, $encoding);
+        return $valuesOnly
+            ? self::htmlEncodeValues($data, $encoding, $flags)
+            : self::htmlEncodeKeysAndValues($data, $encoding, $flags);
     }
 
     /**
      * @param array $data
-     * @param string|null $encoding
+     * @param string $encoding
+     * @param int $flags
      * @return array
      */
-    private static function htmlEncodeValues(array $data, ?string $encoding): array
+    private static function htmlEncodeValues(array $data, string $encoding, int $flags): array
     {
         $d = [];
         foreach ($data as $key => $value) {
             if (is_string($value)) {
-                $d[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
+                $d[$key] = htmlspecialchars($value, $flags, $encoding, true);
             } elseif (is_array($value)) {
-                $d[$key] = self::htmlEncodeValues($value, $encoding);
+                $d[$key] = self::htmlEncodeValues($value, $encoding, $flags);
             } else {
                 $d[$key] = $value;
             }
@@ -1118,20 +1148,21 @@ final class ArrayHelper
 
     /**
      * @param array $data
-     * @param string|null $encoding
+     * @param string $encoding
+     * @param int $flags
      * @return array
      */
-    private static function htmlEncodeKeysAndValues(array $data, ?string $encoding): array
+    private static function htmlEncodeKeysAndValues(array $data, string $encoding, int $flags): array
     {
         $d = [];
         foreach ($data as $key => $value) {
             if (!is_int($key)) {
-                $key = htmlspecialchars((string)$key, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
+                $key = htmlspecialchars((string)$key, $flags, $encoding, true);
             }
             if (is_string($value)) {
-                $d[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
+                $d[$key] = htmlspecialchars($value, $flags, $encoding, true);
             } elseif (is_array($value)) {
-                $d[$key] = self::htmlEncodeKeysAndValues($value, $encoding);
+                $d[$key] = self::htmlEncodeKeysAndValues($value, $encoding, $flags);
             } else {
                 $d[$key] = $value;
             }
