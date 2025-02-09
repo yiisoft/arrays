@@ -234,6 +234,47 @@ final class ArrayHelper
     }
 
     /**
+     * @param mixed $array Array or object to extract value from, otherwise method will return $default.
+     * @param float|int|string $key Key name of the array element, object property name or object method like `getValue()`.
+     * @param mixed $default The default value to be returned if the specified array key does not exist. Not used when
+     * getting value from an object.
+     *
+     * @return mixed The value of the element if found, default value otherwise.
+     */
+    private static function getRootValue(mixed $array, float|int|string $key, mixed $default): mixed
+    {
+        if (is_array($array)) {
+            $key = self::normalizeArrayKey($key);
+            return array_key_exists($key, $array) ? $array[$key] : $default;
+        }
+
+        if (is_object($array)) {
+            $key = (string) $key;
+
+            if (str_ends_with($key, '()')) {
+                $method = substr($key, 0, -2);
+                /** @psalm-suppress MixedMethodCall */
+                return $array->$method();
+            }
+
+            try {
+                /** @psalm-suppress MixedPropertyFetch */
+                return $array::$$key;
+            } catch (Throwable) {
+                /**
+                 * This is expected to fail if the property does not exist, or __get() is not implemented.
+                 * It is not reliably possible to check whether a property is accessible beforehand.
+                 *
+                 * @psalm-suppress MixedPropertyFetch
+                 */
+                return $array->$key;
+            }
+        }
+
+        return $default;
+    }
+
+    /**
      * Retrieves the value of an array element or object property with the given key or property name.
      * If the key does not exist in the array or object, the default value will be returned instead.
      *
@@ -1554,46 +1595,5 @@ final class ArrayHelper
             $newPath[] = $key;
         }
         return $newPath;
-    }
-
-    /**
-     * @param mixed $array Array or object to extract value from, otherwise method will return $default.
-     * @param float|int|string $key Key name of the array element, object property name or object method like `getValue()`.
-     * @param mixed $default The default value to be returned if the specified array key does not exist. Not used when
-     * getting value from an object.
-     *
-     * @return mixed The value of the element if found, default value otherwise.
-     */
-    private static function getRootValue(mixed $array, float|int|string $key, mixed $default): mixed
-    {
-        if (is_array($array)) {
-            $key = self::normalizeArrayKey($key);
-            return array_key_exists($key, $array) ? $array[$key] : $default;
-        }
-
-        if (is_object($array)) {
-            $key = (string) $key;
-
-            if (str_ends_with($key, '()')) {
-                $method = substr($key, 0, -2);
-                /** @psalm-suppress MixedMethodCall */
-                return $array->$method();
-            }
-
-            try {
-                /** @psalm-suppress MixedPropertyFetch */
-                return $array::$$key;
-            } catch (Throwable) {
-                /**
-                 * This is expected to fail if the property does not exist, or __get() is not implemented.
-                 * It is not reliably possible to check whether a property is accessible beforehand.
-                 *
-                 * @psalm-suppress MixedPropertyFetch
-                 */
-                return $array->$key;
-            }
-        }
-
-        return $default;
     }
 }
