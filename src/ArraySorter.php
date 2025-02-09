@@ -62,47 +62,49 @@ final class ArraySorter
         array|int $direction = SORT_ASC,
         array|int $sortFlag = SORT_REGULAR
     ): void {
-        if (empty($array)) {
+        $count = count($array);
+        if ($count === 0) {
             return;
         }
 
         $keys = is_array($key) ? $key : [$key];
-        if (empty($keys)) {
+        $n = count($keys);
+        if ($n === 0) {
             return;
         }
 
-        $n = count($keys);
-        if (is_scalar($direction)) {
-            $direction = array_fill(0, $n, $direction);
-        } elseif (count($direction) !== $n) {
+        if (is_array($direction) && count($direction) !== $n) {
             throw new InvalidArgumentException('The length of $direction parameter must be the same as that of $keys.');
         }
-
-        if (is_scalar($sortFlag)) {
-            $sortFlag = array_fill(0, $n, $sortFlag);
-        } elseif (count($sortFlag) !== $n) {
+        if (is_array($sortFlag) && count($sortFlag) !== $n) {
             throw new InvalidArgumentException('The length of $sortFlag parameter must be the same as that of $keys.');
         }
 
         $args = [];
-        $count = count($array);
-        foreach ($keys as $i => $iKey) {
-            $column = ArrayHelper::getColumn($array, $iKey);
-            $args[] = $column;
-            $args[] = $direction[$i];
-            $args[] = $sortFlag[$i];
+        $args[] = ArrayHelper::getColumn($array, $keys[0]);
+        $args[] = is_array($direction) ? $direction[0] : $direction;
+        $args[] = is_array($sortFlag) ? $sortFlag[0] : $sortFlag;
+
+        if ($n > 1) {
+            for ($i = 1; $i < $n; $i++) {
+                $args[] = ArrayHelper::getColumn($array, $keys[$i]);
+                $args[] = is_array($direction) ? $direction[$i] : $direction;
+                $args[] = is_array($sortFlag) ? $sortFlag[$i] : $sortFlag;
+            }
         }
 
-        // This fix is used for cases when main sorting specified by columns has equal values
+        // Add tie-breaker only for non-empty arrays
         if ($count > 0) {
-            $args[] = range(1, $count);
+            $tieBreaker = [];
+            for ($i = 0; $i < $count; $i++) {
+                $tieBreaker[$i] = $i + 1;
+            }
+            $args[] = $tieBreaker;
             $args[] = SORT_ASC;
             $args[] = SORT_NUMERIC;
         }
 
         $args[] = &$array;
-
-        /** @psalm-suppress MixedArgument */
         array_multisort(...$args);
     }
 }
