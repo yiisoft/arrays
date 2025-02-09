@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Tests\Benchmark;
 
-use ArrayIterator;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Arrays\ArrayableTrait;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayAccessTrait;
 

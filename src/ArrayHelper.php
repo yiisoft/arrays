@@ -15,7 +15,6 @@ use function array_combine;
 use function array_key_exists;
 use function array_keys;
 use function array_merge;
-use function array_pop;
 use function array_search;
 use function array_shift;
 use function count;
@@ -790,11 +789,11 @@ final class ArrayHelper
         if (empty($array)) {
             return [];
         }
-        
+
         if (is_string($groups)) {
             $groups = [$groups];
         }
-        
+
         return self::index($array, null, $groups);
     }
 
