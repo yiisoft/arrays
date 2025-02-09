@@ -1445,28 +1445,32 @@ final class ArrayHelper
      */
     private static function parseMixedPath(array|float|int|string $path, string $delimiter): array|float|int|string
     {
-        if (is_array($path)) {
-            $newPath = [];
-            foreach ($path as $key) {
-                if (is_string($key)) {
-                    $parsedPath = StringHelper::parsePath($key, $delimiter);
-                    $newPath = array_merge($newPath, $parsedPath);
-                    continue;
-                }
-
-                if (is_array($key)) {
-                    /** @var list<float|int|string> $parsedPath */
-                    $parsedPath = self::parseMixedPath($key, $delimiter);
-                    $newPath = array_merge($newPath, $parsedPath);
-                    continue;
-                }
-
-                $newPath[] = $key;
-            }
-            return $newPath;
+        if (!is_array($path)) {
+            return is_string($path) ? StringHelper::parsePath($path, $delimiter) : $path;
         }
 
-        return is_string($path) ? StringHelper::parsePath($path, $delimiter) : $path;
+        $newPath = [];
+        foreach ($path as $key) {
+            if (is_string($key)) {
+                $parsedPath = StringHelper::parsePath($key, $delimiter);
+                array_push($newPath, ...$parsedPath);
+                continue;
+            }
+
+            if (is_array($key)) {
+                /** @var list<float|int|string> $parsedPath */
+                $parsedPath = self::parseMixedPath($key, $delimiter);
+                if (is_array($parsedPath)) {
+                    array_push($newPath, ...$parsedPath);
+                } else {
+                    $newPath[] = $parsedPath;
+                }
+                continue;
+            }
+
+            $newPath[] = $key;
+        }
+        return $newPath;
     }
 
     /**
