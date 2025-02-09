@@ -15,7 +15,6 @@ use function array_combine;
 use function array_key_exists;
 use function array_keys;
 use function array_merge;
-use function array_pop;
 use function array_search;
 use function array_shift;
 use function count;
@@ -217,14 +216,18 @@ final class ArrayHelper
             if (empty($key)) {
                 return $default;
             }
-            $lastKey = array_pop($key);
-            foreach ($key as $keyPart) {
-                $array = self::getRootValue($array, $keyPart, null);
+            $count = count($key);
+            if ($count === 1) {
+                return self::getRootValue($array, $key[0], $default);
+            }
+            $lastIndex = $count - 1;
+            for ($i = 0; $i < $lastIndex; $i++) {
+                $array = self::getRootValue($array, $key[$i], null);
                 if (!is_array($array) && !is_object($array)) {
                     return $default;
                 }
             }
-            return self::getRootValue($array, $lastKey, $default);
+            return self::getRootValue($array, $key[$lastIndex], $default);
         }
 
         return self::getRootValue($array, $key, $default);
@@ -312,11 +315,46 @@ final class ArrayHelper
         mixed $default = null,
         string $delimiter = '.'
     ): mixed {
-        return self::getValue(
-            $array,
-            $path instanceof Closure ? $path : self::parseMixedPath($path, $delimiter),
-            $default
-        );
+        if ($path instanceof Closure) {
+            return self::getValue($array, $path, $default);
+        }
+
+        if (is_array($path)) {
+            $value = $array;
+            foreach ($path as $key) {
+                if (is_array($key)) {
+                    $value = self::getValueByPath($value, $key, $default, $delimiter);
+                } else {
+                    $value = self::getValueByPath($value, $key, $default, $delimiter);
+                }
+                if ($value === $default) {
+                    return $default;
+                }
+            }
+            return $value;
+        }
+
+        if (is_float($path) || is_int($path)) {
+            return self::getValue($array, $path, $default);
+        }
+
+        $path = (string)$path;
+        if (str_contains($path, $delimiter)) {
+            $keys = StringHelper::parsePath($path, $delimiter);
+            $value = $array;
+            foreach ($keys as $key) {
+                if (!is_array($value) && !is_object($value)) {
+                    return $default;
+                }
+                $value = self::getValue($value, $key, $default);
+                if ($value === $default) {
+                    return $default;
+                }
+            }
+            return $value;
+        }
+
+        return self::getValue($array, $path, $default);
     }
 
     /**
@@ -335,7 +373,23 @@ final class ArrayHelper
      *  ];
      * ```
      *
-     * The result of `ArrayHelper::setValue($array, ['key', 'in'], ['arr' => 'val']);`
+     * The result of `ArrayHelper::setValue($array, ['key', 'in'], ['arr' => 'val']);` will be the following:
+     *
+     * ```php
+     *  [
+     *      'key' => [
+     *          'in' => [
+     *              ['arr' => 'val'],
+     *              'key' => 'val'
+     *          ]
+     *      ]
+     *  ]
+     *
+     * ```
+     *
+     * The result of
+     * `ArrayHelper::setValue($array, 'key.in', ['arr' => 'val']);` or
+     * `ArrayHelper::setValue($array, ['key', 'in'], ['arr' => 'val']);`
      * will be the following:
      *
      * ```php
@@ -508,7 +562,7 @@ final class ArrayHelper
      *
      * @param array $array The array to write the value to.
      * @param array|float|int|string|null $path The path of where do you want to write a value to `$array`.
-     * The path can be described by a string when each key should be separated by a dot.
+     * The path can be described by a string when each key should be separated by a delimiter (default is dot).
      * You can also describe the path as an array of keys. If the path is null then `$array` will be assigned
      * the `$value`.
      * @param mixed $value The value to be written.
@@ -751,7 +805,10 @@ final class ArrayHelper
         $result = [];
         $groups = (array)$groups;
 
-        /** @var mixed $element */
+        // Pre-validate array elements
+        if (!is_array($array)) {
+            $array = iterator_to_array($array);
+        }
         foreach ($array as $element) {
             if (!is_array($element) && !is_object($element)) {
                 throw new InvalidArgumentException(
@@ -759,32 +816,46 @@ final class ArrayHelper
                     '. The $array should be either multidimensional array or an array of objects.'
                 );
             }
+        }
 
-            $lastArray = &$result;
-
-            foreach ($groups as $group) {
-                $value = self::normalizeArrayKey(
-                    self::getValue($element, $group)
-                );
-                if (!array_key_exists($value, $lastArray)) {
-                    $lastArray[$value] = [];
+        // Fast path for simple indexing
+        if (empty($groups)) {
+            if ($key === null) {
+                return [];
+            }
+            foreach ($array as $element) {
+                $value = self::getValue($element, $key);
+                if ($value !== null) {
+                    $result[self::normalizeArrayKey($value)] = $element;
                 }
-                /** @psalm-suppress MixedAssignment */
-                $lastArray = &$lastArray[$value];
-                /** @var array $lastArray */
+            }
+            return $result;
+        }
+
+        // Process groups
+        foreach ($array as $element) {
+            $target = &$result;
+            foreach ($groups as $group) {
+                $groupValue = self::getValue($element, $group);
+                if ($groupValue === null) {
+                    continue 2;
+                }
+                $groupKey = self::normalizeArrayKey($groupValue);
+                if (!isset($target[$groupKey])) {
+                    $target[$groupKey] = [];
+                }
+                $target = &$target[$groupKey];
             }
 
             if ($key === null) {
-                if (!empty($groups)) {
-                    $lastArray[] = $element;
-                }
+                $target[] = $element;
             } else {
                 $value = self::getValue($element, $key);
                 if ($value !== null) {
-                    $lastArray[self::normalizeArrayKey($value)] = $element;
+                    $target[self::normalizeArrayKey($value)] = $element;
                 }
             }
-            unset($lastArray);
+            unset($target);
         }
 
         return $result;
@@ -804,7 +875,42 @@ final class ArrayHelper
      */
     public static function group(iterable $array, array|string $groups): array
     {
-        return self::index($array, null, $groups);
+        if (!is_array($array)) {
+            $array = iterator_to_array($array);
+        }
+        if (empty($array)) {
+            return [];
+        }
+
+        $groups = is_string($groups) ? [$groups] : $groups;
+        $result = [];
+
+        foreach ($array as $element) {
+            if (!is_array($element) && !is_object($element)) {
+                throw new InvalidArgumentException(
+                    'group() can not get value from ' . gettype($element) .
+                    '. The $array should be either multidimensional array or an array of objects.'
+                );
+            }
+
+            $target = &$result;
+            foreach ($groups as $group) {
+                $groupValue = self::getValue($element, $group);
+                if ($groupValue === null) {
+                    continue 2;
+                }
+                $groupKey = self::normalizeArrayKey($groupValue);
+                if (!isset($target[$groupKey])) {
+                    $target[$groupKey] = [];
+                }
+                $target = &$target[$groupKey];
+            }
+
+            $target[] = $element;
+            unset($target);
+        }
+
+        return $result;
     }
 
     /**
@@ -857,7 +963,7 @@ final class ArrayHelper
      * The `$from` and `$to` parameters specify the key names or property names to set up the map.
      * Optionally, one can further group the map according to a grouping field `$group`.
      *
-     * For example,
+     * For example:
      *
      * ```php
      * $array = [
@@ -867,12 +973,17 @@ final class ArrayHelper
      * ];
      *
      * $result = ArrayHelper::map($array, 'id', 'name');
-     * // the result is:
-     * // [
-     * //     '123' => 'aaa',
-     * //     '124' => 'bbb',
-     * //     '345' => 'ccc',
-     * // ]
+     * ```
+     *
+     * The result will be an associative array, where the key is the value of `id` attribute
+     *
+     * ```php
+     * [
+     *     '123' => 'aaa',
+     *     '124' => 'bbb',
+     *     '345' => 'ccc',
+     * ]
+     * ```
      *
      * $result = ArrayHelper::map($array, 'id', 'name', 'class');
      * // the result is:
@@ -1043,23 +1154,60 @@ final class ArrayHelper
      */
     public static function htmlEncode(iterable $data, bool $valuesOnly = true, ?string $encoding = null): array
     {
+        if (!is_array($data)) {
+            $data = iterator_to_array($data);
+        }
+
+        $encoding ??= ini_get('default_charset') ?: 'UTF-8';
+        $flags = ENT_QUOTES | ENT_SUBSTITUTE;
+
+        return $valuesOnly
+            ? self::htmlEncodeValues($data, $encoding, $flags)
+            : self::htmlEncodeKeysAndValues($data, $encoding, $flags);
+    }
+
+    /**
+     * @param array $data
+     * @param string $encoding
+     * @param int $flags
+     * @return array
+     */
+    private static function htmlEncodeValues(array $data, string $encoding, int $flags): array
+    {
         $d = [];
         foreach ($data as $key => $value) {
-            if (!is_int($key)) {
-                $key = (string)$key;
-            }
-            if (!$valuesOnly && is_string($key)) {
-                $key = htmlspecialchars($key, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
-            }
             if (is_string($value)) {
-                $d[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, true);
+                $d[$key] = htmlspecialchars($value, $flags, $encoding, true);
             } elseif (is_array($value)) {
-                $d[$key] = self::htmlEncode($value, $valuesOnly, $encoding);
+                $d[$key] = self::htmlEncodeValues($value, $encoding, $flags);
             } else {
                 $d[$key] = $value;
             }
         }
+        return $d;
+    }
 
+    /**
+     * @param array $data
+     * @param string $encoding
+     * @param int $flags
+     * @return array
+     */
+    private static function htmlEncodeKeysAndValues(array $data, string $encoding, int $flags): array
+    {
+        $d = [];
+        foreach ($data as $key => $value) {
+            if (!is_int($key)) {
+                $key = htmlspecialchars((string)$key, $flags, $encoding, true);
+            }
+            if (is_string($value)) {
+                $d[$key] = htmlspecialchars($value, $flags, $encoding, true);
+            } elseif (is_array($value)) {
+                $d[$key] = self::htmlEncodeKeysAndValues($value, $encoding, $flags);
+            } else {
+                $d[$key] = $value;
+            }
+        }
         return $d;
     }
 
@@ -1421,27 +1569,31 @@ final class ArrayHelper
      */
     private static function parseMixedPath(array|float|int|string $path, string $delimiter): array|float|int|string
     {
-        if (is_array($path)) {
-            $newPath = [];
-            foreach ($path as $key) {
-                if (is_string($key)) {
-                    $parsedPath = StringHelper::parsePath($key, $delimiter);
-                    $newPath = array_merge($newPath, $parsedPath);
-                    continue;
-                }
-
-                if (is_array($key)) {
-                    /** @var list<float|int|string> $parsedPath */
-                    $parsedPath = self::parseMixedPath($key, $delimiter);
-                    $newPath = array_merge($newPath, $parsedPath);
-                    continue;
-                }
-
-                $newPath[] = $key;
-            }
-            return $newPath;
+        if (!is_array($path)) {
+            return is_string($path) ? StringHelper::parsePath($path, $delimiter) : $path;
         }
 
-        return is_string($path) ? StringHelper::parsePath($path, $delimiter) : $path;
+        $newPath = [];
+        foreach ($path as $key) {
+            if (is_string($key)) {
+                $parsedPath = StringHelper::parsePath($key, $delimiter);
+                array_push($newPath, ...$parsedPath);
+                continue;
+            }
+
+            if (is_array($key)) {
+                /** @var list<float|int|string> $parsedPath */
+                $parsedPath = self::parseMixedPath($key, $delimiter);
+                if (is_array($parsedPath)) {
+                    array_push($newPath, ...$parsedPath);
+                } else {
+                    $newPath[] = $parsedPath;
+                }
+                continue;
+            }
+
+            $newPath[] = $key;
+        }
+        return $newPath;
     }
 }
