@@ -33,6 +33,7 @@
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.2",
+        "phpbench/phpbench": "^1.4",
         "phpunit/phpunit": "^10.5.43",
         "rector/rector": "^2.0.7",
         "roave/infection-static-analysis-plugin": "^1.35",
