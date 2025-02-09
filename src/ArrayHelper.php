@@ -274,11 +274,46 @@ final class ArrayHelper
         mixed $default = null,
         string $delimiter = '.'
     ): mixed {
-        return self::getValue(
-            $array,
-            $path instanceof Closure ? $path : self::parseMixedPath($path, $delimiter),
-            $default
-        );
+        if ($path instanceof Closure) {
+            return self::getValue($array, $path, $default);
+        }
+
+        if (is_array($path)) {
+            $value = $array;
+            foreach ($path as $key) {
+                if (is_array($key)) {
+                    $value = self::getValueByPath($value, $key, $default, $delimiter);
+                } else {
+                    $value = self::getValueByPath($value, $key, $default, $delimiter);
+                }
+                if ($value === $default) {
+                    return $default;
+                }
+            }
+            return $value;
+        }
+
+        if (is_float($path) || is_int($path)) {
+            return self::getValue($array, $path, $default);
+        }
+
+        $path = (string)$path;
+        if (str_contains($path, $delimiter)) {
+            $keys = StringHelper::parsePath($path, $delimiter);
+            $value = $array;
+            foreach ($keys as $key) {
+                if (!is_array($value) && !is_object($value)) {
+                    return $default;
+                }
+                $value = self::getValue($value, $key, $default);
+                if ($value === $default) {
+                    return $default;
+                }
+            }
+            return $value;
+        }
+
+        return self::getValue($array, $path, $default);
     }
 
     /**
@@ -298,6 +333,23 @@ final class ArrayHelper
      * ```
      *
      * The result of `ArrayHelper::setValue($array, ['key', 'in'], ['arr' => 'val']);`
+     * will be the following:
+     *
+     * ```php
+     *  [
+     *      'key' => [
+     *          'in' => [
+     *              ['arr' => 'val'],
+     *              'key' => 'val'
+     *          ]
+     *      ]
+     *  ]
+     *
+     * ```
+     *
+     * The result of
+     * `ArrayHelper::setValue($array, 'key.in', ['arr' => 'val']);` or
+     * `ArrayHelper::setValue($array, ['key', 'in'], ['arr' => 'val']);`
      * will be the following:
      *
      * ```php
@@ -470,7 +522,7 @@ final class ArrayHelper
      *
      * @param array $array The array to write the value to.
      * @param array|float|int|string|null $path The path of where do you want to write a value to `$array`.
-     * The path can be described by a string when each key should be separated by a dot.
+     * The path can be described by a string when each key should be separated by a delimiter (default is dot).
      * You can also describe the path as an array of keys. If the path is null then `$array` will be assigned
      * the `$value`.
      * @param mixed $value The value to be written.
@@ -847,7 +899,7 @@ final class ArrayHelper
      * The `$from` and `$to` parameters specify the key names or property names to set up the map.
      * Optionally, one can further group the map according to a grouping field `$group`.
      *
-     * For example,
+     * For example:
      *
      * ```php
      * $array = [
