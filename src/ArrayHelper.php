@@ -216,18 +216,16 @@ final class ArrayHelper
             if (empty($key)) {
                 return $default;
             }
-            $count = count($key);
-            if ($count === 1) {
-                return self::getRootValue($array, $key[0], $default);
-            }
-            $lastIndex = $count - 1;
-            for ($i = 0; $i < $lastIndex; $i++) {
-                $array = self::getRootValue($array, $key[$i], null);
+
+            $lastKey = array_pop($key);
+            foreach ($key as $keyPart) {
+                $array = self::getRootValue($array, $keyPart, null);
+
                 if (!is_array($array) && !is_object($array)) {
                     return $default;
                 }
             }
-            return self::getRootValue($array, $key[$lastIndex], $default);
+            return self::getRootValue($array, $lastKey, $default);
         }
 
         return self::getRootValue($array, $key, $default);
@@ -315,46 +313,11 @@ final class ArrayHelper
         mixed $default = null,
         string $delimiter = '.'
     ): mixed {
-        if ($path instanceof Closure) {
-            return self::getValue($array, $path, $default);
-        }
-
-        if (is_array($path)) {
-            $value = $array;
-            foreach ($path as $key) {
-                if (is_array($key)) {
-                    $value = self::getValueByPath($value, $key, $default, $delimiter);
-                } else {
-                    $value = self::getValueByPath($value, $key, $default, $delimiter);
-                }
-                if ($value === $default) {
-                    return $default;
-                }
-            }
-            return $value;
-        }
-
-        if (is_float($path) || is_int($path)) {
-            return self::getValue($array, $path, $default);
-        }
-
-        $path = (string)$path;
-        if (str_contains($path, $delimiter)) {
-            $keys = StringHelper::parsePath($path, $delimiter);
-            $value = $array;
-            foreach ($keys as $key) {
-                if (!is_array($value) && !is_object($value)) {
-                    return $default;
-                }
-                $value = self::getValue($value, $key, $default);
-                if ($value === $default) {
-                    return $default;
-                }
-            }
-            return $value;
-        }
-
-        return self::getValue($array, $path, $default);
+        return self::getValue(
+            $array,
+            $path instanceof Closure ? $path : self::parseMixedPath($path, $delimiter),
+            $default
+        );
     }
 
     /**
@@ -875,42 +838,7 @@ final class ArrayHelper
      */
     public static function group(iterable $array, array|string $groups): array
     {
-        if (!is_array($array)) {
-            $array = iterator_to_array($array);
-        }
-        if (empty($array)) {
-            return [];
-        }
-
-        $groups = is_string($groups) ? [$groups] : $groups;
-        $result = [];
-
-        foreach ($array as $element) {
-            if (!is_array($element) && !is_object($element)) {
-                throw new InvalidArgumentException(
-                    'group() can not get value from ' . gettype($element) .
-                    '. The $array should be either multidimensional array or an array of objects.'
-                );
-            }
-
-            $target = &$result;
-            foreach ($groups as $group) {
-                $groupValue = self::getValue($element, $group);
-                if ($groupValue === null) {
-                    continue 2;
-                }
-                $groupKey = self::normalizeArrayKey($groupValue);
-                if (!isset($target[$groupKey])) {
-                    $target[$groupKey] = [];
-                }
-                $target = &$target[$groupKey];
-            }
-
-            $target[] = $element;
-            unset($target);
-        }
-
-        return $result;
+        return self::index($array, null, $groups);
     }
 
     /**
