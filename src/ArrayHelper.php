@@ -1119,6 +1119,7 @@ final class ArrayHelper
                 $d[$key] = $value;
             }
         }
+
         return $d;
     }
 
@@ -1488,16 +1489,19 @@ final class ArrayHelper
                     $newPath = array_merge($newPath, $parsedPath);
                     continue;
                 }
+
                 if (is_array($key)) {
                     /** @var list<float|int|string> $parsedPath */
                     $parsedPath = self::parseMixedPath($key, $delimiter);
                     $newPath = array_merge($newPath, $parsedPath);
                     continue;
                 }
+
                 $newPath[] = $key;
             }
             return $newPath;
         }
+
         return is_string($path) ? StringHelper::parsePath($path, $delimiter) : $path;
     }
 }
