@@ -15,6 +15,7 @@ use function array_combine;
 use function array_key_exists;
 use function array_keys;
 use function array_merge;
+use function array_pop;
 use function array_search;
 use function array_shift;
 use function count;
@@ -216,11 +217,9 @@ final class ArrayHelper
             if (empty($key)) {
                 return $default;
             }
-
             $lastKey = array_pop($key);
             foreach ($key as $keyPart) {
                 $array = self::getRootValue($array, $keyPart, null);
-
                 if (!is_array($array) && !is_object($array)) {
                     return $default;
                 }
