@@ -759,7 +759,9 @@ final class ArrayHelper
                     '. The $array should be either multidimensional array or an array of objects.'
                 );
             }
+
             $lastArray = &$result;
+
             foreach ($groups as $group) {
                 $value = self::normalizeArrayKey(
                     self::getValue($element, $group)
@@ -784,6 +786,7 @@ final class ArrayHelper
             }
             unset($lastArray);
         }
+
         return $result;
     }
 
