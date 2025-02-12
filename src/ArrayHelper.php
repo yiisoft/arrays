@@ -31,7 +31,6 @@ use function is_float;
 use function is_int;
 use function is_object;
 use function is_string;
-use function range;
 use function str_ends_with;
 use function strcasecmp;
 use function substr;
@@ -75,15 +74,15 @@ final class ArrayHelper
      *
      * @param mixed $object The object to be converted into an array.
      *
-     * It is possible to provide default way of converting object to array for a specific class by implementing
-     * {@see \Yiisoft\Arrays\ArrayableInterface} in its class.
+     * It is possible to provide default way of converting an object to an array for a specific class by implementing
+     * {@see ArrayableInterface} in its class.
      * @param array $properties A mapping from object class names to the properties that need to put into
      * the resulting arrays. The properties specified for each class is an array of the following format:
      *
      * - A field name to include as is.
      * - A key-value pair of desired array key name and model column name to take value from.
      * - A key-value pair of desired array key name and a callback which returns value.
-     * @param bool $recursive Whether to recursively converts properties which are objects into arrays.
+     * @param bool $recursive Whether to recursively convert properties which are objects into arrays.
      *
      * @return array The array representation of the object.
      */
@@ -795,7 +794,7 @@ final class ArrayHelper
      * This is just an alias for indexing by groups
      *
      * @param iterable $array The array or iterable object that needs to be grouped.
-     * @param Closure[]|string|string[] $groups The array of keys, that will be used to group the input array
+     * @param Closure[]|string|string[] $groups The array of keys that will be used to group the input array
      * by one or more keys.
      *
      * @psalm-param iterable<mixed, array|object> $array
@@ -1204,7 +1203,7 @@ final class ArrayHelper
         }
 
         if ($consecutive) {
-            return array_keys($array) === range(0, count($array) - 1);
+            return array_is_list($array);
         }
 
         foreach ($array as $key => $_value) {
