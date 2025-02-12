@@ -160,7 +160,7 @@ final class ArrayHelper
      * For integer-keyed elements, the elements from the latter array will be appended to the former array.
      *
      * @param array[] $arrays Arrays to be merged.
-     * @param int|null $depth The maximum depth that merging is recursively. `Null` means unlimited depth.
+     * @param int|null $depth The maximum depth that for recursive merging. `Null` means unlimited depth.
      *
      * @return array The merged array (the original arrays are not changed).
      */
@@ -176,10 +176,10 @@ final class ArrayHelper
      * Below are some usage examples,
      *
      * ```php
-     * // Working with array:
+     * // Working with an array:
      * $username = \Yiisoft\Arrays\ArrayHelper::getValue($_POST, 'username');
      *
-     * // Working with object:
+     * // Working with an object:
      * $username = \Yiisoft\Arrays\ArrayHelper::getValue($user, 'username');
      *
      * // Working with anonymous function:
@@ -274,12 +274,12 @@ final class ArrayHelper
      * Retrieves the value of an array element or object property with the given key or property name.
      * If the key does not exist in the array or object, the default value will be returned instead.
      *
-     * The key may be specified in a dot-separated format to retrieve the value of a sub-array or the property
+     * The key may be specified in a dot-separated format to retrieve the value of a subarray or the property
      * of an embedded object. In particular, if the key is `x.y.z`, then the returned value would
      * be `$array['x']['y']['z']` or `$array->x->y->z` (if `$array` is an object). If `$array['x']`
      * or `$array->x` is neither an array nor an object, the default value will be returned.
      * Note that if the array already has an element `x.y.z`, then its value will be returned
-     * instead of going through the sub-arrays. So it is better to be done specifying an array of key names
+     * instead of going through the subarrays. So it is better to be done specifying an array of key names
      * like `['x', 'y', 'z']`.
      *
      * Below are some usage examples,
@@ -349,7 +349,7 @@ final class ArrayHelper
      *
      * @param array $array The array to write the value to.
      * @param array|float|int|string|null $key The path of where do you want to write a value to `$array`
-     * the path can be described by an array of keys. If the path is null then `$array` will be assigned the `$value`.
+     * the path can be described by an array of keys. If the path is `null` then `$array` will be assigned the `$value`.
      *
      * @psalm-param ArrayKey|null $key
      *
@@ -380,7 +380,7 @@ final class ArrayHelper
     }
 
     /**
-     * Find array value in array at the key path specified and add passed value to him.
+     * Find array value in an array at the key path specified and add passed value to him.
      *
      * If there is no such key path yet, it will be created recursively and an empty array will be initialized.
      *
@@ -405,7 +405,7 @@ final class ArrayHelper
      *
      * @param array $array The array to append the value to.
      * @param array|float|int|string|null $key The path of where do you want to append a value to `$array`. The path can
-     * be described by an array of keys. If the path is null then `$value` will be appended to the `$array`.
+     * be described by an array of keys. If the path is `null` then `$value` will be appended to the `$array`.
      *
      * @psalm-param ArrayKey|null $key
      *
@@ -437,14 +437,14 @@ final class ArrayHelper
     }
 
     /**
-     * Find array value in array at the key path specified and add passed value to him.
+     * Find array value in an array at the key path specified and add passed value to him.
      *
      * @see addValue
      *
      * @param array $array The array to append the value to.
      * @param array|float|int|string|null $path The path of where do you want to append a value to `$array`. The path
      * can be described by a string when each key should be separated by a dot. You can also describe the path as
-     * an array of keys. If the path is null then `$value` will be appended to the `$array`.
+     * an array of keys. If the path is `null` then `$value` will be appended to the `$array`.
      * @param mixed $value The value to be added.
      * @param string $delimiter A separator, used to parse string $key for embedded object property retrieving. Defaults
      * to "." (dot).
@@ -534,7 +534,7 @@ final class ArrayHelper
      * ```php
      * // $array = ['type' => 'A', 'options' => [1, 2]];
      *
-     * // Working with array:
+     * // Working with an array:
      * $type = \Yiisoft\Arrays\ArrayHelper::remove($array, 'type');
      *
      * // $array content
@@ -580,7 +580,7 @@ final class ArrayHelper
      * ```php
      * // $array = ['type' => 'A', 'options' => [1, 2]];
      *
-     * // Working with array:
+     * // Working with an array:
      * $type = \Yiisoft\Arrays\ArrayHelper::remove($array, 'type');
      *
      * // $array content
@@ -642,14 +642,14 @@ final class ArrayHelper
      * Indexes and/or groups the array according to a specified key.
      * The input should be either multidimensional array or an array of objects.
      *
-     * The `$key` can be either a key name of the sub-array, a property name of object, or an anonymous
+     * The `$key` can be either a key name of the subarray, a property name of an object, or an anonymous
      * function that must return the value that will be used as a key.
      *
-     * `$groups` is an array of keys, that will be used to group the input array into one or more sub-arrays based
+     * `$groups` is an array of keys that will be used to group the input array into one or more subarrays based
      * on keys specified.
      *
      * If the `$key` is specified as `null` or a value of an element corresponding to the key is `null` in addition
-     * to `$groups` not specified then the element is discarded.
+     * to `$groups` not specified, then the element is discarded.
      *
      * For example:
      *
@@ -733,9 +733,9 @@ final class ArrayHelper
      * @param iterable $array The array or iterable object that needs to be indexed or grouped.
      * @param Closure|string|null $key The column name or anonymous function which result will be used
      * to index the array.
-     * @param Closure[]|string|string[]|null $groups The array of keys, that will be used to group the input
+     * @param Closure[]|string|string[]|null $groups The array of keys that will be used to group the input
      * array by one or more keys. If the `$key` attribute or its value for the particular element is null and `$groups`
-     * is not defined, the array element will be discarded. Otherwise, if `$groups` is specified, array element will be
+     * is not defined, the array element will be discarded. Otherwise, if `$groups` is specified, an array element will be
      * added to the result array without any key.
      *
      * @psalm-param iterable<mixed, array|object> $array
@@ -891,7 +891,7 @@ final class ArrayHelper
      * // ]
      * ```
      *
-     * @param iterable $array Array or iterable object to build map from.
+     * @param iterable $array Array or iterable object to build a map from.
      * @param Closure|string $from Key or property name to map from.
      * @param Closure|string $to Key or property name to map to.
      * @param Closure|string|null $group Key or property to group the map.
@@ -1005,12 +1005,12 @@ final class ArrayHelper
 
     /**
      * Checks if the given array contains the specified key. The key may be specified in a dot format.
-     * In particular, if the key is `x.y.z`, then key would be `$array['x']['y']['z']`.
+     * In particular, if the key is `x.y.z`, then the key would be `$array['x']['y']['z']`.
      *
      * This method enhances the `array_key_exists()` function by supporting case-insensitive
      * key comparison.
      *
-     * @param array $array The array to check path in.
+     * @param array $array The array to check the path in.
      * @param array|float|int|string $path The key path. Can be described by a string when each key should be separated
      * by delimiter. You can also describe the path as an array of keys.
      * @param bool $caseSensitive Whether the key comparison should be case-sensitive.
@@ -1272,7 +1272,7 @@ final class ArrayHelper
     }
 
     /**
-     * Filters array according to rules specified.
+     * Filters an array according to rules specified.
      *
      * For example:
      *
@@ -1310,8 +1310,8 @@ final class ArrayHelper
      * @param list<string> $filters Rules that define array keys which should be left or removed from results.
      * Each rule is:
      * - `var` - `$array['var']` will be left in result.
-     * - `var.key` = only `$array['var']['key']` will be left in result.
-     * - `!var.key` = `$array['var']['key']` will be removed from result.
+     * - `var.key` = only `$array['var']['key']` will be left in the result.
+     * - `!var.key` = `$array['var']['key']` will be removed from the result.
      *
      * @return array Filtered array.
      */
@@ -1330,7 +1330,7 @@ final class ArrayHelper
             $keys = explode('.', $filter);
             foreach ($keys as $key) {
                 if (!is_array($nodeValue) || !array_key_exists($key, $nodeValue)) {
-                    continue 2; // Jump to next filter.
+                    continue 2; // Jump to the next filter.
                 }
                 $nodeValue = $nodeValue[$key];
             }
@@ -1361,7 +1361,7 @@ final class ArrayHelper
             $numNestedKeys = count($keys) - 1;
             foreach ($keys as $i => $key) {
                 if (!is_array($excludeNode) || !array_key_exists($key, $excludeNode)) {
-                    continue 2; // Jump to next filter.
+                    continue 2; // Jump to the next filter.
                 }
 
                 if ($i < $numNestedKeys) {
@@ -1399,7 +1399,7 @@ final class ArrayHelper
     }
 
     /**
-     * Rename key in array.
+     * Rename key in an array.
      *
      * @param array $array Source array.
      * @param int|string $from Key to rename.
