@@ -42,10 +42,11 @@ final class GetValueTest extends TestCase
             2 => 'two',
         ],
         '42.7' => 500,
+        '' => 'test',
     ];
 
     /**
-     * @return array[] common test data for [[testGetValue()]] and [[testGetValueByPath()]]
+     * @return array[] Common test data for {@see testGetValueFromArray()} and {@see testGetValueByPathFromArray()}.
      */
     private static function commonDataProviderFromArray(): array
     {
@@ -61,6 +62,7 @@ final class GetValueTest extends TestCase
             [['version', 2], 'two'],
             [['version', 2.0], 'two'],
             [42.7, 500],
+            ['', 'test'],
         ];
     }
 

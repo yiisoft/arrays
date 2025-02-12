@@ -17,11 +17,14 @@ final class GetValueByPathTest extends TestCase
             [['key1.key2' => ['key3' => 'value']], 'key1.key2.key3', '.', null],
             [['key1.key2' => ['key3' => 'value']], 'key1\.key2.key3', '.', 'value'],
             [['key1:key2' => ['key3' => 'value']], 'key1\:key2:key3', ':', 'value'],
+            [['' => 'test'], [''], '.', 'test'],
+            [['key1' => ['' => 'test']], 'key1.', '.', 'test'],
+            [['key1' => ['' => ['key2' => 'test']]], 'key1..key2', '.', 'test'],
         ];
     }
 
     #[DataProvider('getValueByPathDataProvider')]
-    public function testGetValueByPath(array $array, string $path, string $delimiter, ?string $expectedValue): void
+    public function testGetValueByPath(array $array, mixed $path, string $delimiter, ?string $expectedValue): void
     {
         $this->assertSame($expectedValue, ArrayHelper::getValueByPath($array, $path, null, $delimiter));
     }

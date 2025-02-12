@@ -2,7 +2,7 @@
 
 ## 3.2.1 under development
 
-- no changes in this release.
+- Enh #169: Bump `yiisoft/strings` dependency to `^2.6` (@vjik)
 
 ## 3.2.0 February 01, 2025
 
