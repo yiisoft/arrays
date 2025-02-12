@@ -27,7 +27,7 @@ final class ArraySorter
      * ArraySorter::multisort($data, ['age', 'name'], [SORT_ASC, SORT_DESC]);
      * ```
      *
-     * After sorting we'll get the following in `$data`:
+     * After sorting, we'll get the following in `$data`:
      *
      * ```php
      * [
@@ -40,7 +40,7 @@ final class ArraySorter
      * @param array<array-key, array|object> $array The array to be sorted. The array will be modified after calling
      * this method.
      * @param array<array-key, Closure|string>|Closure|string $key The key(s) to be sorted by. This refers to a key
-     * name of the sub-array elements, a property name of the objects, or an anonymous function returning the values
+     * name of the subarray elements, a property name of the objects, or an anonymous function returning the values
      * for comparison purpose. The anonymous function signature should be: `function($item)`.
      * To sort by multiple keys, provide an array of keys here.
      * @param array<array-key, int>|int $direction The sorting direction. It can be either `SORT_ASC` or `SORT_DESC`.
@@ -65,15 +65,15 @@ final class ArraySorter
         }
 
         $keys = is_array($key) ? $key : [$key];
-        $n = count($keys);
-        if ($n === 0) {
+        $keysCount = count($keys);
+        if ($keysCount === 0) {
             return;
         }
 
-        if (is_array($direction) && count($direction) !== $n) {
+        if (is_array($direction) && count($direction) !== $keysCount) {
             throw new InvalidArgumentException('The length of $direction parameter must be the same as that of $keys.');
         }
-        if (is_array($sortFlag) && count($sortFlag) !== $n) {
+        if (is_array($sortFlag) && count($sortFlag) !== $keysCount) {
             throw new InvalidArgumentException('The length of $sortFlag parameter must be the same as that of $keys.');
         }
 
@@ -82,8 +82,8 @@ final class ArraySorter
         $args[] = is_array($direction) ? $direction[0] : $direction;
         $args[] = is_array($sortFlag) ? $sortFlag[0] : $sortFlag;
 
-        if ($n > 1) {
-            for ($i = 1; $i < $n; $i++) {
+        if ($keysCount > 1) {
+            for ($i = 1; $i < $keysCount; $i++) {
                 $args[] = ArrayHelper::getColumn($array, $keys[$i]);
                 $args[] = is_array($direction) ? $direction[$i] : $direction;
                 $args[] = is_array($sortFlag) ? $sortFlag[$i] : $sortFlag;
