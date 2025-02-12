@@ -1085,17 +1085,17 @@ final class ArrayHelper
      */
     private static function htmlEncodeValues(array $data, string $encoding, int $flags): array
     {
-        $d = [];
+        $result = [];
         foreach ($data as $key => $value) {
             if (is_string($value)) {
-                $d[$key] = htmlspecialchars($value, $flags, $encoding, true);
+                $result[$key] = htmlspecialchars($value, $flags, $encoding, true);
             } elseif (is_array($value)) {
-                $d[$key] = self::htmlEncodeValues($value, $encoding, $flags);
+                $result[$key] = self::htmlEncodeValues($value, $encoding, $flags);
             } else {
-                $d[$key] = $value;
+                $result[$key] = $value;
             }
         }
-        return $d;
+        return $result;
     }
 
     /**
@@ -1106,21 +1106,21 @@ final class ArrayHelper
      */
     private static function htmlEncodeKeysAndValues(array $data, string $encoding, int $flags): array
     {
-        $d = [];
+        $result = [];
         foreach ($data as $key => $value) {
             if (!is_int($key)) {
                 $key = htmlspecialchars((string)$key, $flags, $encoding, true);
             }
             if (is_string($value)) {
-                $d[$key] = htmlspecialchars($value, $flags, $encoding, true);
+                $result[$key] = htmlspecialchars($value, $flags, $encoding, true);
             } elseif (is_array($value)) {
-                $d[$key] = self::htmlEncodeKeysAndValues($value, $encoding, $flags);
+                $result[$key] = self::htmlEncodeKeysAndValues($value, $encoding, $flags);
             } else {
-                $d[$key] = $value;
+                $result[$key] = $value;
             }
         }
 
-        return $d;
+        return $result;
     }
 
     /**
