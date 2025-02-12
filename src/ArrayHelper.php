@@ -751,10 +751,7 @@ final class ArrayHelper
         $result = [];
         $groups = (array)$groups;
 
-        // Pre-validate array elements
-        if (!is_array($array)) {
-            $array = iterator_to_array($array);
-        }
+        /** @var mixed $element */
         foreach ($array as $element) {
             if (!is_array($element) && !is_object($element)) {
                 throw new InvalidArgumentException(
@@ -762,48 +759,31 @@ final class ArrayHelper
                     '. The $array should be either multidimensional array or an array of objects.'
                 );
             }
-        }
-
-        // Fast path for simple indexing
-        if (empty($groups)) {
-            if ($key === null) {
-                return [];
-            }
-            foreach ($array as $element) {
-                $value = self::getValue($element, $key);
-                if ($value !== null) {
-                    $result[self::normalizeArrayKey($value)] = $element;
-                }
-            }
-            return $result;
-        }
-
-        // Process groups
-        foreach ($array as $element) {
-            $target = &$result;
+            $lastArray = &$result;
             foreach ($groups as $group) {
-                $groupValue = self::getValue($element, $group);
-                if ($groupValue === null) {
-                    continue 2;
+                $value = self::normalizeArrayKey(
+                    self::getValue($element, $group)
+                );
+                if (!array_key_exists($value, $lastArray)) {
+                    $lastArray[$value] = [];
                 }
-                $groupKey = self::normalizeArrayKey($groupValue);
-                if (!isset($target[$groupKey])) {
-                    $target[$groupKey] = [];
-                }
-                $target = &$target[$groupKey];
+                /** @psalm-suppress MixedAssignment */
+                $lastArray = &$lastArray[$value];
+                /** @var array $lastArray */
             }
 
             if ($key === null) {
-                $target[] = $element;
+                if (!empty($groups)) {
+                    $lastArray[] = $element;
+                }
             } else {
                 $value = self::getValue($element, $key);
                 if ($value !== null) {
-                    $target[self::normalizeArrayKey($value)] = $element;
+                    $lastArray[self::normalizeArrayKey($value)] = $element;
                 }
             }
-            unset($target);
+            unset($lastArray);
         }
-
         return $result;
     }
 
@@ -1483,23 +1463,21 @@ final class ArrayHelper
     {
         if (is_array($path)) {
             $newPath = [];
+
             foreach ($path as $key) {
                 if (is_string($key)) {
-                    $parsedPath = StringHelper::parsePath($key, $delimiter);
-                    $newPath = array_merge($newPath, $parsedPath);
+                    $newPath[] = StringHelper::parsePath($key, $delimiter);
                     continue;
                 }
 
                 if (is_array($key)) {
-                    /** @var list<float|int|string> $parsedPath */
-                    $parsedPath = self::parseMixedPath($key, $delimiter);
-                    $newPath = array_merge($newPath, $parsedPath);
+                    $newPath[] = self::parseMixedPath($key, $delimiter);
                     continue;
                 }
 
-                $newPath[] = $key;
+                $newPath[] = [$key];
             }
-            return $newPath;
+            return array_merge(...$newPath);
         }
 
         return is_string($path) ? StringHelper::parsePath($path, $delimiter) : $path;
