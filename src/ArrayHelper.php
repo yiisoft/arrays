@@ -335,23 +335,7 @@ final class ArrayHelper
      *  ];
      * ```
      *
-     * The result of `ArrayHelper::setValue($array, ['key', 'in'], ['arr' => 'val']);` will be the following:
-     *
-     * ```php
-     *  [
-     *      'key' => [
-     *          'in' => [
-     *              ['arr' => 'val'],
-     *              'key' => 'val'
-     *          ]
-     *      ]
-     *  ]
-     *
-     * ```
-     *
-     * The result of
-     * `ArrayHelper::setValue($array, 'key.in', ['arr' => 'val']);` or
-     * `ArrayHelper::setValue($array, ['key', 'in'], ['arr' => 'val']);`
+     * The result of `ArrayHelper::setValue($array, ['key', 'in'], ['arr' => 'val']);`
      * will be the following:
      *
      * ```php
@@ -525,7 +509,7 @@ final class ArrayHelper
      * @param array $array The array to write the value to.
      * @param array|float|int|string|null $path The path of where do you want to write a value to `$array`.
      * The path can be described by a string when each key should be separated by a delimiter (default is dot).
-     * You can also describe the path as an array of keys. If the path is null then `$array` will be assigned
+     * You can also describe the path as an array of keys. If the path is `null` then `$array` will be assigned
      * the `$value`.
      * @param mixed $value The value to be written.
      * @param string $delimiter A separator, used to parse string $key for embedded object property retrieving. Defaults
