@@ -1055,24 +1055,24 @@ final class ArrayHelper
         $flags = ENT_QUOTES | ENT_SUBSTITUTE;
 
         return $valuesOnly
-            ? self::htmlEncodeValues($data, $encoding, $flags)
-            : self::htmlEncodeKeysAndValues($data, $encoding, $flags);
+            ? self::htmlEncodeValues($data, $flags, $encoding)
+            : self::htmlEncodeKeysAndValues($data, $flags, $encoding);
     }
 
     /**
      * @param array $data
-     * @param string $encoding
      * @param int $flags
+     * @param string $encoding
      * @return array
      */
-    private static function htmlEncodeValues(array $data, string $encoding, int $flags): array
+    private static function htmlEncodeValues(array $data, int $flags, string $encoding): array
     {
         $result = [];
         foreach ($data as $key => $value) {
             if (is_string($value)) {
-                $result[$key] = htmlspecialchars($value, $flags, $encoding, true);
+                $result[$key] = htmlspecialchars($value, $flags, $encoding);
             } elseif (is_array($value)) {
-                $result[$key] = self::htmlEncodeValues($value, $encoding, $flags);
+                $result[$key] = self::htmlEncodeValues($value, $flags, $encoding);
             } else {
                 $result[$key] = $value;
             }
@@ -1080,7 +1080,7 @@ final class ArrayHelper
         return $result;
     }
 
-    private static function htmlEncodeKeysAndValues(array $data, string $encoding, int $flags): array
+    private static function htmlEncodeKeysAndValues(array $data, int $flags, string $encoding): array
     {
         $result = [];
         foreach ($data as $key => $value) {
@@ -1090,7 +1090,7 @@ final class ArrayHelper
             if (is_string($value)) {
                 $result[$key] = htmlspecialchars($value, $flags, $encoding);
             } elseif (is_array($value)) {
-                $result[$key] = self::htmlEncodeKeysAndValues($value, $encoding, $flags);
+                $result[$key] = self::htmlEncodeKeysAndValues($value, $flags, $encoding);
             } else {
                 $result[$key] = $value;
             }

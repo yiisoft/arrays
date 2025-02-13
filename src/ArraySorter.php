@@ -78,16 +78,11 @@ final class ArraySorter
         }
 
         $args = [];
-        $args[] = ArrayHelper::getColumn($array, $keys[0]);
-        $args[] = is_array($direction) ? $direction[0] : $direction;
-        $args[] = is_array($sortFlag) ? $sortFlag[0] : $sortFlag;
 
-        if ($keysCount > 1) {
-            for ($i = 1; $i < $keysCount; $i++) {
-                $args[] = ArrayHelper::getColumn($array, $keys[$i]);
-                $args[] = is_array($direction) ? $direction[$i] : $direction;
-                $args[] = is_array($sortFlag) ? $sortFlag[$i] : $sortFlag;
-            }
+        for ($i = 0; $i < $keysCount; $i++) {
+            $args[] = ArrayHelper::getColumn($array, $keys[$i]);
+            $args[] = is_array($direction) ? $direction[$i] : $direction;
+            $args[] = is_array($sortFlag) ? $sortFlag[$i] : $sortFlag;
         }
 
         // Add tie-breaker only for non-empty arrays
