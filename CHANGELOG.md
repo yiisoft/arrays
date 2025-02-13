@@ -2,6 +2,7 @@
 
 ## 3.2.1 under development
 
+- Enh #168: Add benchmark, improve `ArrayHelper::htmlEncode()` performance (@samdark)
 - Enh #169: Bump `yiisoft/strings` dependency to `^2.6` (@vjik)
 
 ## 3.2.0 February 01, 2025

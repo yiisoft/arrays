@@ -37,7 +37,8 @@
         "rector/rector": "^2.0.9",
         "roave/infection-static-analysis-plugin": "^1.35",
         "spatie/phpunit-watcher": "^1.24",
-        "vimeo/psalm": "^5.26.1 || ^6.5.1"
+        "vimeo/psalm": "^5.26.1 || ^6.5.1",
+        "phpbench/phpbench": "^1.4"
     },
     "autoload": {
         "psr-4": {
