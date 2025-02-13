@@ -101,7 +101,10 @@ final class ArraySorter
             $args[] = SORT_NUMERIC;
         }
 
+        /** @psalm-suppress UnsupportedReferenceUsage */
         $args[] = &$array;
+
+        /** @psalm-suppress ArgumentTypeCoercion */
         array_multisort(...$args);
     }
 }

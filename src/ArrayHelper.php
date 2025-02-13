@@ -1080,21 +1080,15 @@ final class ArrayHelper
         return $result;
     }
 
-    /**
-     * @param array $data
-     * @param string $encoding
-     * @param int $flags
-     * @return array
-     */
     private static function htmlEncodeKeysAndValues(array $data, string $encoding, int $flags): array
     {
         $result = [];
         foreach ($data as $key => $value) {
             if (!is_int($key)) {
-                $key = htmlspecialchars((string)$key, $flags, $encoding, true);
+                $key = htmlspecialchars($key, $flags, $encoding);
             }
             if (is_string($value)) {
-                $result[$key] = htmlspecialchars($value, $flags, $encoding, true);
+                $result[$key] = htmlspecialchars($value, $flags, $encoding);
             } elseif (is_array($value)) {
                 $result[$key] = self::htmlEncodeKeysAndValues($value, $encoding, $flags);
             } else {
@@ -1458,8 +1452,7 @@ final class ArrayHelper
 
     /**
      * @psalm-param ArrayPath $path
-     *
-     * @psalm-return ArrayKey
+     * @psalm-return ($path is array ? array<float|int|string> : float|int|string)
      */
     private static function parseMixedPath(array|float|int|string $path, string $delimiter): array|float|int|string
     {
@@ -1481,6 +1474,12 @@ final class ArrayHelper
             }
             return array_merge(...$newPath);
         }
+
+        /**
+         * It's Psalm bug. These annotations are not needed.
+         * @psalm-var float|int|string $path
+         * @psalm-suppress RedundantConditionGivenDocblockType
+         */
 
         return is_string($path) ? StringHelper::parsePath($path, $delimiter) : $path;
     }
