@@ -7,6 +7,7 @@ namespace Yiisoft\Arrays;
 use Closure;
 use InvalidArgumentException;
 use Throwable;
+use Traversable;
 use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Strings\StringHelper;
 
@@ -1412,6 +1413,18 @@ final class ArrayHelper
         $keys[$index] = $to;
 
         return array_combine($keys, $array);
+    }
+
+    /**
+     * Converts an iterable value to an array.
+     *
+     * @param iterable $iterable The iterable to convert.
+     *
+     * @return array The converted array.
+     */
+    public static function iterableToArray(iterable $iterable): array
+    {
+        return $iterable instanceof Traversable ? iterator_to_array($iterable) : $iterable;
     }
 
     /**

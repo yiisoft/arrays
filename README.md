@@ -82,6 +82,7 @@ Overall the helper has the following method groups.
 ### Transformation
 
 - index
+- iterableToArray
 - group
 - filter
 - map
