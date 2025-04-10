@@ -1048,9 +1048,7 @@ final class ArrayHelper
      */
     public static function htmlEncode(iterable $data, bool $valuesOnly = true, ?string $encoding = null): array
     {
-        if (!is_array($data)) {
-            $data = iterator_to_array($data);
-        }
+        $data = self::iterableToArray($data);
 
         $encoding ??= ini_get('default_charset') ?: 'UTF-8';
         $flags = ENT_QUOTES | ENT_SUBSTITUTE;
