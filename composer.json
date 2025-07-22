@@ -52,7 +52,6 @@
     },
     "config": {
         "sort-packages": true,
-        "bump-after-update": "dev",
         "allow-plugins": {
             "bamarni/composer-bin-plugin": true,
             "infection/extension-installer": true,
