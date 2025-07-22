@@ -797,12 +797,15 @@ final class ArrayHelper
      * @param Closure[]|string|string[] $groups The array of keys that will be used to group the input array
      * by one or more keys.
      *
-     * @psalm-param iterable<mixed, array|object> $array
-     *
      * @return array The grouped array.
+     *
+     * @template T as array|object
+     * @psalm-param iterable<mixed, T> $array
+     * @psalm-return array<non-empty-list<T>>
      */
     public static function group(iterable $array, array|string $groups): array
     {
+        /** @psalm-var array<non-empty-list<T>> */
         return self::index($array, null, $groups);
     }
 
