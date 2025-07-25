@@ -212,7 +212,7 @@ final class ArrayHelper
             return $key($array, $default);
         }
 
-        if (is_array($array) && (is_int($key) || is_string($key))) {
+        if (is_array($array) && is_scalar($key)) {
             return array_key_exists($key, $array) ? $array[$key] : $default;
         }
 
