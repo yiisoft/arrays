@@ -5,6 +5,7 @@
 - Enh #168: Add benchmark, improve `ArrayHelper::htmlEncode()` performance (@samdark)
 - Enh #169: Bump `yiisoft/strings` dependency to `^2.6` (@vjik)
 - Enh #171: Improve psalm types in `ArrayHelper::group()` (@vjik)
+- Enh #173: Add PHP 8.5 support (@vjik)
 
 ## 3.2.0 February 01, 2025
 
