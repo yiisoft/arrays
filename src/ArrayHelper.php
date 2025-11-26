@@ -212,6 +212,10 @@ final class ArrayHelper
             return $key($array, $default);
         }
 
+        if (is_array($array) && is_scalar($key)) {
+            return array_key_exists($key, $array) ? $array[$key] : $default;
+        }
+
         if (is_array($key)) {
             if (empty($key)) {
                 return $default;
