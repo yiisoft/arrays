@@ -1,5 +1,9 @@
 # Yii Arrays Change Log
 
+## 3.2.2 under development
+
+- no changes in this release.
+
 ## 3.2.1 November 26, 2025
 
 - Enh #168: Add benchmark, improve `ArrayHelper::htmlEncode()` performance (@samdark)
