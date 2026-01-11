@@ -9,6 +9,13 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Arrays\ArraySorter;
 
+use const SORT_ASC;
+use const SORT_DESC;
+use const SORT_FLAG_CASE;
+use const SORT_NATURAL;
+use const SORT_REGULAR;
+use const SORT_STRING;
+
 final class ArraySorterTest extends TestCase
 {
     public function testMultisort(): void
@@ -149,7 +156,7 @@ final class ArraySorterTest extends TestCase
                 return 'B' . $i++;
             },
             SORT_ASC,
-            SORT_NATURAL
+            SORT_NATURAL,
         );
         $this->assertSame(
             [
@@ -159,7 +166,7 @@ final class ArraySorterTest extends TestCase
                 ['id' => 1, 'name' => '- Enh #123: test1'],
                 ['id' => 4, 'name' => '- Enh: test3'],
             ],
-            $changelog
+            $changelog,
         );
     }
 

@@ -45,27 +45,6 @@ final class GetValueTest extends TestCase
         '' => 'test',
     ];
 
-    /**
-     * @return array[] Common test data for {@see testGetValueFromArray()} and {@see testGetValueByPathFromArray()}.
-     */
-    private static function commonDataProviderFromArray(): array
-    {
-        return [
-            ['name', 'test'],
-            ['noname', null],
-            ['noname', 'test', 'test'],
-            [
-                static fn ($array, $defaultValue) => $array['date'] . $defaultValue,
-                '31-12-2113test',
-                'test',
-            ],
-            [['version', 2], 'two'],
-            [['version', 2.0], 'two'],
-            [42.7, 500],
-            ['', 'test'],
-        ];
-    }
-
     public static function dataProviderGetValueFromArray(): array
     {
         return array_merge(self::commonDataProviderFromArray(), [
@@ -220,14 +199,14 @@ final class GetValueTest extends TestCase
         set_error_handler(
             static function (int $code, string $message) use (&$errorMessage) {
                 $errorMessage = $message;
-            }
+            },
         );
         ArrayHelper::getValue($object, 'nonExisting');
         restore_error_handler();
 
         $this->assertSame(
             'Undefined property: Yiisoft\Arrays\Tests\Objects\Post1::$nonExisting',
-            $errorMessage
+            $errorMessage,
         );
     }
 
@@ -242,7 +221,7 @@ final class GetValueTest extends TestCase
         set_error_handler(
             static function (int $code, string $message) use (&$errorMessage) {
                 $errorMessage = $message;
-            }
+            },
         );
         ArrayHelper::getValue($arrayObject, 'nonExisting');
         restore_error_handler();
@@ -265,7 +244,7 @@ final class GetValueTest extends TestCase
         set_error_handler(
             static function (int $code, string $message) use (&$errorMessage) {
                 $errorMessage = $message;
-            }
+            },
         );
         ArrayHelper::getValue($object, 'var');
         restore_error_handler();
@@ -320,7 +299,7 @@ final class GetValueTest extends TestCase
 
     public function testGetters(): void
     {
-        $object = new class () {
+        $object = new class {
             public function getValue(): int
             {
                 return 7;
@@ -328,5 +307,26 @@ final class GetValueTest extends TestCase
         };
 
         $this->assertSame(7, ArrayHelper::getValue($object, 'getValue()'));
+    }
+
+    /**
+     * @return array[] Common test data for {@see testGetValueFromArray()} and {@see testGetValueByPathFromArray()}.
+     */
+    private static function commonDataProviderFromArray(): array
+    {
+        return [
+            ['name', 'test'],
+            ['noname', null],
+            ['noname', 'test', 'test'],
+            [
+                static fn($array, $defaultValue) => $array['date'] . $defaultValue,
+                '31-12-2113test',
+                'test',
+            ],
+            [['version', 2], 'two'],
+            [['version', 2.0], 'two'],
+            [42.7, 500],
+            ['', 'test'],
+        ];
     }
 }

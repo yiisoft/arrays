@@ -8,6 +8,8 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayAccessTrait;
 
+use function in_array;
+
 /**
  * @BeforeMethods({"init"})
  */
@@ -39,8 +41,8 @@ final class ArrayHelperBench
         ];
 
         $this->testObjectArray = [
-            (object)['id' => 1, 'name' => 'John'],
-            (object)['id' => 2, 'name' => 'Jane'],
+            (object) ['id' => 1, 'name' => 'John'],
+            (object) ['id' => 2, 'name' => 'Jane'],
         ];
 
         // Prepare larger array for more complex operations

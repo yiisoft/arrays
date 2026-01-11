@@ -47,11 +47,11 @@ final class MapTest extends TestCase
 
         $this->assertEquals(
             $expected,
-            ArrayHelper::map($array, 'id', 'name', $group)
+            ArrayHelper::map($array, 'id', 'name', $group),
         );
         $this->assertEquals(
             $expected,
-            ArrayHelper::map(new IterableObject($array), 'id', 'name', $group)
+            ArrayHelper::map(new IterableObject($array), 'id', 'name', $group),
         );
     }
 
@@ -71,7 +71,7 @@ final class MapTest extends TestCase
                     'key-1' => '1',
                     'key-2' => '2-last',
                 ],
-                static fn (array $row) => "key-{$row['from']}",
+                static fn(array $row) => "key-{$row['from']}",
                 'to',
             ],
             [
@@ -80,7 +80,7 @@ final class MapTest extends TestCase
                     '2' => 'value-2-last',
                 ],
                 'from',
-                static fn (array $row) => "value-{$row['to']}",
+                static fn(array $row) => "value-{$row['to']}",
             ],
         ];
     }
@@ -127,7 +127,7 @@ final class MapTest extends TestCase
                         'key-2' => '2.2-last',
                     ],
                 ],
-                static fn (array $row) => "key-{$row['from']}",
+                static fn(array $row) => "key-{$row['from']}",
                 'to',
                 'group',
             ],
@@ -143,7 +143,7 @@ final class MapTest extends TestCase
                     ],
                 ],
                 'from',
-                static fn (array $row) => "value-{$row['to']}",
+                static fn(array $row) => "value-{$row['to']}",
                 'group',
             ],
             [
@@ -159,7 +159,7 @@ final class MapTest extends TestCase
                 ],
                 'from',
                 'to',
-                static fn (array $row) => "group-{$row['group']}",
+                static fn(array $row) => "group-{$row['group']}",
             ],
         ];
     }

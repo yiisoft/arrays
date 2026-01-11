@@ -10,9 +10,7 @@ use function array_key_exists;
 
 final class Magic
 {
-    public function __construct(private array $attributes)
-    {
-    }
+    public function __construct(private array $attributes) {}
 
     public function __get(string $attribute)
     {

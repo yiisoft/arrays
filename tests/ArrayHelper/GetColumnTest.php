@@ -43,7 +43,7 @@ final class GetColumnTest extends TestCase
             'b' => ['id' => '345', 'data' => 'def'],
         ];
 
-        $closure = static fn ($element) => $element['data'];
+        $closure = static fn($element) => $element['data'];
 
         $expected = ['a' => 'abc', 'b' => 'def'];
 
@@ -58,7 +58,7 @@ final class GetColumnTest extends TestCase
             'b' => ['id' => '345', 'data' => 'def'],
         ];
 
-        $closure = static fn ($element) => $element['data'];
+        $closure = static fn($element) => $element['data'];
 
         $expected = ['abc', 'def'];
 

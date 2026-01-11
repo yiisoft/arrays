@@ -11,76 +11,6 @@ use Yiisoft\Arrays\ArrayHelper;
 final class SetValueTest extends TestCase
 {
     /**
-     * @return array[] common test data for [[testSetValue()]] and [[testSetValueByPath()]]
-     */
-    private static function commonDataProvider(): array
-    {
-        return [
-            [
-                [
-                    'key1' => 'val1',
-                    'key2' => 'val2',
-                ],
-                'key',
-                'val',
-                [
-                    'key1' => 'val1',
-                    'key2' => 'val2',
-                    'key' => 'val',
-                ],
-            ],
-            [
-                [
-                    'key1' => 'val1',
-                    'key2' => 'val2',
-                ],
-                'key2',
-                'val',
-                [
-                    'key1' => 'val1',
-                    'key2' => 'val',
-                ],
-            ],
-            [
-                [
-                    'key' => 'val1',
-                ],
-                'key',
-                ['in' => 'val'],
-                [
-                    'key' => ['in' => 'val'],
-                ],
-            ],
-            [
-                [
-                    'key' => ['val'],
-                ],
-                null,
-                'data',
-                'data',
-            ],
-            [
-                [1 => 'a'],
-                3,
-                'c',
-                [1 => 'a', 3 => 'c'],
-            ],
-            [
-                [1 => 'a'],
-                3.0,
-                'c',
-                [1 => 'a', 3 => 'c'],
-            ],
-            [
-                [1 => 'a'],
-                3.01,
-                'c',
-                [1 => 'a', '3.01' => 'c'],
-            ],
-        ];
-    }
-
-    /**
      * Data provider for [[testSetValue()]].
      *
      * @return array test data
@@ -115,7 +45,7 @@ final class SetValueTest extends TestCase
         array $arrayInput,
         array|float|int|string|null $key,
         mixed $value,
-        mixed $expected
+        mixed $expected,
     ): void {
         ArrayHelper::setValue($arrayInput, $key, $value);
         $this->assertEquals($expected, $arrayInput);
@@ -302,7 +232,7 @@ final class SetValueTest extends TestCase
         array $arrayInput,
         array|float|int|string|null $path,
         mixed $value,
-        mixed $expected
+        mixed $expected,
     ): void {
         ArrayHelper::setValueByPath($arrayInput, $path, $value);
         $this->assertEquals($expected, $arrayInput);
@@ -355,9 +285,79 @@ final class SetValueTest extends TestCase
         array $arrayInput,
         array|float|int|string|null $path,
         mixed $value,
-        mixed $expected
+        mixed $expected,
     ): void {
         ArrayHelper::setValueByPath($arrayInput, $path, $value, '~');
         $this->assertEquals($expected, $arrayInput);
+    }
+
+    /**
+     * @return array[] common test data for [[testSetValue()]] and [[testSetValueByPath()]]
+     */
+    private static function commonDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'key1' => 'val1',
+                    'key2' => 'val2',
+                ],
+                'key',
+                'val',
+                [
+                    'key1' => 'val1',
+                    'key2' => 'val2',
+                    'key' => 'val',
+                ],
+            ],
+            [
+                [
+                    'key1' => 'val1',
+                    'key2' => 'val2',
+                ],
+                'key2',
+                'val',
+                [
+                    'key1' => 'val1',
+                    'key2' => 'val',
+                ],
+            ],
+            [
+                [
+                    'key' => 'val1',
+                ],
+                'key',
+                ['in' => 'val'],
+                [
+                    'key' => ['in' => 'val'],
+                ],
+            ],
+            [
+                [
+                    'key' => ['val'],
+                ],
+                null,
+                'data',
+                'data',
+            ],
+            [
+                [1 => 'a'],
+                3,
+                'c',
+                [1 => 'a', 3 => 'c'],
+            ],
+            [
+                [1 => 'a'],
+                3.0,
+                'c',
+                [1 => 'a', 3 => 'c'],
+            ],
+            [
+                [1 => 'a'],
+                3.01,
+                'c',
+                [1 => 'a', '3.01' => 'c'],
+            ],
+        ];
     }
 }
