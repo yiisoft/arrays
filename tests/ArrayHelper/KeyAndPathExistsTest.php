@@ -38,22 +38,6 @@ final class KeyAndPathExistsTest extends TestCase
         '42.7' => 500,
     ];
 
-    /**
-     * @return array[] common test data for [[testKeyExists()]] and [[testPathExists()]]
-     */
-    private static function commonData(): array
-    {
-        return [
-            [true, 'name'],
-            [false, 'Name'],
-            [true, 'Name', false],
-            [true, ['version', 2]],
-            [true, ['version', 2.0]],
-            [true, 42.7],
-            [false, 'noname'],
-        ];
-    }
-
     public static function dataKeyExists(): array
     {
         return array_merge(self::commonData(), [
@@ -104,5 +88,21 @@ final class KeyAndPathExistsTest extends TestCase
     public function testPathExist(bool $expected, mixed $key, bool $caseSensitive = true): void
     {
         $this->assertSame($expected, ArrayHelper::pathExists($this->array, $key, $caseSensitive));
+    }
+
+    /**
+     * @return array[] common test data for [[testKeyExists()]] and [[testPathExists()]]
+     */
+    private static function commonData(): array
+    {
+        return [
+            [true, 'name'],
+            [false, 'Name'],
+            [true, 'Name', false],
+            [true, ['version', 2]],
+            [true, ['version', 2.0]],
+            [true, 42.7],
+            [false, 'noname'],
+        ];
     }
 }

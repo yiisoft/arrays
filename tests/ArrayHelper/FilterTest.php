@@ -193,7 +193,7 @@ final class FilterTest extends TestCase
 
         $this->assertSame(
             $input,
-            ArrayHelper::filter($input, array_keys($input))
+            ArrayHelper::filter($input, array_keys($input)),
         );
     }
 }

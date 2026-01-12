@@ -6,6 +6,12 @@ namespace Yiisoft\Arrays\Tests\Benchmark;
 
 use Yiisoft\Arrays\ArraySorter;
 
+use const SORT_ASC;
+use const SORT_DESC;
+use const SORT_FLAG_CASE;
+use const SORT_NUMERIC;
+use const SORT_STRING;
+
 /**
  * @BeforeMethods({"init"})
  */
@@ -61,7 +67,7 @@ final class ArraySorterBench
         ArraySorter::multisort(
             $data,
             ['category', 'price'],
-            [SORT_ASC, SORT_DESC]
+            [SORT_ASC, SORT_DESC],
         );
     }
 
@@ -75,11 +81,11 @@ final class ArraySorterBench
         ArraySorter::multisort(
             $data,
             [
-                static fn ($item) => strtolower($item['category']),
+                static fn($item) => strtolower($item['category']),
                 'price',
             ],
             [SORT_ASC, SORT_DESC],
-            [SORT_STRING | SORT_FLAG_CASE, SORT_NUMERIC]
+            [SORT_STRING | SORT_FLAG_CASE, SORT_NUMERIC],
         );
     }
 }

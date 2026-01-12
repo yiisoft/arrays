@@ -32,6 +32,7 @@
         "yiisoft/strings": "^2.6"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.92.5",
         "bamarni/composer-bin-plugin": "^1.8.2",
         "phpunit/phpunit": "^10.5.48",
         "rector/rector": "^2.1.2",

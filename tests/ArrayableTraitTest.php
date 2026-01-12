@@ -63,7 +63,7 @@ final class ArrayableTraitTest extends TestCase
                     ],
                 ],
             ],
-            $object->toArray()
+            $object->toArray(),
         );
         $this->assertSame(
             [
@@ -72,7 +72,7 @@ final class ArrayableTraitTest extends TestCase
                     'b' => 2,
                 ],
             ],
-            $object->toArray(['nested'])
+            $object->toArray(['nested']),
         );
         $this->assertSame(
             [
@@ -80,13 +80,13 @@ final class ArrayableTraitTest extends TestCase
                     'a' => 1,
                 ],
             ],
-            $object->toArray(['nested.a'])
+            $object->toArray(['nested.a']),
         );
         $this->assertSame(
             [
                 'z' => 3,
             ],
-            $object->toArray([''], ['z'])
+            $object->toArray([''], ['z']),
         );
         $this->assertSame(
             [
@@ -94,7 +94,7 @@ final class ArrayableTraitTest extends TestCase
                     'A' => 42,
                 ],
             ],
-            $object->toArray([''], ['some.A'], true)
+            $object->toArray([''], ['some.A'], true),
         );
         $this->assertSame(
             [
@@ -107,7 +107,7 @@ final class ArrayableTraitTest extends TestCase
                     ],
                 ],
             ],
-            $object->toArray([''], ['some'], false)
+            $object->toArray([''], ['some'], false),
         );
         $this->assertSame(
             [
@@ -119,7 +119,7 @@ final class ArrayableTraitTest extends TestCase
                     ],
                 ],
             ],
-            $object->toArray([''], ['some.A', 'some.C'])
+            $object->toArray([''], ['some.A', 'some.C']),
         );
         $this->assertSame(
             [
@@ -130,7 +130,7 @@ final class ArrayableTraitTest extends TestCase
                     ],
                 ],
             ],
-            $object->toArray([''], ['some.A', 'some.C.C2'])
+            $object->toArray([''], ['some.A', 'some.C.C2']),
         );
         $this->assertSame(
             [
@@ -140,7 +140,7 @@ final class ArrayableTraitTest extends TestCase
                     ],
                 ],
             ],
-            $object->toArray(['nested2.X.a'])
+            $object->toArray(['nested2.X.a']),
         );
         $this->assertSame(
             [
@@ -153,7 +153,7 @@ final class ArrayableTraitTest extends TestCase
                     ],
                 ],
             ],
-            $object->toArray(['nested2.Y.a'])
+            $object->toArray(['nested2.Y.a']),
         );
         $this->assertSame(
             [
@@ -162,7 +162,7 @@ final class ArrayableTraitTest extends TestCase
                     'A' => 42,
                 ],
             ],
-            $object->toArray([''], ['z', 'some.A'])
+            $object->toArray([''], ['z', 'some.A']),
         );
         $this->assertSame(
             [
@@ -172,7 +172,7 @@ final class ArrayableTraitTest extends TestCase
                     ],
                 ],
             ],
-            $object->toArray(['specific./x.a'])
+            $object->toArray(['specific./x.a']),
         );
     }
 }

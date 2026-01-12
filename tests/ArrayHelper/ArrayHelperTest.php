@@ -27,14 +27,14 @@ final class ArrayHelperTest extends TestCase
                 'Bob' => 'Dylan',
                 'Mick' => 'Jagger',
             ],
-            $array
+            $array,
         );
         $this->assertEquals(
             [
                 'Michael' => 'Jackson',
                 'Janet' => 'Jackson',
             ],
-            $removed
+            $removed,
         );
     }
 
@@ -56,7 +56,7 @@ final class ArrayHelperTest extends TestCase
                 'Mick' => 'Jagger',
                 'Janet' => 'Jackson',
             ],
-            $array
+            $array,
         );
         $this->assertEquals([], $removed);
     }

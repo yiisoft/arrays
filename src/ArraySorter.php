@@ -11,6 +11,10 @@ use function array_multisort;
 use function count;
 use function is_array;
 
+use const SORT_ASC;
+use const SORT_NUMERIC;
+use const SORT_REGULAR;
+
 final class ArraySorter
 {
     /**
@@ -57,7 +61,7 @@ final class ArraySorter
         array &$array,
         array|Closure|string $key,
         array|int $direction = SORT_ASC,
-        array|int $sortFlag = SORT_REGULAR
+        array|int $sortFlag = SORT_REGULAR,
     ): void {
         $count = count($array);
         if ($count === 0) {

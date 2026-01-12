@@ -2,7 +2,7 @@
 
 ## 3.2.2 under development
 
-- no changes in this release.
+- Enh #175: Explicitly import functions and constants in "use" section (@mspirkov)
 
 ## 3.2.1 November 26, 2025
 

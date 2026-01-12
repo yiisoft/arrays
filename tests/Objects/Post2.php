@@ -10,14 +10,14 @@ final class Post2
     public string $content = 'test';
     private string $secret = 's';
 
-    public function getSecret(): string
-    {
-        return $this->secret;
-    }
-
     /** @noinspection MagicMethodsValidityInspection */
     public function __get($name)
     {
         return $this->$name;
+    }
+
+    public function getSecret(): string
+    {
+        return $this->secret;
     }
 }

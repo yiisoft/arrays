@@ -155,31 +155,6 @@ trait ArrayableTrait
     }
 
     /**
-     * @param string[] $fields
-     * @param string[] $expand
-     */
-    private function filterAndExpand(array $array, array $fields = [], array $expand = []): array
-    {
-        $data = [];
-        $rootFields = $this->extractRootFields($fields);
-        $rootExpand = $this->extractRootFields($expand);
-        foreach (array_merge($rootFields, $rootExpand) as $field) {
-            if (array_key_exists($field, $array)) {
-                $attribute = $array[$field];
-                $nestedFields = $this->extractFieldsFor($fields, $field);
-                $nestedExpand = $this->extractFieldsFor($expand, $field);
-                if ($attribute instanceof ArrayableInterface) {
-                    $attribute = $attribute->toArray($nestedFields, $nestedExpand);
-                } elseif (is_array($attribute) && ($nestedExpand || $nestedFields)) {
-                    $attribute = $this->filterAndExpand($attribute, $nestedFields, $nestedExpand);
-                }
-                $data[$field] = $attribute;
-            }
-        }
-        return $data;
-    }
-
-    /**
      * Extracts the root field names from nested fields.
      * Nested fields are separated with dots (.). e.g: "item.id"
      * The previous example would extract "item".
@@ -272,5 +247,30 @@ trait ArrayableTrait
         }
 
         return $result;
+    }
+
+    /**
+     * @param string[] $fields
+     * @param string[] $expand
+     */
+    private function filterAndExpand(array $array, array $fields = [], array $expand = []): array
+    {
+        $data = [];
+        $rootFields = $this->extractRootFields($fields);
+        $rootExpand = $this->extractRootFields($expand);
+        foreach (array_merge($rootFields, $rootExpand) as $field) {
+            if (array_key_exists($field, $array)) {
+                $attribute = $array[$field];
+                $nestedFields = $this->extractFieldsFor($fields, $field);
+                $nestedExpand = $this->extractFieldsFor($expand, $field);
+                if ($attribute instanceof ArrayableInterface) {
+                    $attribute = $attribute->toArray($nestedFields, $nestedExpand);
+                } elseif (is_array($attribute) && ($nestedExpand || $nestedFields)) {
+                    $attribute = $this->filterAndExpand($attribute, $nestedFields, $nestedExpand);
+                }
+                $data[$field] = $attribute;
+            }
+        }
+        return $data;
     }
 }

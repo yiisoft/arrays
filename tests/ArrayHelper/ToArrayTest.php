@@ -44,8 +44,8 @@ final class ToArrayTest extends TestCase
                 [
                     $object1,
                     $object2,
-                ]
-            )
+                ],
+            ),
         );
 
         $object = new Post2();
@@ -63,10 +63,10 @@ final class ToArrayTest extends TestCase
                         'id',
                         'secret',
                         '_content' => 'content',
-                        'length' => fn (Post2 $post) => strlen($post->content),
+                        'length' => fn(Post2 $post) => strlen($post->content),
                     ],
-                ]
-            )
+                ],
+            ),
         );
 
         $object = new Post3();
@@ -79,7 +79,7 @@ final class ToArrayTest extends TestCase
                     'content' => 'test',
                 ],
             ],
-            ArrayHelper::toArray($object)
+            ArrayHelper::toArray($object),
         );
 
         //recursive with attributes of object and subobject
@@ -98,14 +98,14 @@ final class ToArrayTest extends TestCase
                     $object::class => [
                         'id',
                         'subObject',
-                        'id_plus_1' => static fn ($post) => $post->id + 1,
+                        'id_plus_1' => static fn($post) => $post->id + 1,
                     ],
                     $object->subObject::class => [
                         'id',
-                        'id_plus_1' => static fn ($post) => $post->id + 1,
+                        'id_plus_1' => static fn($post) => $post->id + 1,
                     ],
-                ]
-            )
+                ],
+            ),
         );
 
         //recursive with attributes of subobject only
@@ -122,10 +122,10 @@ final class ToArrayTest extends TestCase
                 [
                     $object->subObject::class => [
                         'id',
-                        'id_plus_1' => static fn ($post) => $post->id + 1,
+                        'id_plus_1' => static fn($post) => $post->id + 1,
                     ],
-                ]
-            )
+                ],
+            ),
         );
 
         $this->assertEquals(
@@ -136,7 +136,7 @@ final class ToArrayTest extends TestCase
                     'b' => 2,
                 ],
             ],
-            ArrayHelper::toArray(new ObjectWithNestedArrayableObject())
+            ArrayHelper::toArray(new ObjectWithNestedArrayableObject()),
         );
     }
 
