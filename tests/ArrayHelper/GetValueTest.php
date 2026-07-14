@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
+use AllowDynamicProperties;
 use ArrayObject;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -234,6 +235,33 @@ final class GetValueTest extends TestCase
         $object = new StaticObject();
         $this->assertSame(1, ArrayHelper::getValue($object, 'a'));
         $this->assertSame(2, ArrayHelper::getValueByPath($object, 'nested.b'));
+    }
+
+    public function testStaticPropertyTakesPrecedenceOverDynamicProperty(): void
+    {
+        $object = new #[AllowDynamicProperties] class {
+            public static string $value = 'static';
+        };
+
+        set_error_handler(static fn(): bool => true);
+        $object->value = 'dynamic';
+        restore_error_handler();
+
+        $this->assertSame('static', ArrayHelper::getValue($object, 'value'));
+    }
+
+    public function testStaticPropertyTakesPrecedenceOverMagicProperty(): void
+    {
+        $object = new class {
+            public static string $value = 'static';
+
+            public function __get(string $name): string
+            {
+                return 'magic';
+            }
+        };
+
+        $this->assertSame('static', ArrayHelper::getValue($object, 'value'));
     }
 
     public function testGetUndefinedPropertyFromObject(): void

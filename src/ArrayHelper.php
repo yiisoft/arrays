@@ -6,6 +6,9 @@ namespace Yiisoft\Arrays;
 
 use Closure;
 use InvalidArgumentException;
+use ReflectionClass;
+use ReflectionProperty;
+use stdClass;
 use Throwable;
 use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Strings\StringHelper;
@@ -31,6 +34,7 @@ use function is_float;
 use function is_int;
 use function is_object;
 use function is_string;
+use function property_exists;
 use function str_ends_with;
 use function strcasecmp;
 use function substr;
@@ -1330,26 +1334,42 @@ final class ArrayHelper
                 return $array->$method();
             }
 
-            if (array_key_exists($key, get_object_vars($array))) {
+            if ($array instanceof stdClass) {
                 /** @psalm-suppress MixedPropertyFetch */
                 return $array->$key;
             }
 
-            try {
-                /** @psalm-suppress MixedPropertyFetch */
-                return $array::$$key;
-            } catch (Throwable) {
-                /**
-                 * This is expected to fail if the property does not exist, or __get() is not implemented.
-                 * It is not reliably possible to check whether a property is accessible beforehand.
-                 *
-                 * @psalm-suppress MixedPropertyFetch
-                 */
-                return $array->$key;
+            if (property_exists($array::class, $key) && self::isStaticProperty($array, $key)) {
+                try {
+                    /** @psalm-suppress MixedPropertyFetch */
+                    return $array::$$key;
+                } catch (Throwable) {
+                    // Fall back to the instance property if the static property is not accessible or initialized.
+                }
             }
+
+            /** @psalm-suppress MixedPropertyFetch */
+            return $array->$key;
         }
 
         return $default;
+    }
+
+    private static function isStaticProperty(object $object, string $key): bool
+    {
+        /** @var array<class-string, array<string, true>> $staticProperties */
+        static $staticProperties = [];
+
+        $class = $object::class;
+        if (!isset($staticProperties[$class])) {
+            $staticProperties[$class] = [];
+
+            foreach ((new ReflectionClass($class))->getProperties(ReflectionProperty::IS_STATIC) as $property) {
+                $staticProperties[$class][$property->getName()] = true;
+            }
+        }
+
+        return isset($staticProperties[$class][$key]);
     }
 
     private static function rootKeyExists(array $array, float|int|string $key, bool $caseSensitive): bool
