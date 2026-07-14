@@ -19,8 +19,8 @@ final class ArrayHelperBench
     private array $testNestedArray = [];
     private array $testObjectArray = [];
     private array $testLargeArray = [];
-
     private array $testLargeObjectArray = [];
+    
     private TestArrayable $testArrayable;
     private TestArrayAccess $testArrayAccess;
 
