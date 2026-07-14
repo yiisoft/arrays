@@ -35,6 +35,7 @@ use function is_int;
 use function is_object;
 use function is_string;
 use function property_exists;
+use function reset;
 use function str_ends_with;
 use function strcasecmp;
 use function substr;
@@ -716,6 +717,27 @@ final class ArrayHelper
     ): array {
         $result = [];
         $groups = (array) $groups;
+
+        if ($key === null && count($groups) === 1) {
+            /** @var Closure|string $group */
+            $group = reset($groups);
+
+            /** @var mixed $element */
+            foreach ($array as $element) {
+                if (!is_array($element) && !is_object($element)) {
+                    throw new InvalidArgumentException(
+                        'index() can not get value from ' . gettype($element)
+                        . '. The $array should be either multidimensional array or an array of objects.',
+                    );
+                }
+
+                $value = self::normalizeArrayKey(self::getValue($element, $group));
+                /** @psalm-suppress MixedArrayAssignment */
+                $result[$value][] = $element;
+            }
+
+            return $result;
+        }
 
         /** @var mixed $element */
         foreach ($array as $element) {
