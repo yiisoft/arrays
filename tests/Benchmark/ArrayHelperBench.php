@@ -20,7 +20,7 @@ final class ArrayHelperBench
     private array $testObjectArray = [];
     private array $testLargeArray = [];
     private array $testLargeObjectArray = [];
-    
+
     private TestArrayable $testArrayable;
     private TestArrayAccess $testArrayAccess;
 
@@ -476,13 +476,9 @@ final class TestArrayAccess
 {
     use ArrayAccessTrait;
 
-    public array $data;
+    public array $data = [
+        'key1' => 'value1',
+        'key2' => 'value2',
+    ];
 
-    public function __construct()
-    {
-        $this->data = [
-            'key1' => 'value1',
-            'key2' => 'value2',
-        ];
-    }
 }

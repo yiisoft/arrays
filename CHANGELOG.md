@@ -4,6 +4,7 @@
 
 - Enh #175: Explicitly import functions and constants in "use" section (@mspirkov)
 - Enh #176: Remove unnecessary files from Composer package (@mspirkov)
+- Enh #182: Improve performance of `ArrayHelper::group()` on arrays of objects (@samdark)
 
 ## 3.2.1 November 26, 2025
 

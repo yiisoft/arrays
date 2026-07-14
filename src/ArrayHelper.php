@@ -1330,6 +1330,11 @@ final class ArrayHelper
                 return $array->$method();
             }
 
+            if (array_key_exists($key, get_object_vars($array))) {
+                /** @psalm-suppress MixedPropertyFetch */
+                return $array->$key;
+            }
+
             try {
                 /** @psalm-suppress MixedPropertyFetch */
                 return $array::$$key;
