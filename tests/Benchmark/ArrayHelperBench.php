@@ -19,6 +19,8 @@ final class ArrayHelperBench
     private array $testNestedArray = [];
     private array $testObjectArray = [];
     private array $testLargeArray = [];
+
+    private array $testLargeObjectArray = [];
     private TestArrayable $testArrayable;
     private TestArrayAccess $testArrayAccess;
 
@@ -54,6 +56,13 @@ final class ArrayHelperBench
                 'value' => $i * 10,
                 'name' => 'Item ' . $i,
                 'html' => '<p>Item ' . $i . '</p>',
+            ];
+        }
+
+        $this->testLargeObjectArray = [];
+        for ($i = 0; $i < 100; $i++) {
+            $this->testLargeObjectArray[] = (object) [
+                'category' => $i % 3 === 0 ? 'A' : ($i % 3 === 1 ? 'B' : 'C'),
             ];
         }
 
@@ -151,6 +160,15 @@ final class ArrayHelperBench
     public function benchGroup(): void
     {
         ArrayHelper::group($this->testLargeArray, 'category');
+    }
+
+    /**
+     * @Revs(1000)
+     * @Iterations(5)
+     */
+    public function benchGroupArrayOfObjects(): void
+    {
+        ArrayHelper::group($this->testLargeObjectArray, 'category');
     }
 
     /**
@@ -457,6 +475,8 @@ final class TestArrayable implements ArrayableInterface
 final class TestArrayAccess
 {
     use ArrayAccessTrait;
+
+    public array $data;
 
     public function __construct()
     {
