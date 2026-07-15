@@ -263,6 +263,20 @@ final class GetValueTest extends TestCase
         $this->assertSame('static', ArrayHelper::getValue($object, 'value'));
     }
 
+    public function testUninitializedStaticPropertyFallsBackToMagicProperty(): void
+    {
+        $object = new class {
+            public static string $value;
+
+            public function __get(string $name): string
+            {
+                return 'magic';
+            }
+        };
+
+        $this->assertSame('magic', ArrayHelper::getValue($object, 'value'));
+    }
+
     public function testGetUndefinedPropertyFromObject(): void
     {
         $object = new stdClass();
