@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Arrays\Tests\ArrayHelper;
 
-use AllowDynamicProperties;
 use ArrayObject;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -239,7 +238,7 @@ final class GetValueTest extends TestCase
 
     public function testStaticPropertyTakesPrecedenceOverDynamicProperty(): void
     {
-        $object = new #[AllowDynamicProperties] class {
+        $object = new class {
             public static string $value = 'static';
         };
 
