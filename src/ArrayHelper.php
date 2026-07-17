@@ -31,6 +31,8 @@ use function is_float;
 use function is_int;
 use function is_object;
 use function is_string;
+use function reset;
+use function str_contains;
 use function str_ends_with;
 use function strcasecmp;
 use function substr;
@@ -713,6 +715,27 @@ final class ArrayHelper
         $result = [];
         $groups = (array) $groups;
 
+        if ($key === null && count($groups) === 1) {
+            /** @var Closure|string $group */
+            $group = reset($groups);
+
+            /** @var mixed $element */
+            foreach ($array as $element) {
+                if (!is_array($element) && !is_object($element)) {
+                    throw new InvalidArgumentException(
+                        'index() can not get value from ' . gettype($element)
+                        . '. The $array should be either multidimensional array or an array of objects.',
+                    );
+                }
+
+                $value = self::normalizeArrayKey(self::getValue($element, $group));
+                /** @psalm-suppress MixedArrayAssignment */
+                $result[$value][] = $element;
+            }
+
+            return $result;
+        }
+
         /** @var mixed $element */
         foreach ($array as $element) {
             if (!is_array($element) && !is_object($element)) {
@@ -1330,18 +1353,26 @@ final class ArrayHelper
                 return $array->$method();
             }
 
+            /** @var array<class-string, array<string, true>> $notStaticProperties */
+            static $notStaticProperties = [];
+
+            $class = $array::class;
+            if (isset($notStaticProperties[$class][$key])) {
+                /** @psalm-suppress MixedPropertyFetch */
+                return $array->$key;
+            }
+
             try {
                 /** @psalm-suppress MixedPropertyFetch */
                 return $array::$$key;
-            } catch (Throwable) {
-                /**
-                 * This is expected to fail if the property does not exist, or __get() is not implemented.
-                 * It is not reliably possible to check whether a property is accessible beforehand.
-                 *
-                 * @psalm-suppress MixedPropertyFetch
-                 */
-                return $array->$key;
+            } catch (Throwable $e) {
+                if (!str_contains($e->getMessage(), 'must not be accessed before initialization')) {
+                    $notStaticProperties[$class][$key] = true;
+                }
             }
+
+            /** @psalm-suppress MixedPropertyFetch */
+            return $array->$key;
         }
 
         return $default;
