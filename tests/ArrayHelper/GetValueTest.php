@@ -236,6 +236,15 @@ final class GetValueTest extends TestCase
         $this->assertSame(2, ArrayHelper::getValueByPath($object, 'nested.b'));
     }
 
+    public function testGetValueFromStaticPropertyOfStdClassSubclass(): void
+    {
+        $object = new class extends stdClass {
+            public static string $value = 'test';
+        };
+
+        $this->assertSame('test', ArrayHelper::getValue($object, 'value'));
+    }
+
     public function testStaticPropertyTakesPrecedenceOverDynamicProperty(): void
     {
         $object = new class {
@@ -275,6 +284,24 @@ final class GetValueTest extends TestCase
         };
 
         $this->assertSame('magic', ArrayHelper::getValue($object, 'value'));
+    }
+
+    public function testInitializedStaticPropertyIsNotSkippedAfterUninitializedFallback(): void
+    {
+        $object = new class {
+            public static string $value;
+
+            public function __get(string $name): string
+            {
+                return 'magic';
+            }
+        };
+
+        $this->assertSame('magic', ArrayHelper::getValue($object, 'value'));
+
+        $object::$value = 'static';
+
+        $this->assertSame('static', ArrayHelper::getValue($object, 'value'));
     }
 
     public function testGetUndefinedPropertyFromObject(): void
