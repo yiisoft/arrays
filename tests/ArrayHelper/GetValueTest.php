@@ -236,6 +236,74 @@ final class GetValueTest extends TestCase
         $this->assertSame(2, ArrayHelper::getValueByPath($object, 'nested.b'));
     }
 
+    public function testGetValueFromStaticPropertyOfStdClassSubclass(): void
+    {
+        $object = new class extends stdClass {
+            public static string $value = 'test';
+        };
+
+        $this->assertSame('test', ArrayHelper::getValue($object, 'value'));
+    }
+
+    public function testStaticPropertyTakesPrecedenceOverDynamicProperty(): void
+    {
+        $object = new class {
+            public static string $value = 'static';
+        };
+
+        set_error_handler(static fn(): bool => true);
+        $object->value = 'dynamic';
+        restore_error_handler();
+
+        $this->assertSame('static', ArrayHelper::getValue($object, 'value'));
+    }
+
+    public function testStaticPropertyTakesPrecedenceOverMagicProperty(): void
+    {
+        $object = new class {
+            public static string $value = 'static';
+
+            public function __get(string $name): string
+            {
+                return 'magic';
+            }
+        };
+
+        $this->assertSame('static', ArrayHelper::getValue($object, 'value'));
+    }
+
+    public function testUninitializedStaticPropertyFallsBackToMagicProperty(): void
+    {
+        $object = new class {
+            public static string $value;
+
+            public function __get(string $name): string
+            {
+                return 'magic';
+            }
+        };
+
+        $this->assertSame('magic', ArrayHelper::getValue($object, 'value'));
+    }
+
+    public function testInitializedStaticPropertyIsNotSkippedAfterUninitializedFallback(): void
+    {
+        $object = new class {
+            public static string $value;
+
+            public function __get(string $name): string
+            {
+                return 'magic';
+            }
+        };
+
+        $this->assertSame('magic', ArrayHelper::getValue($object, 'value'));
+
+        $object::$value = 'static';
+
+        $this->assertSame('static', ArrayHelper::getValue($object, 'value'));
+    }
+
     public function testGetUndefinedPropertyFromObject(): void
     {
         $object = new stdClass();
