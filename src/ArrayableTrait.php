@@ -77,10 +77,6 @@ trait ArrayableTrait
      * @see toArray()
      *
      * @psalm-return FieldsArray
-     *
-     * @infection-ignore-all Infection's PublicVisibility mutator makes this required
-     * ArrayableInterface method protected, which violates the interface contract before
-     * the test suite can execute.
      */
     public function fields(): array
     {
@@ -108,10 +104,6 @@ trait ArrayableTrait
      * @see fields()
      *
      * @psalm-return FieldsArray
-     *
-     * @infection-ignore-all Infection's PublicVisibility mutator makes this required
-     * ArrayableInterface method protected, which violates the interface contract before
-     * the test suite can execute.
      */
     public function extraFields(): array
     {
@@ -140,10 +132,6 @@ trait ArrayableTrait
      * @param bool $recursive Whether to recursively return array representation of embedded objects.
      *
      * @return array The array representation of the object.
-     *
-     * @infection-ignore-all Infection's PublicVisibility mutator makes this required
-     * ArrayableInterface method protected, which violates the interface contract before
-     * the test suite can execute.
      */
     public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array
     {

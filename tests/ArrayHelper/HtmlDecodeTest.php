@@ -66,4 +66,13 @@ final class HtmlDecodeTest extends TestCase
         $this->assertSame($expected, ArrayHelper::htmlDecode($array, false));
         $this->assertSame($expected, ArrayHelper::htmlDecode(new IterableObject($array), false));
     }
+
+    public function testNormalizesNonIntegerIterableKeys(): void
+    {
+        $data = static function (): iterable {
+            yield 1.5 => '&lt;';
+        };
+
+        $this->assertSame(['1.5' => '<'], ArrayHelper::htmlDecode($data()));
+    }
 }

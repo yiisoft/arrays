@@ -922,11 +922,8 @@ final class ArrayHelper
             /** @psalm-var non-empty-array<array-key,float|int|string> $key */
 
             foreach (self::getExistsKeys($array, array_shift($key), $caseSensitive) as $existKey) {
-                if (!is_array($array)) {
-                    return false;
-                }
-                $array = self::getRootValue($array, $existKey, null);
-                if (is_array($array) && self::keyExists($array, $key, $caseSensitive)) {
+                $value = self::getRootValue($array, $existKey, null);
+                if (is_array($value) && self::keyExists($value, $key, $caseSensitive)) {
                     return true;
                 }
             }
@@ -1013,7 +1010,9 @@ final class ArrayHelper
     {
         $decoded = [];
         foreach ($data as $key => $value) {
-            /** @var array-key $key */
+            if (!is_int($key)) {
+                $key = (string) $key;
+            }
             if (!$valuesOnly && is_string($key)) {
                 $key = htmlspecialchars_decode($key, ENT_QUOTES);
             }
