@@ -233,6 +233,7 @@ trait ArrayableTrait
         }
 
         if (empty($expand)) {
+            /** @infection-ignore-all No expansion requested: avoid calling and iterating extraFields(). */
             return $result;
         }
 

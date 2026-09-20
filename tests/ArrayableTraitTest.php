@@ -5,8 +5,38 @@ declare(strict_types=1);
 namespace Yiisoft\Arrays\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Arrays\ArrayableInterface;
+use Yiisoft\Arrays\ArrayableTrait;
 use Yiisoft\Arrays\Tests\Objects\HardArrayableObject;
 use Yiisoft\Arrays\Tests\Objects\SimpleArrayableObject;
+
+class ArrayableTraitBaseTestObject implements ArrayableInterface
+{
+    use ArrayableTrait;
+
+    public function fields(): array
+    {
+        return [];
+    }
+}
+
+final class ArrayableTraitChildTestObject extends ArrayableTraitBaseTestObject
+{
+    public function rootFields(array $fields): array
+    {
+        return $this->extractRootFields($fields);
+    }
+
+    public function nestedFields(array $fields, string $root): array
+    {
+        return $this->extractFieldsFor($fields, $root);
+    }
+
+    public function resolvedFields(array $fields, array $expand): array
+    {
+        return $this->resolveFields($fields, $expand);
+    }
+}
 
 final class ArrayableTraitTest extends TestCase
 {
@@ -23,6 +53,15 @@ final class ArrayableTraitTest extends TestCase
     {
         $object = new SimpleArrayableObject();
         $this->assertSame([], $object->extraFields());
+    }
+
+    public function testTraitFieldHelpersRemainExtensible(): void
+    {
+        $object = new ArrayableTraitChildTestObject();
+
+        $this->assertSame(['item'], $object->rootFields(['item.id', 'item.name']));
+        $this->assertSame(['id'], $object->nestedFields(['item.id', 'item.id'], 'item'));
+        $this->assertSame([], $object->resolvedFields([], []));
     }
 
     public function testToArray(): void

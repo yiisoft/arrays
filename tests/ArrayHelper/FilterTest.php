@@ -158,6 +158,19 @@ final class FilterTest extends TestCase
                 ],
                 ['A.D', '!A.D.E.X'],
             ],
+            'excludeNonExistingIntermediatePath' => [
+                [
+                    'A' => [
+                        'B' => 1,
+                        'C' => 2,
+                        'D' => [
+                            'E' => 1,
+                            'F' => 2,
+                        ],
+                    ],
+                ],
+                ['A', '!A.D.X.E'],
+            ],
         ];
     }
 

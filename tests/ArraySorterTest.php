@@ -25,6 +25,10 @@ final class ArraySorterTest extends TestCase
         ArraySorter::multisort($dataEmpty, '');
         $this->assertEquals([], $dataEmpty);
 
+        $data = [['name' => 'a']];
+        ArraySorter::multisort($data, []);
+        $this->assertSame([['name' => 'a']], $data);
+
         // single key
         $array = [
             ['name' => 'b', 'age' => 3],
@@ -99,6 +103,18 @@ final class ArraySorterTest extends TestCase
         $this->assertEquals($obj1, $models[0]);
         $this->assertEquals($obj2, $models[1]);
         $this->assertEquals($obj3, $models[2]);
+    }
+
+    public function testMultisortPreservesOrderForEqualKeys(): void
+    {
+        $array = [
+            ['name' => 'same', 'id' => 1],
+            ['name' => 'same', 'id' => 2],
+        ];
+
+        ArraySorter::multisort($array, 'name');
+
+        $this->assertSame([1, 2], array_column($array, 'id'));
     }
 
     public function testMultisortUseSort(): void

@@ -178,4 +178,48 @@ final class MapTest extends TestCase
         $this->assertSame($expected, ArrayHelper::map($array, $from, $to, $group));
         $this->assertSame($expected, ArrayHelper::map(new IterableObject($array), $from, $to, $group));
     }
+
+    public function testMapCastsNonStringKeysAndValues(): void
+    {
+        $array = [
+            ['id' => 1, 'name' => 10],
+            ['id' => 2, 'name' => 20],
+        ];
+
+        $this->assertSame([1 => 10, 2 => 20], ArrayHelper::map($array, 'id', 'name'));
+    }
+
+    public function testMapUsesArrayColumnSemanticsForMissingColumns(): void
+    {
+        $array = [
+            ['id' => 1, 'name' => 'first'],
+            ['name' => 'second'],
+        ];
+
+        $this->assertSame([1 => 'first', 2 => 'second'], ArrayHelper::map($array, 'id', 'name'));
+    }
+
+    public function testMapPreservesFloatKeysReturnedByClosures(): void
+    {
+        $array = [['name' => 'first'], ['name' => 'second']];
+
+        $this->assertSame(
+            ['1.2' => 'first', '1.8' => 'second'],
+            ArrayHelper::map(
+                $array,
+                static fn(array $row): float => $row['name'] === 'first' ? 1.2 : 1.8,
+                'name',
+            ),
+        );
+
+        $this->assertSame(
+            ['1.2' => ['2.4' => 'first'], '1.8' => ['2.4' => 'second']],
+            ArrayHelper::map(
+                $array,
+                static fn(array $row): float => 2.4,
+                'name',
+                static fn(array $row): float => $row['name'] === 'first' ? 1.2 : 1.8,
+            ),
+        );
+    }
 }

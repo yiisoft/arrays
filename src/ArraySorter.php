@@ -65,12 +65,14 @@ final class ArraySorter
     ): void {
         $count = count($array);
         if ($count === 0) {
+            /** @infection-ignore-all Empty input needs no key extraction or sorting work. */
             return;
         }
 
         $keys = is_array($key) ? $key : [$key];
         $keysCount = count($keys);
         if ($keysCount === 0) {
+            /** @infection-ignore-all An empty key list is a no-op; avoid calling array_multisort without sort keys. */
             return;
         }
 
@@ -90,6 +92,7 @@ final class ArraySorter
         }
 
         // Add tie-breaker only for non-empty arrays
+        /** @infection-ignore-all The tie-breaker preserves input order; its monotonic values are intentional. */
         if ($count > 0) {
             $tieBreaker = [];
             for ($i = 0; $i < $count; $i++) {

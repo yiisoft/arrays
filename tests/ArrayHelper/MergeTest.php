@@ -101,6 +101,11 @@ final class MergeTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
+    public function testMergeKeepsDifferentIntegerValues(): void
+    {
+        $this->assertSame(['first', 'second'], ArrayHelper::merge(['first'], ['second']));
+    }
+
     public static function dataParametrizedMerge(): array
     {
         return [

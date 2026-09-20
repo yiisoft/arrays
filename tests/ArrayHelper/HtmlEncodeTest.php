@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Arrays\Tests\Objects\IterableObject;
 
+use function ini_get;
+use function ini_set;
+
 final class HtmlEncodeTest extends TestCase
 {
     public function testBase(): void
@@ -72,5 +75,22 @@ final class HtmlEncodeTest extends TestCase
 
         $this->assertEquals($expected, ArrayHelper::htmlEncode($array, false));
         $this->assertEquals($expected, ArrayHelper::htmlEncode(new IterableObject($array), false));
+    }
+
+    public function testExplicitEncodingIsUsed(): void
+    {
+        $this->assertSame(["\xE9"], ArrayHelper::htmlEncode(["\xE9"], true, 'ISO-8859-1'));
+    }
+
+    public function testDefaultEncodingUsesDefaultCharset(): void
+    {
+        $previous = ini_get('default_charset');
+        ini_set('default_charset', 'ISO-8859-1');
+
+        try {
+            $this->assertSame(["\xE9"], ArrayHelper::htmlEncode(["\xE9"]));
+        } finally {
+            ini_set('default_charset', $previous);
+        }
     }
 }

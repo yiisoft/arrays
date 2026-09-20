@@ -86,6 +86,7 @@ final class GetValueTest extends TestCase
             [['version', '1.0'], 'defaultValue', 'defaultValue'],
             [['post', 'author.name'], 'cebe'],
             [['post', ['author', ['profile.title']]], '1337'],
+            [['post', ['author'], 'id'], 'defaultValue', 'defaultValue'],
             ['42.7', null],
         ]);
     }
@@ -234,6 +235,11 @@ final class GetValueTest extends TestCase
         $object = new StaticObject();
         $this->assertSame(1, ArrayHelper::getValue($object, 'a'));
         $this->assertSame(2, ArrayHelper::getValueByPath($object, 'nested.b'));
+    }
+
+    public function testGetValueReturnsDefaultWhenAnIntermediateValueIsScalar(): void
+    {
+        $this->assertSame('default', ArrayHelper::getValue($this->array, ['post', 'id', 'value'], 'default'));
     }
 
     public function testGetUndefinedPropertyFromObject(): void

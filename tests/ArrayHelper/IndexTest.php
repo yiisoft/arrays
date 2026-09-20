@@ -230,6 +230,16 @@ final class IndexTest extends TestCase
         ArrayHelper::index($array, 'id');
     }
 
+    public function testInvalidIndexMessageIncludesValueTypeAndGuidance(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'index() can not get value from string. The $array should be either multidimensional array or an array of objects.',
+        );
+
+        ArrayHelper::index(['invalid'], 'id');
+    }
+
     public function testInvalidIndexInIterable(): void
     {
         $iterableObject = new IterableObject([

@@ -90,6 +90,24 @@ final class KeyAndPathExistsTest extends TestCase
         $this->assertSame($expected, ArrayHelper::pathExists($this->array, $key, $caseSensitive));
     }
 
+    public function testKeyAndPathExistenceIsCaseSensitiveByDefault(): void
+    {
+        $this->assertFalse(ArrayHelper::keyExists(['Name' => 'value'], 'name'));
+        $this->assertFalse(ArrayHelper::keyExists(['User' => ['Name' => 'value']], ['User', 'name']));
+        $this->assertFalse(ArrayHelper::pathExists(['User' => ['Name' => 'value']], 'user.name'));
+        $this->assertFalse(ArrayHelper::keyExists(['User' => 'value'], ['User', 'name']));
+        $this->assertTrue(ArrayHelper::keyExists(
+            ['User' => 'value', 'USER' => ['name' => 'value']],
+            ['user', 'name'],
+            false,
+        ));
+        $this->assertFalse(ArrayHelper::keyExists(
+            ['USER' => ['other' => 'value'], 'Something' => ['name' => 'value']],
+            ['user', 'name'],
+            false,
+        ));
+    }
+
     /**
      * @return array[] common test data for [[testKeyExists()]] and [[testPathExists()]]
      */
