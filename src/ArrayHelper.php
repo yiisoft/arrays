@@ -329,9 +329,7 @@ final class ArrayHelper
 
         while (count($keys) > 1) {
             $k = self::normalizeArrayKey(array_shift($keys));
-            if (!isset($array[$k])) {
-                $array[$k] = [];
-            }
+            $array[$k] ??= [];
             if (!is_array($array[$k])) {
                 $array[$k] = [$array[$k]];
             }

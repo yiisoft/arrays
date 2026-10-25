@@ -126,7 +126,6 @@ final class GetValueTest extends TestCase
         ArrayHelper::setValue($array, 'a.b.c', 'newValue');
         $this->assertEquals('newValue', ArrayHelper::getValue($array, 'a.b.c'));
 
-
         $array = [
             'a.b' => [
                 'c' => 'value1',

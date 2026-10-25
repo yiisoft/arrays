@@ -62,7 +62,6 @@ final class HtmlDecodeTest extends TestCase
             ],
         ];
 
-
         $this->assertSame($expected, ArrayHelper::htmlDecode($array, false));
         $this->assertSame($expected, ArrayHelper::htmlDecode(new IterableObject($array), false));
     }
