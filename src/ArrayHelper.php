@@ -777,7 +777,7 @@ final class ArrayHelper
      * @param bool $keepKeys Whether to maintain the array keys. If false, the resulting array
      * will be re-indexed with integers.
      *
-     * @return array<mixed> The list of column values.
+     * @return array<array-key, mixed> The list of column values.
      */
     public static function getColumn(iterable $array, Closure|string $name, bool $keepKeys = true): array
     {
@@ -840,7 +840,7 @@ final class ArrayHelper
      * @param Closure|string $to Key or property name to map to.
      * @param Closure|string|null $group Key or property to group the map.
      *
-     * @return array<mixed> Resulting map.
+     * @return array<array-key, mixed> Resulting map.
      */
     public static function map(
         iterable $array,
