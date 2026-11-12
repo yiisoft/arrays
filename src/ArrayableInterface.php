@@ -91,7 +91,7 @@ interface ArrayableInterface
      * will be returned.
      * @param bool $recursive Whether to recursively return array representation of embedded objects.
      *
-     * @return array<string, mixed> The array representation of the object.
+     * @return array<array-key, mixed> The array representation of the object.
      */
     public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array;
 }
