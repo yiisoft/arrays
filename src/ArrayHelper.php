@@ -80,7 +80,7 @@ final class ArrayHelper
      *
      * It is possible to provide default way of converting an object to an array for a specific class by implementing
      * {@see ArrayableInterface} in its class.
-     * @param array<string, array<int, string>|array<string, string|Closure>> $properties A mapping from object class names to the
+     * @param array<string, array<array-key, string|Closure>> $properties A mapping from object class names to the
      * properties that need to put into the resulting arrays. The properties specified for each class is an array of
      * the following format:
      *

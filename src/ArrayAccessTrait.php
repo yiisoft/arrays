@@ -60,7 +60,7 @@ trait ArrayAccessTrait
      *
      * @param TKey $offset The offset to retrieve element.
      *
-     * @return TValue The element at the offset, null if no element is found at the offset.
+     * @return TValue|null The element at the offset, null if no element is found at the offset.
      */
     public function offsetGet(mixed $offset): mixed
     {
