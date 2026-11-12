@@ -17,7 +17,7 @@ namespace Yiisoft\Arrays;
  * the result of {@see ArrayableInterface::toArray()}.
  *
  * @phpstan-type CallableFieldDefinition = callable(object, string): string
- * @phpstan-type FieldsArray = array<int, string>|array<string, string|CallableFieldDefinition>
+ * @phpstan-type FieldsArray = array<array-key, string|CallableFieldDefinition>
  */
 interface ArrayableInterface
 {
