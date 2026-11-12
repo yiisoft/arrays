@@ -15,10 +15,10 @@ use function count;
  * Note that `ArrayAccessTrait` requires the class using it contain a property named `data` which should be an array.
  * The data will be exposed by `ArrayAccessTrait` to support accessing the class object like an array.
  *
- * @property array $data
+ * @property array<array-key, mixed> $data
  *
- * @psalm-template TKey as array-key
- * @psalm-template TValue as mixed
+ * @template TKey as array-key
+ * @template TValue as mixed
  */
 trait ArrayAccessTrait
 {
@@ -27,7 +27,7 @@ trait ArrayAccessTrait
      * This method is required by the SPL interface {@see \IteratorAggregate}.
      * It will be implicitly called when you use `foreach` to traverse the collection.
      *
-     * @return ArrayIterator An iterator for traversing the cookies in the collection.
+     * @return ArrayIterator<array-key, mixed> An iterator for traversing the cookies in the collection.
      */
     public function getIterator(): ArrayIterator
     {
@@ -48,9 +48,7 @@ trait ArrayAccessTrait
     /**
      * This method is required by the interface {@see \ArrayAccess}.
      *
-     * @param mixed $offset The offset to check on.
-     *
-     * @psalm-param TKey $offset
+     * @param TKey $offset The offset to check on.
      */
     public function offsetExists(mixed $offset): bool
     {
@@ -60,12 +58,9 @@ trait ArrayAccessTrait
     /**
      * This method is required by the interface {@see \ArrayAccess}.
      *
-     * @param mixed $offset The offset to retrieve element.
+     * @param TKey $offset The offset to retrieve element.
      *
-     * @return mixed The element at the offset, null if no element is found at the offset.
-     *
-     * @psalm-param TKey $offset
-     * @psalm-return TValue
+     * @return TValue The element at the offset, null if no element is found at the offset.
      */
     public function offsetGet(mixed $offset): mixed
     {
@@ -75,11 +70,8 @@ trait ArrayAccessTrait
     /**
      * This method is required by the interface {@see \ArrayAccess}.
      *
-     * @param mixed $offset The offset to set element.
-     * @param mixed $value The element value.
-     *
-     * @psalm-param TKey|null $offset
-     * @psalm-param TValue $value
+     * @param TKey|null $offset The offset to set element.
+     * @param TValue $value The element value.
      */
     public function offsetSet(mixed $offset, mixed $value): void
     {
@@ -93,9 +85,7 @@ trait ArrayAccessTrait
     /**
      * This method is required by the interface {@see \ArrayAccess}.
      *
-     * @param mixed $offset The offset to unset element.
-     *
-     * @psalm-param TKey $offset
+     * @param TKey $offset The offset to unset element.
      */
     public function offsetUnset(mixed $offset): void
     {

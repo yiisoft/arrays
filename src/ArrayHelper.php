@@ -42,8 +42,8 @@ use const ENT_SUBSTITUTE;
 /**
  * Yii array helper provides static methods allowing you to deal with arrays more efficiently.
  *
- * @psalm-type ArrayKey = float|int|string|array<array-key,float|int|string>
- * @psalm-type ArrayPath = float|int|string|array<array-key,float|int|string|array<array-key,float|int|string>>
+ * @phpstan-type ArrayKey = float|int|string|array<array-key,float|int|string>
+ * @phpstan-type ArrayPath = float|int|string|array<array-key,float|int|string|array<array-key,float|int|string>>
  */
 final class ArrayHelper
 {
@@ -80,15 +80,16 @@ final class ArrayHelper
      *
      * It is possible to provide default way of converting an object to an array for a specific class by implementing
      * {@see ArrayableInterface} in its class.
-     * @param array $properties A mapping from object class names to the properties that need to put into
-     * the resulting arrays. The properties specified for each class is an array of the following format:
+     * @param array<string, array<int|string, string|Closure>> $properties A mapping from object class names to the
+     * properties that need to put into the resulting arrays. The properties specified for each class is an array of
+     * the following format:
      *
      * - A field name to include as is.
      * - A key-value pair of desired array key name and model column name to take value from.
      * - A key-value pair of desired array key name and a callback which returns value.
      * @param bool $recursive Whether to recursively convert properties which are objects into arrays.
      *
-     * @return array The array representation of the object.
+     * @return array<array-key, mixed> The array representation of the object.
      */
     public static function toArray(mixed $object, array $properties = [], bool $recursive = true): array
     {
@@ -131,6 +132,7 @@ final class ArrayHelper
                 /**
                  * @var string $key
                  */
+                // @phpstan-ignore foreach.nonIterable
                 foreach ($object as $key => $value) {
                     $result[$key] = $value;
                 }
@@ -148,9 +150,9 @@ final class ArrayHelper
      * conducted if both arrays have an element of array type and are having the same key. For integer-keyed elements,
      * the elements from the latter array will be appended to the former array.
      *
-     * @param array ...$arrays Arrays to be merged.
+     * @param array<array-key, mixed> ...$arrays Arrays to be merged.
      *
-     * @return array The merged array (the original arrays are not changed).
+     * @return array<array-key, mixed> The merged array (the original arrays are not changed).
      */
     public static function merge(...$arrays): array
     {
@@ -163,10 +165,10 @@ final class ArrayHelper
      * Recursive merging will be conducted if both arrays have an element of array type and are having the same key.
      * For integer-keyed elements, the elements from the latter array will be appended to the former array.
      *
-     * @param array[] $arrays Arrays to be merged.
+     * @param array<array-key, mixed>[] $arrays Arrays to be merged.
      * @param int|null $depth The maximum depth that for recursive merging. `Null` means unlimited depth.
      *
-     * @return array The merged array (the original arrays are not changed).
+     * @return array<array-key, mixed> The merged array (the original arrays are not changed).
      */
     public static function parametrizedMerge(array $arrays, ?int $depth): array
     {
@@ -195,15 +197,13 @@ final class ArrayHelper
      * $value = \Yiisoft\Arrays\ArrayHelper::getValue($versions, ['1.0', 'date']);
      * ```
      *
-     * @param array|object $array Array or object to extract value from.
-     * @param array|Closure|float|int|string $key Key name of the array element,
+     * @param array<array-key, mixed>|object $array Array or object to extract value from.
+     * @param ArrayKey|Closure $key Key name of the array element,
      * an array of keys, object property name, object method like `getName()`, or an anonymous function
      * returning the value. The anonymous function signature should be:
      * `function($array, $defaultValue)`.
      * @param mixed $default The default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
-     *
-     * @psalm-param ArrayKey|Closure $key
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
@@ -255,16 +255,14 @@ final class ArrayHelper
      * $value = \Yiisoft\Arrays\ArrayHelper::getValue($versions, ['1.0', 'date']);
      * ```
      *
-     * @param array|object $array Array or object to extract value from.
-     * @param array|Closure|float|int|string $path Key name of the array element, an array of keys or property name
+     * @param array<array-key, mixed>|object $array Array or object to extract value from.
+     * @param ArrayPath|Closure $path Key name of the array element, an array of keys or property name
      * of the object, or an anonymous function returning the value. The anonymous function signature should be:
      * `function($array, $defaultValue)`.
      * @param mixed $default The default value to be returned if the specified array key does not exist. Not used when
      * getting value from an object.
      * @param string $delimiter A separator, used to parse string $key for embedded object property retrieving. Defaults
      * to "." (dot).
-     *
-     * @psalm-param ArrayPath|Closure $path
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
@@ -310,17 +308,16 @@ final class ArrayHelper
      *  ]
      * ```
      *
-     * @param array $array The array to write the value to.
-     * @param array|float|int|string|null $key The path of where do you want to write a value to `$array`
+     * @param array<array-key, mixed> $array The array to write the value to.
+     * @param ArrayKey|null $key The path of where do you want to write a value to `$array`
      * the path can be described by an array of keys. If the path is `null` then `$array` will be assigned the `$value`.
-     *
-     * @psalm-param ArrayKey|null $key
      *
      * @param mixed $value The value to be written.
      */
     public static function setValue(array &$array, array|float|int|string|null $key, mixed $value): void
     {
         if ($key === null) {
+            /** @phpstan-ignore parameterByRef.type */
             $array = $value;
             return;
         }
@@ -334,7 +331,7 @@ final class ArrayHelper
                 $array[$k] = [$array[$k]];
             }
             $array = &$array[$k];
-            /** @var array $array */
+            /** @var array<array-key, mixed> $array */
         }
 
         $array[self::normalizeArrayKey(array_shift($keys))] = $value;
@@ -364,11 +361,9 @@ final class ArrayHelper
      * // Result: ['key' => ['in', 'variable1']]
      * ```
      *
-     * @param array $array The array to append the value to.
-     * @param array|float|int|string|null $key The path of where do you want to append a value to `$array`. The path can
+     * @param array<array-key, mixed> $array The array to append the value to.
+     * @param ArrayKey|null $key The path of where do you want to append a value to `$array`. The path can
      * be described by an array of keys. If the path is `null` then `$value` will be appended to the `$array`.
-     *
-     * @psalm-param ArrayKey|null $key
      *
      * @param mixed $value The value to be appended.
      */
@@ -391,7 +386,7 @@ final class ArrayHelper
             }
 
             $array = &$array[$k];
-            /** @var array $array */
+            /** @var array<array-key, mixed> $array */
         }
 
         $array[] = $value;
@@ -402,15 +397,13 @@ final class ArrayHelper
      *
      * @see addValue
      *
-     * @param array $array The array to append the value to.
-     * @param array|float|int|string|null $path The path of where do you want to append a value to `$array`. The path
+     * @param array<array-key, mixed> $array The array to append the value to.
+     * @param ArrayPath|null $path The path of where do you want to append a value to `$array`. The path
      * can be described by a string when each key should be separated by a dot. You can also describe the path as
      * an array of keys. If the path is `null` then `$value` will be appended to the `$array`.
      * @param mixed $value The value to be added.
      * @param string $delimiter A separator, used to parse string $key for embedded object property retrieving. Defaults
      * to "." (dot).
-     *
-     * @psalm-param ArrayPath|null $path
      */
     public static function addValueByPath(
         array &$array,
@@ -466,16 +459,14 @@ final class ArrayHelper
      *  ]
      * ```
      *
-     * @param array $array The array to write the value to.
-     * @param array|float|int|string|null $path The path of where do you want to write a value to `$array`.
+     * @param array<array-key, mixed> $array The array to write the value to.
+     * @param ArrayPath|null $path The path of where do you want to write a value to `$array`.
      * The path can be described by a string when each key should be separated by a delimiter (default is dot).
      * You can also describe the path as an array of keys. If the path is `null` then `$array` will be assigned
      * the `$value`.
      * @param mixed $value The value to be written.
      * @param string $delimiter A separator, used to parse string $key for embedded object property retrieving. Defaults
      * to "." (dot).
-     *
-     * @psalm-param ArrayPath|null $path
      */
     public static function setValueByPath(
         array &$array,
@@ -502,11 +493,9 @@ final class ArrayHelper
      * // $array = ['options' => [1, 2]];
      * ```
      *
-     * @param array $array The array to extract value from.
-     * @param array|float|int|string $key Key name of the array element or associative array at the key path specified.
+     * @param array<array-key, mixed> $array The array to extract value from.
+     * @param ArrayKey $key Key name of the array element or associative array at the key path specified.
      * @param mixed $default The default value to be returned if the specified key does not exist.
-     *
-     * @psalm-param ArrayKey $key
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
@@ -548,14 +537,12 @@ final class ArrayHelper
      * // $array = ['options' => [1, 2]];
      * ```
      *
-     * @param array $array The array to extract value from.
-     * @param array|float|int|string $path Key name of the array element or associative array at the key path specified.
+     * @param array<array-key, mixed> $array The array to extract value from.
+     * @param ArrayPath $path Key name of the array element or associative array at the key path specified.
      * The path can be described by a string when each key should be separated by a delimiter (default is dot).
      * @param mixed $default The default value to be returned if the specified key does not exist.
      * @param string $delimiter A separator, used to parse string $key for embedded object property retrieving. Defaults
      * to "." (dot).
-     *
-     * @psalm-param ArrayPath $path
      *
      * @return mixed The value of the element if found, default value otherwise.
      */
@@ -581,10 +568,10 @@ final class ArrayHelper
      * // $removed = ['Michael' => 'Jackson', 'Janet' => 'Jackson'];
      * ```
      *
-     * @param array $array The array where to look the value from.
+     * @param array<array-key, mixed> $array The array where to look the value from.
      * @param mixed $value The value to remove from the array.
      *
-     * @return array The items that were removed from the array.
+     * @return array<array-key, mixed> The items that were removed from the array.
      */
     public static function removeValue(array &$array, mixed $value): array
     {
@@ -691,7 +678,7 @@ final class ArrayHelper
      * ]
      * ```
      *
-     * @param iterable $array The array or iterable object that needs to be indexed or grouped.
+     * @param iterable<mixed, array<array-key, mixed>|object> $array The array or iterable object that needs to be indexed or grouped.
      * @param Closure|string|null $key The column name or anonymous function which result will be used
      * to index the array.
      * @param Closure[]|string|string[]|null $groups The array of keys that will be used to group the input
@@ -699,9 +686,7 @@ final class ArrayHelper
      * is not defined, the array element will be discarded. Otherwise, if `$groups` is specified, an array element will be
      * added to the result array without any key.
      *
-     * @psalm-param iterable<mixed, array|object> $array
-     *
-     * @return array The indexed and/or grouped array.
+     * @return array<array-key, mixed> The indexed and/or grouped array.
      */
     public static function index(
         iterable $array,
@@ -729,9 +714,8 @@ final class ArrayHelper
                 if (!array_key_exists($value, $lastArray)) {
                     $lastArray[$value] = [];
                 }
-                /** @psalm-suppress MixedAssignment */
                 $lastArray = &$lastArray[$value];
-                /** @var array $lastArray */
+                /** @var array<array-key, mixed> $lastArray */
             }
 
             if ($key === null) {
@@ -754,19 +738,17 @@ final class ArrayHelper
      * Groups the array according to a specified key.
      * This is just an alias for indexing by groups
      *
-     * @param iterable $array The array or iterable object that needs to be grouped.
+     * @template T as array<array-key, mixed>|object
+     *
+     * @param iterable<mixed, T> $array The array or iterable object that needs to be grouped.
      * @param Closure[]|string|string[] $groups The array of keys that will be used to group the input array
      * by one or more keys.
      *
-     * @return array The grouped array.
-     *
-     * @template T as array|object
-     * @psalm-param iterable<mixed, T> $array
-     * @psalm-return array<non-empty-list<T>>
+     * @return array<non-empty-list<T>> The grouped array.
      */
     public static function group(iterable $array, array|string $groups): array
     {
-        /** @psalm-var array<non-empty-list<T>> */
+        /** @var array<non-empty-list<T>> */
         return self::index($array, null, $groups);
     }
 
@@ -790,14 +772,12 @@ final class ArrayHelper
      * });
      * ```
      *
-     * @param iterable $array The array or iterable object to get column from.
+     * @param iterable<array-key, array<array-key, mixed>|object> $array The array or iterable object to get column from.
      * @param Closure|string $name Column name or a closure returning column name.
      * @param bool $keepKeys Whether to maintain the array keys. If false, the resulting array
      * will be re-indexed with integers.
      *
-     * @psalm-param iterable<array-key, array|object> $array
-     *
-     * @return array The list of column values.
+     * @return array<mixed> The list of column values.
      */
     public static function getColumn(iterable $array, Closure|string $name, bool $keepKeys = true): array
     {
@@ -855,14 +835,12 @@ final class ArrayHelper
      * // ]
      * ```
      *
-     * @param iterable $array Array or iterable object to build a map from.
+     * @param iterable<mixed, array<array-key, mixed>|object> $array Array or iterable object to build a map from.
      * @param Closure|string $from Key or property name to map from.
      * @param Closure|string $to Key or property name to map to.
      * @param Closure|string|null $group Key or property to group the map.
      *
-     * @psalm-param iterable<mixed, array|object> $array
-     *
-     * @return array Resulting map.
+     * @return array<mixed> Resulting map.
      */
     public static function map(
         iterable $array,
@@ -874,6 +852,7 @@ final class ArrayHelper
             if ($from instanceof Closure || $to instanceof Closure || !is_array($array)) {
                 $result = [];
                 foreach ($array as $element) {
+                    /** @phpstan-ignore cast.string */
                     $key = (string) self::getValue($element, $from);
                     $result[$key] = self::getValue($element, $to);
                 }
@@ -886,7 +865,9 @@ final class ArrayHelper
 
         $result = [];
         foreach ($array as $element) {
+            /** @phpstan-ignore cast.string */
             $groupKey = (string) self::getValue($element, $group);
+            /** @phpstan-ignore cast.string */
             $key = (string) self::getValue($element, $from);
             $result[$groupKey][$key] = self::getValue($element, $to);
         }
@@ -899,11 +880,9 @@ final class ArrayHelper
      * This method enhances the `array_key_exists()` function by supporting case-insensitive
      * key comparison.
      *
-     * @param array $array The array with keys to check.
-     * @param array|float|int|string $key The key to check.
+     * @param array<array-key, mixed> $array The array with keys to check.
+     * @param ArrayKey $key The key to check.
      * @param bool $caseSensitive Whether the key comparison should be case-sensitive.
-     *
-     * @psalm-param ArrayKey $key
      *
      * @return bool Whether the array contains the specified key.
      */
@@ -918,10 +897,9 @@ final class ArrayHelper
                 return self::rootKeyExists($array, end($key), $caseSensitive);
             }
 
-            /** @psalm-var non-empty-array<array-key,float|int|string> $key */
-
             foreach (self::getExistsKeys($array, array_shift($key), $caseSensitive) as $existKey) {
                 $array = self::getRootValue($array, $existKey, null);
+                /** @var non-empty-array<array-key, float|int|string> $key */
                 if (is_array($array) && self::keyExists($array, $key, $caseSensitive)) {
                     return true;
                 }
@@ -940,14 +918,12 @@ final class ArrayHelper
      * This method enhances the `array_key_exists()` function by supporting case-insensitive
      * key comparison.
      *
-     * @param array $array The array to check the path in.
-     * @param array|float|int|string $path The key path. Can be described by a string when each key should be separated
+     * @param array<array-key, mixed> $array The array to check the path in.
+     * @param ArrayPath $path The key path. Can be described by a string when each key should be separated
      * by delimiter. You can also describe the path as an array of keys.
      * @param bool $caseSensitive Whether the key comparison should be case-sensitive.
      * @param string $delimiter A separator, used to parse string $key for embedded object property retrieving. Defaults
      * to "." (dot).
-     *
-     * @psalm-param ArrayPath $path
      */
     public static function pathExists(
         array $array,
@@ -964,14 +940,12 @@ final class ArrayHelper
      * If a value is an array, this method will also encode it recursively.
      * Only string values will be encoded.
      *
-     * @param iterable $data Data to be encoded.
+     * @param iterable<array-key, mixed> $data Data to be encoded.
      * @param bool $valuesOnly Whether to encode array values only. If false,
      * both the array keys and array values will be encoded.
      * @param string|null $encoding The encoding to use, defaults to `ini_get('default_charset')`.
      *
-     * @psalm-param iterable<mixed, mixed> $data
-     *
-     * @return array The encoded data.
+     * @return array<array-key, mixed> The encoded data.
      *
      * @link https://www.php.net/manual/en/function.htmlspecialchars.php
      */
@@ -995,13 +969,11 @@ final class ArrayHelper
      * If a value is an array, this method will also decode it recursively.
      * Only string values will be decoded.
      *
-     * @param iterable $data Data to be decoded.
+     * @param iterable<array-key, mixed> $data Data to be decoded.
      * @param bool $valuesOnly Whether to decode array values only. If false,
      * both the array keys and array values will be decoded.
      *
-     * @psalm-param iterable<mixed, mixed> $data
-     *
-     * @return array The decoded data.
+     * @return array<array-key, mixed> The decoded data.
      *
      * @link https://www.php.net/manual/en/function.htmlspecialchars-decode.php
      */
@@ -1035,7 +1007,7 @@ final class ArrayHelper
      *
      * Note that an empty array will NOT be considered associative.
      *
-     * @param array $array The array being checked.
+     * @param array<array-key, mixed> $array The array being checked.
      * @param bool $allStrings Whether the array keys must be all strings in order for
      * the array to be treated as associative.
      *
@@ -1074,7 +1046,7 @@ final class ArrayHelper
      *
      * Note that an empty array will be considered indexed.
      *
-     * @param array $array The array being checked.
+     * @param array<array-key, mixed> $array The array being checked.
      * @param bool $consecutive Whether the array keys must be a consecutive sequence
      * in order for the array to be treated as indexed.
      *
@@ -1106,7 +1078,7 @@ final class ArrayHelper
      * but additionally works for objects that implement the {@see \Traversable} interface.
      *
      * @param mixed $needle The value to look for.
-     * @param iterable $haystack The set of values to search.
+     * @param iterable<mixed, mixed> $haystack The set of values to search.
      * @param bool $strict Whether to enable strict (`===`) comparison.
      *
      * @throws InvalidArgumentException if `$haystack` is neither traversable nor an array.
@@ -1136,8 +1108,8 @@ final class ArrayHelper
      * This method will return `true`, if all elements of `$needles` are contained in
      * `$haystack`. If at least one element is missing, `false` will be returned.
      *
-     * @param iterable $needles The values that must **all** be in `$haystack`.
-     * @param iterable $haystack The set of value to search.
+     * @param iterable<mixed, mixed> $needles The values that must **all** be in `$haystack`.
+     * @param iterable<mixed, mixed> $haystack The set of value to search.
      * @param bool $strict Whether to enable strict (`===`) comparison.
      *
      * @throws InvalidArgumentException if `$haystack` or `$needles` is neither traversable nor an array.
@@ -1190,14 +1162,14 @@ final class ArrayHelper
      * // ]
      * ```
      *
-     * @param array $array Source array.
+     * @param array<array-key, mixed> $array Source array.
      * @param list<string> $filters Rules that define array keys which should be left or removed from results.
      * Each rule is:
      * - `var` - `$array['var']` will be left in result.
      * - `var.key` = only `$array['var']['key']` will be left in the result.
      * - `!var.key` = `$array['var']['key']` will be removed from the result.
      *
-     * @return array Filtered array.
+     * @return array<array-key, mixed> Filtered array.
      */
     public static function filter(array $array, array $filters): array
     {
@@ -1225,19 +1197,12 @@ final class ArrayHelper
                 if (!array_key_exists($key, $resultNode)) {
                     $resultNode[$key] = [];
                 }
-                /** @psalm-suppress MixedAssignment */
                 $resultNode = &$resultNode[$key];
-                /** @var array $resultNode */
+                /** @var array<array-key, mixed> $resultNode */
             }
-            /** @var array */
+            /** @var array<array-key, mixed> $resultNode */
             $resultNode = $nodeValue;
         }
-
-        /**
-         * @psalm-suppress UnnecessaryVarAnnotation
-         *
-         * @var array $result
-         */
 
         foreach ($excludeFilters as $filter) {
             $excludeNode = &$result;
@@ -1249,7 +1214,6 @@ final class ArrayHelper
                 }
 
                 if ($i < $numNestedKeys) {
-                    /** @psalm-suppress MixedAssignment */
                     $excludeNode = &$excludeNode[$key];
                 } else {
                     unset($excludeNode[$key]);
@@ -1258,7 +1222,7 @@ final class ArrayHelper
             }
         }
 
-        /** @var array $result */
+        /** @var array<array-key, mixed> $result */
 
         return $result;
     }
@@ -1271,25 +1235,24 @@ final class ArrayHelper
      *
      * @param object $object The object to be handled.
      *
-     * @return array The public member variables of the object.
+     * @return array<string, mixed> The public member variables of the object.
      *
      * @link https://www.php.net/manual/en/function.get-object-vars.php
-     *
-     * @psalm-return array<string, mixed>
      */
     public static function getObjectVars(object $object): array
     {
+        // @phpstan-ignore return.type
         return get_object_vars($object);
     }
 
     /**
      * Rename key in an array.
      *
-     * @param array $array Source array.
+     * @param array<array-key, mixed> $array Source array.
      * @param int|string $from Key to rename.
      * @param int|string $to New key name.
      *
-     * @return array The result array.
+     * @return array<array-key, mixed> The result array.
      */
     public static function renameKey(array $array, int|string $from, int|string $to): array
     {
@@ -1324,19 +1287,15 @@ final class ArrayHelper
 
             if (str_ends_with($key, '()')) {
                 $method = substr($key, 0, -2);
-                /** @psalm-suppress MixedMethodCall */
                 return $array->$method();
             }
 
             try {
-                /** @psalm-suppress MixedPropertyFetch */
                 return $array::$$key;
-            } catch (Throwable) {
+            } catch (Throwable) { // @phpstan-ignore catch.neverThrown
                 /**
                  * This is expected to fail if the property does not exist, or __get() is not implemented.
                  * It is not reliably possible to check whether a property is accessible beforehand.
-                 *
-                 * @psalm-suppress MixedPropertyFetch
                  */
                 return $array->$key;
             }
@@ -1345,6 +1304,9 @@ final class ArrayHelper
         return $default;
     }
 
+    /**
+     * @param array<array-key, mixed> $array
+     */
     private static function rootKeyExists(array $array, float|int|string $key, bool $caseSensitive): bool
     {
         $key = (string) $key;
@@ -1363,6 +1325,8 @@ final class ArrayHelper
     }
 
     /**
+     * @param array<array-key, mixed> $array
+     *
      * @return array<int, array-key>
      */
     private static function getExistsKeys(array $array, float|int|string $key, bool $caseSensitive): array
@@ -1380,10 +1344,11 @@ final class ArrayHelper
     }
 
     /**
-     * @param array $data
+     * @param array<array-key, mixed> $data
      * @param int $flags
      * @param string $encoding
-     * @return array
+     *
+     * @return array<array-key, mixed>
      */
     private static function htmlEncodeValues(array $data, int $flags, string $encoding): array
     {
@@ -1400,6 +1365,11 @@ final class ArrayHelper
         return $result;
     }
 
+    /**
+     * @param array<array-key, mixed> $data
+     *
+     * @return array<array-key, mixed>
+     */
     private static function htmlEncodeKeysAndValues(array $data, int $flags, string $encoding): array
     {
         $result = [];
@@ -1420,7 +1390,9 @@ final class ArrayHelper
     }
 
     /**
-     * @param array[] $arrays
+     * @param array<array-key, mixed>[] $arrays
+     *
+     * @return array<array-key, mixed>
      */
     private static function doMerge(array $arrays, ?int $depth, int $currentDepth = 0): array
     {
@@ -1452,14 +1424,16 @@ final class ArrayHelper
 
     private static function normalizeArrayKey(mixed $key): string
     {
+        // @phpstan-ignore cast.string
         return is_float($key) ? NumericHelper::normalize($key) : (string) $key;
     }
 
     /**
-     * @psalm-param ArrayPath $path
-     * @psalm-return ($path is array ? array<float|int|string> : float|int|string)
+     * @param ArrayPath $path
+     *
+     * @return ($path is array|string ? array<array-key, float|int|string> : float|int)
      */
-    private static function parseMixedPath(array|float|int|string $path, string $delimiter): array|float|int|string
+    private static function parseMixedPath(array|float|int|string $path, string $delimiter): array|float|int
     {
         if (is_array($path)) {
             $newPath = [];
@@ -1479,12 +1453,6 @@ final class ArrayHelper
             }
             return array_merge(...$newPath);
         }
-
-        /**
-         * It's Psalm bug. These annotations are not needed.
-         * @psalm-var float|int|string $path
-         * @psalm-suppress RedundantConditionGivenDocblockType
-         */
 
         return is_string($path) ? StringHelper::parsePath($path, $delimiter) : $path;
     }

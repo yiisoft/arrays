@@ -24,8 +24,8 @@ use function substr;
  * `ArrayableTrait` implements {@see ArrayableInterface::toArray()} by respecting the field definitions as declared
  * in {@see ArrayableInterface::fields()} and {@see ArrayableInterface::extraFields()}.
  *
- * @psalm-import-type CallableFieldDefinition from ArrayableInterface
- * @psalm-import-type FieldsArray from ArrayableInterface
+ * @phpstan-import-type CallableFieldDefinition from ArrayableInterface
+ * @phpstan-import-type FieldsArray from ArrayableInterface
  */
 trait ArrayableTrait
 {
@@ -72,11 +72,9 @@ trait ArrayableTrait
      *
      * The default implementation of this method returns the public object member variables indexed by themselves.
      *
-     * @return array The list of field names or field definitions.
+     * @return FieldsArray The list of field names or field definitions.
      *
      * @see toArray()
-     *
-     * @psalm-return FieldsArray
      */
     public function fields(): array
     {
@@ -97,13 +95,11 @@ trait ArrayableTrait
      * You may override this method to return a list of expandable fields based on some context information
      * (e.g. the current application user).
      *
-     * @return array The list of expandable field names or field definitions. Please refer
+     * @return FieldsArray The list of expandable field names or field definitions. Please refer
      * to {@see ArrayableInterface::fields()} on the format of the return value.
      *
      * @see toArray()
      * @see fields()
-     *
-     * @psalm-return FieldsArray
      */
     public function extraFields(): array
     {
@@ -131,7 +127,7 @@ trait ArrayableTrait
      * will be extracted.
      * @param bool $recursive Whether to recursively return array representation of embedded objects.
      *
-     * @return array The array representation of the object.
+     * @return array<array-key, mixed> The array representation of the object.
      */
     public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array
     {
@@ -168,9 +164,9 @@ trait ArrayableTrait
         $result = [];
 
         foreach ($fields as $field) {
-            /** @var string */
             $result[] = strstr($field . '.', '.', true);
         }
+        /** @var list<string> $result */
 
         if (in_array('*', $result, true)) {
             $result = [];
@@ -211,10 +207,9 @@ trait ArrayableTrait
      * @param string[] $fields The fields being requested for exporting.
      * @param string[] $expand The additional fields being requested for exporting.
      *
-     * @return array The list of fields to be exported. The array keys are the field names, and the array values
-     * are the corresponding object property names or PHP callables returning the field values.
-     *
-     * @psalm-return array<string, string|CallableFieldDefinition>
+     * @return array<string, string|CallableFieldDefinition> The list of fields to be exported. The array keys are the field
+     * names, and the array values are the corresponding object property names or PHP callables returning the field
+     * values.
      */
     protected function resolveFields(array $fields, array $expand): array
     {
@@ -250,8 +245,11 @@ trait ArrayableTrait
     }
 
     /**
+     * @param array<array-key, mixed> $array
      * @param string[] $fields
      * @param string[] $expand
+     *
+     * @return array<array-key, mixed>
      */
     private function filterAndExpand(array $array, array $fields = [], array $expand = []): array
     {

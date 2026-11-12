@@ -8,15 +8,15 @@ use Yiisoft\Arrays\ArrayableTrait;
 use Yiisoft\Arrays\ArrayAccessTrait;
 
 /**
- * @internal Need for correct psalm analysis.
- * @see https://github.com/vimeo/psalm/issues/10920
+ * @internal Need for correct static analysis.
  */
-final class PsalmTraitHelper
+final class PhpStanTraitHelper
 {
     use ArrayableTrait;
 
     /** @use ArrayAccessTrait<array-key, mixed> */
     use ArrayAccessTrait;
 
+    /** @var array<array-key, mixed> */
     public array $data = [];
 }

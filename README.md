@@ -12,7 +12,6 @@
 [![Code Coverage](https://codecov.io/gh/yiisoft/arrays/graph/badge.svg?token=SMTMNF4KT9)](https://codecov.io/gh/yiisoft/arrays)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyiisoft%2Farrays%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/yiisoft/arrays/master)
 [![static analysis](https://github.com/yiisoft/arrays/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/arrays/actions?query=workflow%3A%22static+analysis%22)
-[![type-coverage](https://shepherd.dev/github/yiisoft/arrays/coverage.svg)](https://shepherd.dev/github/yiisoft/arrays)
 
 The package provides:
 
