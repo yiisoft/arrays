@@ -1,5 +1,9 @@
 # Yii Arrays Change Log
 
+## 3.2.3 under development
+
+- no changes in this release.
+
 ## 3.2.2 November 13, 2026
 
 - Chg #189: Replace Psalm with PHPStan (@vjik)
