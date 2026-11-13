@@ -16,8 +16,8 @@ namespace Yiisoft\Arrays;
  * the implementing classes to customize how and which of their data should be formatted and put into
  * the result of {@see ArrayableInterface::toArray()}.
  *
- * @psalm-type CallableFieldDefinition = callable(object, string): string
- * @psalm-type FieldsArray = array<int, string>|array<string, string|CallableFieldDefinition>
+ * @phpstan-type CallableFieldDefinition = callable(object, string): string
+ * @phpstan-type FieldsArray = array<array-key, string|CallableFieldDefinition>
  */
 interface ArrayableInterface
 {
@@ -58,11 +58,9 @@ interface ArrayableInterface
      * ];
      * ```
      *
-     * @return array The list of field names or field definitions.
+     * @return FieldsArray The list of field names or field definitions.
      *
      * @see toArray()
-     *
-     * @psalm-return FieldsArray
      */
     public function fields(): array;
 
@@ -74,13 +72,11 @@ interface ArrayableInterface
      * by this method are not returned by default by {@see toArray()}. Only when a field in the list
      * is explicitly requested, will it be included in the result of {@see toArray()}.
      *
-     * @return array The list of expandable field names or field definitions. Please refer
+     * @return FieldsArray The list of expandable field names or field definitions. Please refer
      * to {@see fields()} on the format of the return value.
      *
      * @see toArray()
      * @see fields()
-     *
-     * @psalm-return FieldsArray
      */
     public function extraFields(): array;
 
@@ -95,7 +91,7 @@ interface ArrayableInterface
      * will be returned.
      * @param bool $recursive Whether to recursively return array representation of embedded objects.
      *
-     * @return array The array representation of the object.
+     * @return array<array-key, mixed> The array representation of the object.
      */
     public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array;
 }

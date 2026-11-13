@@ -2,6 +2,8 @@
 
 ## 3.2.2 under development
 
+- Chg #189: Replace Psalm with PHPStan (@vjik)
+- Enh #189: Simplify tie-breaker block in `ArraySorter::multisort()` (@vjik)
 - Enh #175: Explicitly import functions and constants in "use" section (@mspirkov)
 - Enh #176: Remove unnecessary files from Composer package (@mspirkov)
 

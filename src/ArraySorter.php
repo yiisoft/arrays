@@ -41,7 +41,7 @@ final class ArraySorter
      * ];
      * ```
      *
-     * @param array<array-key, array|object> $array The array to be sorted. The array will be modified after calling
+     * @param array<array-key, array<array-key, mixed>|object> $array The array to be sorted. The array will be modified after calling
      * this method.
      * @param array<array-key, Closure|string>|Closure|string $key The key(s) to be sorted by. This refers to a key
      * name of the subarray elements, a property name of the objects, or an anonymous function returning the values
@@ -89,21 +89,18 @@ final class ArraySorter
             $args[] = is_array($sortFlag) ? $sortFlag[$i] : $sortFlag;
         }
 
-        // Add tie-breaker only for non-empty arrays
-        if ($count > 0) {
-            $tieBreaker = [];
-            for ($i = 0; $i < $count; $i++) {
-                $tieBreaker[$i] = $i + 1;
-            }
-            $args[] = $tieBreaker;
-            $args[] = SORT_ASC;
-            $args[] = SORT_NUMERIC;
+        // Add tie-breaker for non-empty arrays
+        $tieBreaker = [];
+        for ($i = 0; $i < $count; $i++) {
+            $tieBreaker[$i] = $i + 1;
         }
+        $args[] = $tieBreaker;
+        $args[] = SORT_ASC;
+        $args[] = SORT_NUMERIC;
 
-        /** @psalm-suppress UnsupportedReferenceUsage */
         $args[] = &$array;
 
-        /** @psalm-suppress ArgumentTypeCoercion */
+        // @phpstan-ignore argument.type
         array_multisort(...$args);
     }
 }
